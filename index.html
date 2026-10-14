@@ -10,10 +10,16 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="KHJAM POS">
     
+    <!-- Custom Favicon -->
+    <link rel="icon" type="image/svg+xml" href="https://api.iconify.design/lucide:camera.svg?color=%2376cdca">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- jsPDF Library for PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <!-- PWA Web App Manifest (Inlined via Blob) -->
     <script>
         const manifestData = {
@@ -25,14 +31,9 @@
             "theme_color": "#76cdca",
             "icons": [
                 {
-                    "src": "https://placehold.co/192x192/76cdca/ffffff?text=KH",
-                    "sizes": "192x192",
-                    "type": "image/png"
-                },
-                {
-                    "src": "https://placehold.co/512x512/76cdca/ffffff?text=KH",
-                    "sizes": "512x512",
-                    "type": "image/png"
+                    "src": "https://api.iconify.design/lucide:camera.svg?color=%2376cdca",
+                    "sizes": "192x192 512x512",
+                    "type": "image/svg+xml"
                 }
             ]
         };
@@ -83,64 +84,51 @@
 </head>
 <body class="bg-gray-50 text-gray-800 h-screen overflow-hidden flex flex-col md:flex-row font-sans selection:bg-primary selection:text-white">
 
-    <aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 shadow-sm z-20 h-full">
-        <div class="p-6 border-b border-gray-200 flex flex-col items-center justify-center">
-            <svg class="w-16 h-16 mb-2" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 shadow-sm z-20 h-full shrink-0">
+        <div class="p-4 border-b border-gray-200 flex flex-col items-center justify-center">
+            <svg class="w-9 h-9 mb-1" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M48 90 C 20 85, 10 70, 10 55 L 10 45 C 15 30, 30 20, 48 10 L 48 35 C 38 40, 25 50, 30 65 L 48 70 Z" fill="#76cdca"/>
                 <path d="M52 90 C 80 85, 90 70, 90 55 L 90 45 C 85 30, 70 20, 52 10 L 52 35 C 62 40, 75 50, 70 65 L 52 70 Z" fill="#fdd375"/>
                 <path d="M57 15 Q 65 20, 60 28 Q 55 25, 57 15 Z" fill="#ffffff"/>
             </svg>
-            <h1 class="text-xl font-bold text-gray-800 tracking-tight">KHJAM</h1>
-            <p class="text-[11px] text-gray-500 mt-0.5 uppercase tracking-wider font-semibold">Photo Studio</p>
+            <h1 class="text-base font-bold text-gray-800 tracking-tight">KHJAM</h1>
         </div>
-        <nav class="flex-1 overflow-y-auto p-4 space-y-1.5">
-            <button onclick="app.switchView('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100 transition-colors text-sm">
+        <nav class="flex-1 overflow-y-auto p-3 space-y-1">
+            <button onclick="app.switchView('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100 transition-colors text-xs">
                 <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
             </button>
-            <button onclick="app.switchView('pos')" id="nav-pos" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left font-medium transition-colors bg-primary text-white text-sm">
+            <button onclick="app.switchView('pos')" id="nav-pos" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left font-medium transition-colors bg-primary text-white text-xs">
                 <i class="fa-solid fa-calculator w-5"></i> Kasir (POS)
             </button>
-            <button onclick="app.switchView('history')" id="nav-history" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100 transition-colors text-sm">
+            <button onclick="app.switchView('history')" id="nav-history" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100 transition-colors text-xs">
                 <i class="fa-solid fa-clock-rotate-left w-5"></i> Riwayat Transaksi
             </button>
-            <button onclick="app.switchView('inventory')" id="nav-inventory" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100 transition-colors text-sm">
+            <button onclick="app.switchView('inventory')" id="nav-inventory" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100 transition-colors text-xs">
                 <i class="fa-solid fa-box-open w-5"></i> Manajemen Produk
             </button>
-            <button onclick="app.switchView('stock')" id="nav-stock" class="nav-btn w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100 transition-colors text-sm">
+            <button onclick="app.switchView('stock')" id="nav-stock" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100 transition-colors text-xs">
                 <i class="fa-solid fa-warehouse w-5"></i> Manajemen Stok
             </button>
         </nav>
-        <div class="p-4 border-t border-gray-200 bg-gray-50 flex flex-col gap-2">
-            <!-- PWA Install Button Desktop -->
-            <button id="btn-install-pwa" onclick="app.installPWA()" class="w-full bg-secondary hover:bg-secondaryHover text-gray-900 py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-sm hidden">
+        <div class="p-3 border-t border-gray-200 bg-gray-50 flex flex-col gap-1.5 shrink-0">
+            <button id="btn-install-pwa" onclick="app.installPWA()" class="w-full bg-secondary hover:bg-secondaryHover text-gray-900 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-sm hidden">
                 <i class="fa-solid fa-mobile-screen-button text-sm"></i> Install Aplikasi (APK)
             </button>
-            <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-0.5 mt-1">Keamanan Data</div>
-            <button onclick="app.exportBackup()" class="w-full bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm">
-                <i class="fa-solid fa-download text-primary"></i> Cadangkan Data
-            </button>
-            <label class="w-full bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm cursor-pointer">
-                <i class="fa-solid fa-upload text-secondary"></i> Pulihkan Data
-                <input type="file" id="import-file" accept=".json" onchange="app.importBackup(event)" class="hidden">
-            </label>
         </div>
     </aside>
 
-    <header class="md:hidden bg-white shadow-sm px-4 py-3 flex justify-between items-center z-25">
+    <header class="md:hidden bg-white shadow-sm px-4 py-3 flex justify-between items-center z-25 shrink-0">
         <div class="flex items-center gap-2">
-            <svg class="w-8 h-8" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="w-7 h-7" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M48 90 C 20 85, 10 70, 10 55 L 10 45 C 15 30, 30 20, 48 10 L 48 35 C 38 40, 25 50, 30 65 L 48 70 Z" fill="#76cdca"/>
                 <path d="M52 90 C 80 85, 90 70, 90 55 L 90 45 C 85 30, 70 20, 52 10 L 52 35 C 62 40, 75 50, 70 65 L 52 70 Z" fill="#fdd375"/>
                 <path d="M57 15 Q 65 20, 60 28 Q 55 25, 57 15 Z" fill="#ffffff"/>
             </svg>
-            <h1 class="text-lg font-bold text-gray-800 tracking-tight">KHJAM</h1>
+            <h1 class="text-base font-bold text-gray-800 tracking-tight">KHJAM</h1>
         </div>
         <div class="flex items-center gap-2">
             <button id="btn-install-pwa-mobile" onclick="app.installPWA()" class="bg-secondary hover:bg-secondaryHover text-gray-900 text-xs font-bold px-2.5 py-1.5 rounded-lg flex items-center gap-1 shadow-sm hidden">
                 <i class="fa-solid fa-download"></i> Install
-            </button>
-            <button onclick="app.exportBackup()" class="text-gray-500 hover:text-primary text-sm p-1.5 bg-gray-100 rounded-lg" title="Cadangkan Data">
-                <i class="fa-solid fa-download"></i>
             </button>
             <div id="mobile-cart-btn" class="relative cursor-pointer" onclick="app.toggleMobileCart()">
                 <i class="fa-solid fa-cart-shopping text-gray-600 text-lg"></i>
@@ -150,7 +138,7 @@
     </header>
 
     <main class="flex-1 relative h-full flex flex-col md:flex-row overflow-hidden pb-16 md:pb-0">
-        <div class="flex-1 h-full overflow-hidden relative w-full">
+        <div class="flex-1 h-full overflow-hidden relative w-full flex flex-col">
             
             <!-- Dashboard View -->
             <div id="view-dashboard" class="view-section hidden h-full flex flex-col p-4 md:p-6 bg-gray-50 overflow-y-auto">
@@ -203,9 +191,9 @@
             </div>
 
             <!-- POS View -->
-            <div id="view-pos" class="view-section h-full flex flex-col md:flex-row">
-                <div class="flex-1 flex flex-col h-full bg-gray-50">
-                    <div class="p-3 bg-white border-b border-gray-200">
+            <div id="view-pos" class="view-section h-full flex flex-col md:flex-row overflow-hidden">
+                <div class="flex-1 flex flex-col h-full bg-gray-50 overflow-hidden">
+                    <div class="p-3 bg-white border-b border-gray-200 shrink-0">
                         <div class="flex space-x-2 overflow-x-auto hide-scroll pb-1">
                             <button onclick="app.filterProducts('all')" id="filter-all" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-gray-800 text-white transition-colors">Semua</button>
                             <button onclick="app.filterProducts('paket')" id="filter-paket" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">Paket Studio</button>
@@ -220,8 +208,8 @@
                 </div>
 
                 <!-- Cart Panel -->
-                <div id="cart-container" class="fixed inset-y-0 right-0 w-full sm:w-88 bg-white shadow-2xl transform translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-30 flex flex-col md:relative md:w-80 md:border-l md:border-gray-200">
-                    <div class="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-gray-50 md:bg-white">
+                <div id="cart-container" class="fixed inset-y-0 right-0 w-full sm:w-88 bg-white shadow-2xl transform translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-30 flex flex-col md:relative md:w-80 md:border-l md:border-gray-200 h-full">
+                    <div class="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-gray-50 md:bg-white shrink-0">
                         <h2 class="text-base font-bold text-gray-800">Keranjang Pesanan</h2>
                         <button class="md:hidden text-gray-500 hover:text-red-500" onclick="app.toggleMobileCart()">
                             <i class="fa-solid fa-xmark text-lg"></i>
@@ -235,7 +223,7 @@
                         </div>
                     </div>
 
-                    <div class="border-t border-gray-200 p-3 bg-gray-50">
+                    <div class="border-t border-gray-200 p-3 bg-gray-50 shrink-0">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-xs text-gray-600 font-medium">Subtotal</span>
                             <span id="cart-subtotal" class="font-bold text-gray-800 text-base">Rp 0</span>
@@ -249,13 +237,13 @@
             </div>
 
             <!-- History View -->
-            <div id="view-history" class="view-section hidden h-full flex flex-col p-4 md:p-6 bg-gray-50">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+            <div id="view-history" class="view-section hidden h-full flex flex-col p-4 md:p-6 bg-gray-50 overflow-hidden">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3 shrink-0">
                     <div>
                         <h2 class="text-xl font-bold text-gray-800">Riwayat Transaksi</h2>
                         <p class="text-xs text-gray-500">Log semua transaksi yang sudah diselesaikan.</p>
                     </div>
-                    <button onclick="app.openShiftSummaryModal()" class="bg-secondary hover:bg-secondaryHover text-gray-900 px-3.5 py-2 rounded-xl font-bold shadow transition-colors flex items-center gap-2 text-xs">
+                    <button onclick="app.openShiftCheckModal()" class="bg-secondary hover:bg-secondaryHover text-gray-900 px-3.5 py-2 rounded-xl font-bold shadow transition-colors flex items-center gap-2 text-xs">
                         <i class="fa-solid fa-file-invoice-dollar"></i> Akhiri Shift (Tutup Kasir)
                     </button>
                 </div>
@@ -280,8 +268,8 @@
             </div>
 
             <!-- Inventory View -->
-            <div id="view-inventory" class="view-section hidden h-full flex flex-col p-4 md:p-6 bg-gray-50">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+            <div id="view-inventory" class="view-section hidden h-full flex flex-col p-3 md:p-5 bg-gray-50 overflow-hidden">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 gap-2 shrink-0">
                     <div>
                         <h2 class="text-xl font-bold text-gray-800">Manajemen Produk</h2>
                         <p class="text-xs text-gray-500">Kelola paket studio, layanan self studio, photobox, dan pas photo.</p>
@@ -292,10 +280,10 @@
                 </div>
 
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex-1 overflow-hidden flex flex-col">
-                    <div class="overflow-x-auto flex-1">
+                    <div class="overflow-y-auto flex-1">
                         <table class="w-full text-left border-collapse min-w-[850px]">
-                            <thead>
-                                <tr class="bg-gray-50 text-gray-600 text-xs border-b border-gray-200">
+                            <thead class="sticky top-0 bg-gray-50 z-10">
+                                <tr class="text-gray-600 text-xs border-b border-gray-200">
                                     <th class="p-3 font-medium">Nama Produk</th>
                                     <th class="p-3 font-medium">Kategori</th>
                                     <th class="p-3 font-medium">Rincian Spesifikasi</th>
@@ -310,8 +298,8 @@
             </div>
 
             <!-- Stock View -->
-            <div id="view-stock" class="view-section hidden h-full flex flex-col p-4 md:p-6 bg-gray-50">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+            <div id="view-stock" class="view-section hidden h-full flex flex-col p-3 md:p-5 bg-gray-50 overflow-hidden">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 gap-2 shrink-0">
                     <div>
                         <h2 class="text-xl font-bold text-gray-800">Manajemen Stok Barang</h2>
                         <p class="text-xs text-gray-500">Pantau stok frame 4R-6R & 10R-60x90.</p>
@@ -328,7 +316,7 @@
 
                 <!-- Subtab Frame Content -->
                 <div id="stock-subview-frame" class="bg-white rounded-xl shadow-sm border border-gray-200 flex-1 overflow-hidden flex flex-col">
-                    <div class="p-3 bg-gray-50 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                    <div class="p-2.5 bg-gray-50 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 shrink-0">
                         <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Daftar Stok Frame (4R - 60x90)</span>
                         <div class="flex items-center gap-2">
                             <button onclick="app.openBulkInboundModal()" class="bg-secondary hover:bg-secondaryHover text-gray-900 px-3 py-1.5 rounded-lg text-xs font-bold shadow transition-colors flex items-center gap-1.5">
@@ -336,10 +324,10 @@
                             </button>
                         </div>
                     </div>
-                    <div class="overflow-x-auto flex-1">
+                    <div class="overflow-y-auto flex-1">
                         <table class="w-full text-left border-collapse min-w-[750px]">
-                            <thead>
-                                <tr class="bg-gray-50 text-gray-600 text-xs border-b border-gray-200">
+                            <thead class="sticky top-0 bg-gray-50 z-10">
+                                <tr class="text-gray-600 text-xs border-b border-gray-200">
                                     <th class="p-3 font-medium">Ukuran Frame</th>
                                     <th class="p-3 font-medium">Warna / Tipe Ukir</th>
                                     <th class="p-3 font-medium">Sisa / Aktual Stok</th>
@@ -353,16 +341,16 @@
 
                 <!-- Subtab Other Content -->
                 <div id="stock-subview-other" class="bg-white rounded-xl shadow-sm border border-gray-200 flex-1 overflow-hidden flex flex-col hidden">
-                    <div class="p-3 bg-gray-50 border-b border-gray-200 flex justify-between items-center">
+                    <div class="p-2.5 bg-gray-50 border-b border-gray-200 flex justify-between items-center shrink-0">
                         <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Daftar Material & Perlengkapan</span>
                         <button onclick="app.openStockModal()" class="bg-primary hover:bg-primaryHover text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow transition-colors flex items-center gap-1">
                             <i class="fa-solid fa-plus"></i> Tambah Item
                         </button>
                     </div>
-                    <div class="overflow-x-auto flex-1">
+                    <div class="overflow-y-auto flex-1">
                         <table class="w-full text-left border-collapse min-w-[700px]">
-                            <thead>
-                                <tr class="bg-gray-50 text-gray-600 text-xs border-b border-gray-200">
+                            <thead class="sticky top-0 bg-gray-50 z-10">
+                                <tr class="text-gray-600 text-xs border-b border-gray-200">
                                     <th class="p-3 font-medium">Nama Barang / Material</th>
                                     <th class="p-3 font-medium">Kategori Stok</th>
                                     <th class="p-3 font-medium">Sisa / Aktual Stok</th>
@@ -480,7 +468,7 @@
 
     <!-- MODAL RECEIPT -->
     <div id="modal-receipt" class="fixed inset-0 bg-black bg-opacity-60 z-[80] hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col max-h-[95vh] animate-scale">
+        <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col max-h-[95vh]">
             <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
                 <h3 class="font-bold text-gray-800 text-sm flex items-center gap-2"><i class="fa-solid fa-receipt text-primary"></i> Struk Pembayaran</h3>
                 <button onclick="app.closeModal('modal-receipt')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-xmark text-lg"></i></button>
@@ -523,11 +511,49 @@
                 <button onclick="window.print()" class="bg-gray-800 hover:bg-gray-900 text-white py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition-colors shadow-sm">
                     <i class="fa-solid fa-print"></i> Print
                 </button>
-                <button onclick="app.downloadReceipt()" class="bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition-colors shadow-sm">
-                    <i class="fa-solid fa-download text-primary"></i> File
+                <button onclick="app.downloadReceiptPDF()" class="bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition-colors shadow-sm">
+                    <i class="fa-solid fa-file-pdf text-red-500"></i> PDF
                 </button>
                 <button onclick="app.shareReceipt()" class="bg-primary hover:bg-primaryHover text-white py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition-colors shadow-sm">
                     <i class="fa-solid fa-share-nodes"></i> Share
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SHIFT CASH CHECK (AUDIT KAS FISIK) -->
+    <div id="modal-shift-check" class="fixed inset-0 bg-black bg-opacity-60 z-[84] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col animate-scale">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                <h3 class="font-bold text-gray-800 text-sm flex items-center gap-2"><i class="fa-solid fa-coins text-secondary"></i> Audit Kas Cash Shift</h3>
+                <button onclick="app.closeModal('modal-shift-check')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div class="p-5 space-y-3 font-sans text-xs">
+                <p class="text-gray-500">Hitung total uang kas fisik di laci saat ini dan masukkan ke bawah untuk mencocokkan dengan sistem.</p>
+                
+                <div class="bg-gray-100 p-3 rounded-xl flex justify-between items-center">
+                    <span class="text-gray-600 font-medium">Total Cash Sistem:</span>
+                    <span id="shift-expected-cash" class="font-bold text-gray-800 text-sm">Rp 0</span>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-gray-700 mb-1">Uang Kas Fisik Aktual di Laci</label>
+                    <input type="text" id="input-actual-cash" readonly inputmode="none" onclick="app.openNumpadForInput('input-actual-cash', 'Kas Fisik Aktual')" class="w-full px-3 py-2.5 border border-gray-300 rounded-xl bg-white font-bold text-sm text-primary cursor-pointer outline-none text-center" placeholder="0">
+                </div>
+
+                <div id="diff-box" class="bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-center hidden">
+                    <span id="diff-label" class="text-[11px] font-bold text-emerald-800 block mb-0.5">SELISIH KAS</span>
+                    <span id="diff-amount" class="text-sm font-extrabold text-emerald-600">Rp 0 (Pas)</span>
+                </div>
+            </div>
+
+            <div class="p-3 border-t border-gray-200 bg-gray-50 flex gap-2 font-sans">
+                <button onclick="app.closeModal('modal-shift-check')" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2.5 rounded-xl text-xs font-bold transition-colors">
+                    Batal
+                </button>
+                <button onclick="app.proceedToShiftSummary()" class="flex-1 bg-primary hover:bg-primaryHover text-white py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow">
+                    Lanjut & Cetak <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
         </div>
@@ -562,8 +588,9 @@
                     </div>
 
                     <div class="space-y-1.5 pb-2 border-b border-dashed border-gray-300 font-sans text-xs">
-                        <h4 class="font-bold text-gray-700 text-xs uppercase tracking-wide">2. Rincian Jenis Pembayaran</h4>
+                        <h4 class="font-bold text-gray-700 text-xs uppercase tracking-wide">2. Rincian Jenis Pembayaran & Audit Kas</h4>
                         <div class="space-y-1" id="shift-payment-methods-list"></div>
+                        <div id="shift-audit-result-summary" class="mt-2 pt-2 border-t border-gray-200"></div>
                     </div>
 
                     <div class="space-y-1.5 pb-2 border-b border-dashed border-gray-300 font-sans text-xs">
@@ -580,10 +607,10 @@
 
             <div class="p-3 border-t border-gray-200 bg-gray-50 flex gap-2 font-sans">
                 <button onclick="window.print()" class="flex-1 bg-gray-800 hover:bg-gray-900 text-white py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-sm">
-                    <i class="fa-solid fa-print"></i> Print Laporan Shift
+                    <i class="fa-solid fa-print"></i> Print
                 </button>
-                <button onclick="app.downloadShiftSummary()" class="flex-1 bg-primary hover:bg-primaryHover text-white py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-sm">
-                    <i class="fa-solid fa-download"></i> Download Rekap
+                <button onclick="app.downloadShiftSummaryPDF()" class="flex-1 bg-primary hover:bg-primaryHover text-white py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow-sm">
+                    <i class="fa-solid fa-file-pdf"></i> Download PDF
                 </button>
                 <button onclick="app.closeModal('modal-shift-summary')" class="px-3 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-xl text-xs font-bold transition-colors">
                     Tutup
@@ -822,6 +849,8 @@
             selectedPaymentMethod: 'cash',
             lastCompletedTrx: null,
             pendingProductId: null,
+            currentExpectedCash: 0,
+            lastAuditData: null,
 
             installPWA() {
                 if (deferredPrompt) {
@@ -860,15 +889,22 @@
                 }
                 const displayVal = this.activeNumpadRaw !== '' ? new Intl.NumberFormat('id-ID').format(this.activeNumpadRaw) : '0';
                 document.getElementById('numpad-display').innerText = displayVal;
+
+                if (this.activeNumpadTarget === 'input-actual-cash') {
+                    this.calculateCashDifference();
+                }
             },
 
             confirmGlobalNumpad() {
                 if (this.activeNumpadTarget) {
                     const el = document.getElementById(this.activeNumpadTarget);
                     if (el) {
-                        const isFormattedCurrency = this.activeNumpadTarget === 'prod-price';
+                        const isFormattedCurrency = this.activeNumpadTarget === 'prod-price' || this.activeNumpadTarget === 'input-actual-cash';
                         el.value = this.activeNumpadRaw !== '' ? (isFormattedCurrency ? new Intl.NumberFormat('id-ID').format(this.activeNumpadRaw) : this.activeNumpadRaw) : '';
                     }
+                }
+                if (this.activeNumpadTarget === 'input-actual-cash') {
+                    this.calculateCashDifference();
                 }
                 document.getElementById('modal-numpad').classList.add('hidden');
             },
@@ -958,45 +994,6 @@
                     localStorage.setItem('khjam_frame_stock_catalog_v2', JSON.stringify(this.data.frameStock));
                 } catch(e) {
                     console.error('Storage error', e);
-                }
-            },
-
-            exportBackup() {
-                const backupData = { products: this.data.products, history: this.data.history, stock: this.data.stock, frameStock: this.data.frameStock, exportDate: new Date().toISOString() };
-                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupData, null, 2));
-                const downloadAnchor = document.createElement('a');
-                downloadAnchor.setAttribute("href", dataStr);
-                downloadAnchor.setAttribute("download", `khjam_backup_${new Date().toISOString().slice(0,10)}.json`);
-                document.body.appendChild(downloadAnchor);
-                downloadAnchor.click();
-                downloadAnchor.remove();
-                this.showToast('Data berhasil dicadangkan!');
-            },
-
-            importBackup(event) {
-                const fileReader = new FileReader();
-                if (event.target.files[0]) {
-                    fileReader.readAsText(event.target.files[0], "UTF-8");
-                    fileReader.onload = (e) => {
-                        try {
-                            const parsed = JSON.parse(e.target.result);
-                            if (parsed.products && Array.isArray(parsed.products)) {
-                                this.data.products = parsed.products;
-                                if (parsed.history && Array.isArray(parsed.history)) this.data.history = parsed.history;
-                                if (parsed.stock && Array.isArray(parsed.stock)) this.data.stock = parsed.stock;
-                                if (parsed.frameStock && Array.isArray(parsed.frameStock)) this.data.frameStock = parsed.frameStock;
-                                this.saveData();
-                                this.renderProducts();
-                                this.renderInventory();
-                                this.renderStock();
-                                this.showToast('Data berhasil dipulihkan!');
-                            } else {
-                                this.showToast('Format file cadangan tidak valid.');
-                            }
-                        } catch (error) {
-                            this.showToast('Gagal membaca file JSON.');
-                        }
-                    };
                 }
             },
 
@@ -1387,22 +1384,67 @@
                 document.getElementById('modal-receipt').classList.remove('hidden');
             },
 
-            downloadReceipt() {
+            downloadReceiptPDF() {
                 if (!this.lastCompletedTrx) return;
                 const trx = this.lastCompletedTrx;
-                let text = `=== KHJAM PHOTO STUDIO ===\nID: ${trx.id}\nWaktu: ${trx.date}\n--------------------------------\n`;
-                trx.items.forEach(i => { text += `${i.qty}x ${i.name} @${formatRupiah(i.price)} = ${formatRupiah(i.price * i.qty)}\n`; });
-                text += `--------------------------------\nTotal: ${formatRupiah(trx.total)}\nBayar (${trx.method}): ${formatRupiah(trx.payment)}\nKembali: ${formatRupiah(trx.change)}\n================================\nTerima Kasih Telah Berkunjung!\n`;
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({ unit: 'mm', format: [80, 150] });
 
-                const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `Struk_${trx.id}.txt`;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                this.showToast('Struk berhasil diunduh!');
+                doc.setFont("Helvetica", "bold");
+                doc.setFontSize(12);
+                doc.text("KHJAM PHOTO STUDIO", 40, 10, { align: "center" });
+                
+                doc.setFont("Helvetica", "normal");
+                doc.setFontSize(8);
+                doc.text("Jl. Studio Foto No. 88, Karawang", 40, 15, { align: "center" });
+                doc.text(`Waktu: ${trx.date}`, 40, 19, { align: "center" });
+                doc.text(`ID: ${trx.id}`, 40, 23, { align: "center" });
+
+                doc.setLineWidth(0.2);
+                doc.line(5, 26, 75, 26);
+
+                let y = 31;
+                doc.setFontSize(8);
+                trx.items.forEach(i => {
+                    doc.setFont("Helvetica", "bold");
+                    doc.text(`${i.qty}x ${i.name}`, 5, y);
+                    doc.text(formatRupiah(i.price * i.qty), 75, y, { align: "right" });
+                    y += 5;
+                    doc.setFont("Helvetica", "normal");
+                    doc.text(`@ ${formatRupiah(i.price)}`, 5, y);
+                    y += 5;
+                });
+
+                doc.line(5, y, 75, y);
+                y += 5;
+
+                doc.setFont("Helvetica", "bold");
+                doc.text("Total Tagihan:", 5, y);
+                doc.text(formatRupiah(trx.total), 75, y, { align: "right" });
+                y += 5;
+
+                doc.setFont("Helvetica", "normal");
+                doc.text(`Bayar (${trx.method}):`, 5, y);
+                doc.text(formatRupiah(trx.payment), 75, y, { align: "right" });
+                y += 5;
+
+                doc.text("Kembalian:", 5, y);
+                doc.text(formatRupiah(trx.change), 75, y, { align: "right" });
+                y += 7;
+
+                doc.setLineWidth(0.2);
+                doc.line(5, y, 75, y);
+                y += 5;
+
+                doc.setFont("Helvetica", "bold");
+                doc.text("Terima Kasih Telah Berkunjung!", 40, y, { align: "center" });
+                y += 4;
+                doc.setFont("Helvetica", "normal");
+                doc.setFontSize(7);
+                doc.text("Simpan struk ini sebagai bukti pengambilan foto.", 40, y, { align: "center" });
+
+                doc.save(`Struk_${trx.id}.pdf`);
+                this.showToast('Struk PDF berhasil diunduh!');
             },
 
             shareReceipt() {
@@ -1462,6 +1504,67 @@
                 }
             },
 
+            openShiftCheckModal() {
+                let expectedCash = 0;
+                this.data.history.forEach(trx => {
+                    if ((trx.method || 'CASH').toUpperCase() === 'CASH') {
+                        expectedCash += (trx.total || 0);
+                    }
+                });
+                this.currentExpectedCash = expectedCash;
+                document.getElementById('shift-expected-cash').innerText = formatRupiah(expectedCash);
+                document.getElementById('input-actual-cash').value = new Intl.NumberFormat('id-ID').format(expectedCash);
+                
+                const diffBox = document.getElementById('diff-box');
+                diffBox.className = "bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-center";
+                document.getElementById('diff-label').innerText = "SELISIH KAS";
+                document.getElementById('diff-amount').className = "text-sm font-extrabold text-emerald-600";
+                document.getElementById('diff-amount').innerText = "Rp 0 (Pas)";
+                diffBox.classList.remove('hidden');
+
+                document.getElementById('modal-shift-check').classList.remove('hidden');
+            },
+
+            calculateCashDifference() {
+                const actualValStr = document.getElementById('input-actual-cash').value.replace(/\./g, '');
+                const actualCash = parseFloat(actualValStr) || 0;
+                const diff = actualCash - this.currentExpectedCash;
+
+                const diffBox = document.getElementById('diff-box');
+                const diffAmount = document.getElementById('diff-amount');
+                const diffLabel = document.getElementById('diff-label');
+
+                diffBox.classList.remove('hidden');
+                if (diff === 0) {
+                    diffBox.className = "bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-center";
+                    diffLabel.innerText = "STATUS KAS FISIK";
+                    diffAmount.className = "text-sm font-extrabold text-emerald-600";
+                    diffAmount.innerText = "Rp 0 (Pas / Seimbang)";
+                } else if (diff > 0) {
+                    diffBox.className = "bg-blue-50 border border-blue-200 p-3 rounded-xl text-center";
+                    diffLabel.innerText = "KAS LEBIH (SURPLUS)";
+                    diffAmount.className = "text-sm font-extrabold text-blue-600";
+                    diffAmount.innerText = `+ ${formatRupiah(diff)}`;
+                } else {
+                    diffBox.className = "bg-red-50 border border-red-200 p-3 rounded-xl text-center";
+                    diffLabel.innerText = "KAS KURANG (DEFISIT)";
+                    diffAmount.className = "text-sm font-extrabold text-red-600";
+                    diffAmount.innerText = `- ${formatRupiah(Math.abs(diff))}`;
+                }
+
+                this.lastAuditData = { expected: this.currentExpectedCash, actual: actualCash, diff };
+            },
+
+            proceedToShiftSummary() {
+                const actualValStr = document.getElementById('input-actual-cash').value.replace(/\./g, '');
+                const actualCash = parseFloat(actualValStr) || 0;
+                const diff = actualCash - this.currentExpectedCash;
+
+                this.lastAuditData = { expected: this.currentExpectedCash, actual: actualCash, diff };
+                this.closeModal('modal-shift-check');
+                this.openShiftSummaryModal();
+            },
+
             openShiftSummaryModal() {
                 const history = this.data.history;
                 const totalTrx = history.length;
@@ -1495,7 +1598,8 @@
                     }
                 });
 
-                this.currentShiftSummaryData = { totalTrx, totalRevenue, paymentStats, productStats };
+                const audit = this.lastAuditData || { expected: paymentStats['CASH'] || 0, actual: paymentStats['CASH'] || 0, diff: 0 };
+                this.currentShiftSummaryData = { totalTrx, totalRevenue, paymentStats, productStats, audit };
 
                 document.getElementById('shift-date-range').innerText = `Waktu Cetak: ${getFormatDate()}`;
                 document.getElementById('shift-total-trx').innerText = `${totalTrx} Transaksi`;
@@ -1510,6 +1614,14 @@
                     div.innerHTML = `<span>Metode ${method}:</span><span class="font-bold text-gray-800">${formatRupiah(amount)}</span>`;
                     pmContainer.appendChild(div);
                 });
+
+                const auditSummaryEl = document.getElementById('shift-audit-result-summary');
+                auditSummaryEl.innerHTML = `
+                    <div class="bg-gray-50 p-2 rounded-lg border border-gray-200 space-y-1 text-xs">
+                        <div class="flex justify-between"><span>Kas Fisik Aktual:</span><b class="text-gray-800">${formatRupiah(audit.actual)}</b></div>
+                        <div class="flex justify-between"><span>Selisih Kas:</span><b class="${audit.diff < 0 ? 'text-red-600' : audit.diff > 0 ? 'text-blue-600' : 'text-emerald-600'}">${audit.diff === 0 ? 'Rp 0 (Pas)' : (audit.diff > 0 ? '+' : '') + formatRupiah(audit.diff)}</b></div>
+                    </div>
+                `;
 
                 const prodContainer = document.getElementById('shift-products-list');
                 prodContainer.innerHTML = '';
@@ -1535,54 +1647,97 @@
                 document.getElementById('modal-shift-summary').classList.remove('hidden');
             },
 
-            downloadShiftSummary() {
+            downloadShiftSummaryPDF() {
                 const data = this.currentShiftSummaryData;
                 if (!data) return;
 
-                let text = `========================================\n`;
-                text += `       KHJAM PHOTO STUDIO - SHIFT\n`;
-                text += `========================================\n`;
-                text += `Waktu Cetak : ${getFormatDate()}\n`;
-                text += `----------------------------------------\n`;
-                text += `1. RINGKASAN PENDAPATAN & TRANSAKSI\n`;
-                text += `----------------------------------------\n`;
-                text += `Total Transaksi  : ${data.totalTrx} Transaksi\n`;
-                text += `Total Pendapatan : ${formatRupiah(data.totalRevenue)}\n\n`;
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
                 
-                text += `----------------------------------------\n`;
-                text += `2. RINCIAN JENIS PEMBAYARAN\n`;
-                text += `----------------------------------------\n`;
-                Object.keys(data.paymentStats).forEach(method => {
-                    text += `Metode ${method.padEnd(8, ' ')} : ${formatRupiah(data.paymentStats[method])}\n`;
-                });
-                text += `\n`;
+                doc.setFont("Helvetica", "bold");
+                doc.setFontSize(16);
+                doc.text("KHJAM PHOTO STUDIO", 105, 15, { align: "center" });
 
-                text += `----------------------------------------\n`;
-                text += `3. RINCIAN PRODUK TERJUAL\n`;
-                text += `----------------------------------------\n`;
+                doc.setFontSize(11);
+                doc.text("LAPORAN REKAPITULASI SHIFT / TUTUP KASIR", 105, 22, { align: "center" });
+                
+                doc.setFont("Helvetica", "normal");
+                doc.setFontSize(9);
+                doc.text(`Waktu Cetak: ${getFormatDate()}`, 105, 28, { align: "center" });
+
+                doc.setLineWidth(0.5);
+                doc.line(14, 33, 196, 33);
+
+                let y = 40;
+                doc.setFont("Helvetica", "bold");
+                doc.setFontSize(11);
+                doc.text("1. Ringkasan Pendapatan & Transaksi", 14, y);
+                y += 6;
+
+                doc.setFont("Helvetica", "normal");
+                doc.setFontSize(10);
+                doc.text(`Jumlah Total Transaksi : ${data.totalTrx} Transaksi`, 14, y);
+                y += 6;
+                doc.text(`Total Pendapatan       : ${formatRupiah(data.totalRevenue)}`, 14, y);
+                y += 10;
+
+                doc.setFont("Helvetica", "bold");
+                doc.setFontSize(11);
+                doc.text("2. Rincian Jenis Pembayaran & Audit Kas", 14, y);
+                y += 6;
+
+                doc.setFont("Helvetica", "normal");
+                doc.setFontSize(10);
+                Object.keys(data.paymentStats).forEach(method => {
+                    doc.text(`- Metode ${method.padEnd(8, ' ')} : ${formatRupiah(data.paymentStats[method])}`, 14, y);
+                    y += 6;
+                });
+                doc.text(`- Kas Fisik Aktual     : ${formatRupiah(data.audit.actual)}`, 14, y);
+                y += 6;
+                let diffText = data.audit.diff === 0 ? 'Rp 0 (Pas / Seimbang)' : (data.audit.diff > 0 ? '+' : '') + formatRupiah(data.audit.diff);
+                doc.text(`- Selisih Kas          : ${diffText}`, 14, y);
+                y += 10;
+
+                doc.setFont("Helvetica", "bold");
+                doc.setFontSize(11);
+                doc.text("3. Rincian Produk Terjual", 14, y);
+                y += 6;
+
                 const prodKeys = Object.keys(data.productStats);
                 if (prodKeys.length === 0) {
-                    text += `(Belum ada produk terjual)\n`;
+                    doc.setFont("Helvetica", "normal");
+                    doc.text("(Belum ada produk terjual dalam shift ini)", 14, y);
+                    y += 6;
                 } else {
+                    doc.setFont("Helvetica", "bold");
+                    doc.setFontSize(9);
+                    doc.text("Nama Produk", 14, y);
+                    doc.text("Terjual", 130, y);
+                    doc.text("Subtotal", 170, y);
+                    y += 4;
+                    doc.setLineWidth(0.2);
+                    doc.line(14, y, 196, y);
+                    y += 5;
+
+                    doc.setFont("Helvetica", "normal");
                     prodKeys.forEach(name => {
                         const p = data.productStats[name];
-                        text += `• ${name}\n`;
-                        text += `  Terjual : ${p.qty} Pcs | Subtotal: ${formatRupiah(p.total)}\n`;
+                        if (y > 275) { doc.addPage(); y = 20; }
+                        doc.text(name, 14, y);
+                        doc.text(`${p.qty} Pcs`, 130, y);
+                        doc.text(formatRupiah(p.total), 170, y);
+                        y += 6;
                     });
                 }
-                text += `========================================\n`;
-                text += `      LAPORAN SELESAI & TERSIMPAN\n`;
-                text += `========================================\n`;
 
-                const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `Rekap_Shift_${new Date().toISOString().slice(0,10)}.txt`;
-                document.body.appendChild(a);
-                a.click();
-                a.remove();
-                this.showToast('Laporan rekap shift berhasil diunduh!');
+                y += 10;
+                if (y > 270) { doc.addPage(); y = 20; }
+                doc.setFont("Helvetica", "italic");
+                doc.setFontSize(8);
+                doc.text("Laporan rekap shift ini digenerate otomatis oleh sistem KHJAM POS.", 105, y, { align: "center" });
+
+                doc.save(`Rekap_Shift_${new Date().toISOString().slice(0,10)}.pdf`);
+                this.showToast('Laporan Shift PDF berhasil diunduh!');
             },
 
             renderInventory() {
