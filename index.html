@@ -27,7 +27,7 @@
             "short_name": "KHJAM POS",
             "start_url": "./khjam_pos.html",
             "display": "standalone",
-            "background_color": "#ffffff",
+            "background_color": "#f8fafc",
             "theme_color": "#76cdca",
             "icons": [
                 {
@@ -82,11 +82,11 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 h-screen overflow-hidden flex flex-col md:flex-row font-sans selection:bg-primary selection:text-white">
+<body class="bg-gradient-to-br from-slate-50 via-teal-50/20 to-amber-50/20 text-gray-800 h-screen overflow-hidden flex flex-col md:flex-row font-sans selection:bg-primary selection:text-white">
 
     <!-- SIDEBAR DESKTOP -->
-    <aside class="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 shadow-sm z-20 h-full shrink-0">
-        <div class="p-4 border-b border-gray-200 flex flex-col items-center justify-center">
+    <aside class="hidden md:flex flex-col w-64 bg-white/90 backdrop-blur-md border-r border-gray-200/80 shadow-sm z-20 h-full shrink-0">
+        <div class="p-4 border-b border-gray-100 flex flex-col items-center justify-center">
             <svg class="w-8 h-8 mb-1" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M48 90 C 20 85, 10 70, 10 55 L 10 45 C 15 30, 30 20, 48 10 L 48 35 C 38 40, 25 50, 30 65 L 48 70 Z" fill="#76cdca"/>
                 <path d="M52 90 C 80 85, 90 70, 90 55 L 90 45 C 85 30, 70 20, 52 10 L 52 35 C 62 40, 75 50, 70 65 L 52 70 Z" fill="#fdd375"/>
@@ -95,23 +95,23 @@
             <h1 class="text-base font-bold text-gray-800 tracking-tight">KHJAM</h1>
         </div>
         <nav class="flex-1 overflow-y-auto p-3 space-y-1">
-            <button onclick="app.switchView('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100 transition-colors text-xs">
+            <button onclick="app.switchView('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100/80 transition-colors text-xs">
                 <i class="fa-solid fa-chart-pie w-5"></i> Dashboard
             </button>
-            <button onclick="app.switchView('pos')" id="nav-pos" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left font-medium transition-colors bg-primary text-white text-xs">
+            <button onclick="app.switchView('pos')" id="nav-pos" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left font-medium transition-colors bg-primary text-white text-xs shadow-sm">
                 <i class="fa-solid fa-calculator w-5"></i> Kasir (POS)
             </button>
-            <button onclick="app.switchView('history')" id="nav-history" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100 transition-colors text-xs">
+            <button onclick="app.switchView('history')" id="nav-history" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100/80 transition-colors text-xs">
                 <i class="fa-solid fa-clock-rotate-left w-5"></i> Riwayat Transaksi
             </button>
-            <button onclick="app.switchView('inventory')" id="nav-inventory" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100 transition-colors text-xs">
+            <button onclick="app.switchView('inventory')" id="nav-inventory" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100/80 transition-colors text-xs">
                 <i class="fa-solid fa-box-open w-5"></i> Manajemen Produk
             </button>
-            <button onclick="app.switchView('stock')" id="nav-stock" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100 transition-colors text-xs">
+            <button onclick="app.switchView('stock')" id="nav-stock" class="nav-btn w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-left font-medium text-gray-600 hover:bg-gray-100/80 transition-colors text-xs">
                 <i class="fa-solid fa-warehouse w-5"></i> Manajemen Stok
             </button>
         </nav>
-        <div class="p-3 border-t border-gray-200 bg-gray-50 flex flex-col gap-1.5 shrink-0">
+        <div class="p-3 border-t border-gray-100 bg-white/50 flex flex-col gap-1.5 shrink-0">
             <button id="btn-install-pwa" onclick="app.installPWA()" class="w-full bg-secondary hover:bg-secondaryHover text-gray-900 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-sm hidden">
                 <i class="fa-solid fa-mobile-screen-button text-sm"></i> Install Aplikasi (APK)
             </button>
@@ -119,7 +119,7 @@
     </aside>
 
     <!-- HEADER MOBILE -->
-    <header class="md:hidden bg-white shadow-sm px-4 py-3 flex justify-between items-center z-25 shrink-0">
+    <header class="md:hidden bg-white/90 backdrop-blur-md shadow-sm px-4 py-3 flex justify-between items-center z-25 shrink-0 border-b border-gray-100">
         <div class="flex items-center gap-2">
             <svg class="w-6 h-6" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M48 90 C 20 85, 10 70, 10 55 L 10 45 C 15 30, 30 20, 48 10 L 48 35 C 38 40, 25 50, 30 65 L 48 70 Z" fill="#76cdca"/>
@@ -145,7 +145,7 @@
         <div class="flex-1 h-full overflow-hidden relative w-full flex flex-col">
             
             <!-- Dashboard View -->
-            <div id="view-dashboard" class="view-section hidden h-full flex flex-col p-4 md:p-6 bg-gray-50 overflow-y-auto">
+            <div id="view-dashboard" class="view-section hidden h-full flex flex-col p-4 md:p-6 bg-transparent overflow-y-auto">
                 <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <div>
                         <h2 class="text-2xl font-bold text-gray-800">Dashboard KHJAM</h2>
@@ -155,7 +155,7 @@
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <!-- Card Hari Ini / Tanggal Terpilih -->
-                    <div onclick="app.openDailyPickerModal()" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-primary cursor-pointer hover:shadow-md transition-all group relative">
+                    <div onclick="app.openCustomDailyPickerModal()" class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-sm border border-gray-200/80 border-l-4 border-l-primary cursor-pointer hover:shadow-md transition-all group relative">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-full bg-[#e6f7f6] text-primary flex items-center justify-center"><i class="fa-solid fa-calendar-day"></i></div>
@@ -168,7 +168,7 @@
                     </div>
 
                     <!-- Card Bulan Ini -->
-                    <div onclick="app.openMonthPickerModal()" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-secondary cursor-pointer hover:shadow-md transition-all group relative">
+                    <div onclick="app.openMonthPickerModal()" class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-sm border border-gray-200/80 border-l-4 border-l-secondary cursor-pointer hover:shadow-md transition-all group relative">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-full bg-[#fff8e6] text-secondary flex items-center justify-center"><i class="fa-solid fa-calendar-week"></i></div>
@@ -181,7 +181,7 @@
                     </div>
 
                     <!-- Card Tahun Ini -->
-                    <div onclick="app.openYearPickerModal()" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-amber-400 cursor-pointer hover:shadow-md transition-all group relative">
+                    <div onclick="app.openYearPickerModal()" class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-sm border border-gray-200/80 border-l-4 border-l-amber-400 cursor-pointer hover:shadow-md transition-all group relative">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
                                 <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center"><i class="fa-solid fa-calendar-days"></i></div>
@@ -193,31 +193,18 @@
                         <div class="text-xs text-gray-400 mt-2"><span id="dash-yearly-count" class="font-bold text-gray-600">0</span> Transaksi diselesaikan</div>
                     </div>
                 </div>
-
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-1">Total Semua Pendapatan</h3>
-                        <div class="flex items-baseline gap-2">
-                            <div id="dash-all-time-revenue" class="text-3xl font-bold text-primary">Rp 0</div>
-                            <div class="text-sm text-gray-500">Dari <span id="dash-all-time-count" class="font-bold text-gray-700">0</span> total transaksi.</div>
-                        </div>
-                    </div>
-                    <button onclick="app.switchView('history')" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-3 rounded-xl font-medium transition-colors text-sm flex items-center gap-2 whitespace-nowrap shadow-sm">
-                        Lihat Semua Transaksi <i class="fa-solid fa-arrow-right"></i>
-                    </button>
-                </div>
             </div>
 
             <!-- POS View -->
             <div id="view-pos" class="view-section h-full flex flex-col md:flex-row overflow-hidden">
-                <div class="flex-1 flex flex-col h-full bg-gray-50 overflow-hidden">
-                    <div class="p-3 bg-white border-b border-gray-200 shrink-0">
+                <div class="flex-1 flex flex-col h-full bg-transparent overflow-hidden">
+                    <div class="p-3 bg-white/80 backdrop-blur-md border-b border-gray-200/80 shrink-0">
                         <div class="flex space-x-2 overflow-x-auto hide-scroll pb-1">
-                            <button onclick="app.filterProducts('all')" id="filter-all" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-gray-800 text-white transition-colors">Semua</button>
-                            <button onclick="app.filterProducts('paket')" id="filter-paket" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">Paket Studio</button>
-                            <button onclick="app.filterProducts('self_studio')" id="filter-self_studio" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">Self Studio</button>
-                            <button onclick="app.filterProducts('photobox')" id="filter-photobox" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">Photobox</button>
-                            <button onclick="app.filterProducts('pas_photo')" id="filter-pas_photo" class="filter-btn px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors">Pas Photo</button>
+                            <button onclick="app.filterProducts('all')" id="filter-all" class="filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap bg-gray-900 text-white shadow-sm transition-colors">Semua</button>
+                            <button onclick="app.filterProducts('paket')" id="filter-paket" class="filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap bg-secondary text-black shadow-sm transition-colors">Photo Studio</button>
+                            <button onclick="app.filterProducts('self_studio')" id="filter-self_studio" class="filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap bg-secondary text-black shadow-sm transition-colors">Self Studio</button>
+                            <button onclick="app.filterProducts('photobox')" id="filter-photobox" class="filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap bg-secondary text-black shadow-sm transition-colors">Photobox</button>
+                            <button onclick="app.filterProducts('pas_photo')" id="filter-pas_photo" class="filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap bg-secondary text-black shadow-sm transition-colors">Pas Photo</button>
                         </div>
                     </div>
                     <div class="flex-1 overflow-y-auto p-3">
@@ -226,8 +213,8 @@
                 </div>
 
                 <!-- Cart Panel -->
-                <div id="cart-container" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white shadow-2xl transform translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-30 flex flex-col md:relative md:w-96 md:border-l md:border-gray-200 h-full">
-                    <div class="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-gray-50 md:bg-white shrink-0">
+                <div id="cart-container" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white/95 backdrop-blur-md shadow-2xl transform translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-30 flex flex-col md:relative md:w-96 md:border-l md:border-gray-200/80 h-full">
+                    <div class="px-4 py-3 border-b border-gray-200/80 flex justify-between items-center bg-gray-50/50 md:bg-white/50 shrink-0">
                         <h2 class="text-base font-bold text-gray-800">Keranjang Pesanan</h2>
                         <button class="md:hidden text-gray-500 hover:text-red-500" onclick="app.toggleMobileCart()">
                             <i class="fa-solid fa-xmark text-lg"></i>
@@ -241,7 +228,7 @@
                         </div>
                     </div>
 
-                    <div class="border-t border-gray-200 p-3 bg-gray-50 shrink-0">
+                    <div class="border-t border-gray-200/80 p-3 bg-gray-50/50 shrink-0">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-xs text-gray-600 font-medium">Subtotal</span>
                             <span id="cart-subtotal" class="font-bold text-gray-800 text-base">Rp 0</span>
@@ -255,14 +242,14 @@
             </div>
 
             <!-- History View -->
-            <div id="view-history" class="view-section hidden h-full flex flex-col p-4 md:p-6 bg-gray-50 overflow-hidden">
+            <div id="view-history" class="view-section hidden h-full flex flex-col p-4 md:p-6 bg-transparent overflow-hidden">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3 shrink-0">
                     <div>
                         <h2 class="text-xl font-bold text-gray-800">Riwayat Transaksi (Shift Berjalan)</h2>
                         <p class="text-xs text-gray-500">Log transaksi hari ini. Data di-reset otomatis setelah akhiri shift.</p>
                     </div>
                     <div class="flex items-center gap-2 flex-wrap">
-                        <button onclick="app.openShiftHistoryModal()" class="bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 px-3.5 py-2 rounded-xl font-bold shadow-sm transition-colors flex items-center gap-2 text-xs">
+                        <button onclick="app.openShiftHistoryModal()" class="bg-white/90 hover:bg-gray-100 text-gray-700 border border-gray-300 px-3.5 py-2 rounded-xl font-bold shadow-sm transition-colors flex items-center gap-2 text-xs">
                             <i class="fa-solid fa-folder-open text-primary"></i> Riwayat Shift
                         </button>
                         <button onclick="app.openPinModal()" class="bg-secondary hover:bg-secondaryHover text-gray-900 px-3.5 py-2 rounded-xl font-bold shadow transition-colors flex items-center gap-2 text-xs">
@@ -271,11 +258,11 @@
                     </div>
                 </div>
                 
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex-1 overflow-hidden flex flex-col">
+                <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-sm border border-gray-200/80 flex-1 overflow-hidden flex flex-col">
                     <div class="overflow-x-auto flex-1">
                         <table class="w-full text-left border-collapse min-w-[600px]">
                             <thead>
-                                <tr class="bg-gray-50 text-gray-600 text-xs border-b border-gray-200">
+                                <tr class="bg-gray-50/80 text-gray-600 text-xs border-b border-gray-200/80">
                                     <th class="p-3 font-medium">ID Transaksi</th>
                                     <th class="p-3 font-medium">Waktu</th>
                                     <th class="p-3 font-medium">Metode</th>
@@ -291,22 +278,22 @@
             </div>
 
             <!-- Inventory View -->
-            <div id="view-inventory" class="view-section hidden h-full flex flex-col p-3 md:p-5 bg-gray-50 overflow-hidden">
+            <div id="view-inventory" class="view-section hidden h-full flex flex-col p-3 md:p-5 bg-transparent overflow-hidden">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 gap-2 shrink-0">
                     <div>
                         <h2 class="text-xl font-bold text-gray-800">Manajemen Produk</h2>
-                        <p class="text-xs text-gray-500">Kelola paket studio, layanan self studio, photobox, dan pas photo.</p>
+                        <p class="text-xs text-gray-500">Kelola photo studio, layanan self studio, photobox, dan pas photo.</p>
                     </div>
-                    <button onclick="app.openProductModal()" class="bg-primary hover:bg-primaryHover text-white px-3.5 py-2 rounded-lg font-medium shadow transition-colors flex items-center gap-2 text-xs">
+                    <button onclick="app.openProductModal()" class="bg-primary hover:bg-primaryHover text-white px-3.5 py-2 rounded-xl font-medium shadow transition-colors flex items-center gap-2 text-xs">
                         <i class="fa-solid fa-plus"></i> Tambah Produk
                     </button>
                 </div>
 
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex-1 overflow-hidden flex flex-col">
+                <div class="bg-white/90 backdrop-blur-md rounded-2xl shadow-sm border border-gray-200/80 flex-1 overflow-hidden flex flex-col">
                     <div class="overflow-y-auto flex-1">
                         <table class="w-full text-left border-collapse min-w-[850px]">
-                            <thead class="sticky top-0 bg-gray-50 z-10">
-                                <tr class="text-gray-600 text-xs border-b border-gray-200">
+                            <thead class="sticky top-0 bg-gray-50/90 backdrop-blur-md z-10">
+                                <tr class="text-gray-600 text-xs border-b border-gray-200/80">
                                     <th class="p-3 font-medium">Nama Produk</th>
                                     <th class="p-3 font-medium">Kategori</th>
                                     <th class="p-3 font-medium">Rincian Spesifikasi</th>
@@ -321,40 +308,39 @@
             </div>
 
             <!-- Stock View -->
-            <div id="view-stock" class="view-section hidden h-full flex flex-col p-3 md:p-5 bg-gray-50 overflow-hidden">
+            <div id="view-stock" class="view-section hidden h-full flex flex-col p-3 md:p-5 bg-transparent overflow-hidden">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-3 gap-2 shrink-0">
                     <div>
                         <h2 class="text-xl font-bold text-gray-800">Manajemen Stok Barang</h2>
-                        <p class="text-xs text-gray-500">Pantau stok frame 4R-6R & 10R-60x90.</p>
+                        <p class="text-xs text-gray-500">Pantau ketersediaan stok frame dan material secara real-time.</p>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="app.switchStockSubTab('frame')" id="stock-tab-frame" class="px-3.5 py-1.5 rounded-lg font-bold text-xs bg-primary text-white shadow transition-colors">
+                        <button onclick="app.switchStockSubTab('frame')" id="stock-tab-frame" class="px-3.5 py-1.5 rounded-xl font-bold text-xs bg-primary text-white shadow transition-colors">
                             <i class="fa-solid fa-image mr-1"></i> Stok Frame
                         </button>
-                        <button onclick="app.switchStockSubTab('other')" id="stock-tab-other" class="px-3.5 py-1.5 rounded-lg font-medium text-xs bg-white text-gray-600 border border-gray-300 hover:bg-gray-100 transition-colors">
+                        <button onclick="app.switchStockSubTab('other')" id="stock-tab-other" class="px-3.5 py-1.5 rounded-xl font-medium text-xs bg-white/90 text-gray-600 border border-gray-300 hover:bg-gray-100 transition-colors">
                             <i class="fa-solid fa-box mr-1"></i> Lainnya / Material
                         </button>
                     </div>
                 </div>
 
                 <!-- Subtab Frame Content -->
-                <div id="stock-subview-frame" class="bg-white rounded-xl shadow-sm border border-gray-200 flex-1 overflow-hidden flex flex-col">
-                    <div class="p-2.5 bg-gray-50 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 shrink-0">
-                        <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Daftar Stok Frame (4R - 60x90)</span>
+                <div id="stock-subview-frame" class="bg-white/90 backdrop-blur-md rounded-2xl shadow-sm border border-gray-200/80 flex-1 overflow-hidden flex flex-col">
+                    <div class="p-2.5 bg-gray-50/80 border-b border-gray-200/80 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 shrink-0">
+                        <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Status Stok Frame (4R - 60x90)</span>
                         <div class="flex items-center gap-2">
-                            <button onclick="app.openBulkInboundModal()" class="bg-secondary hover:bg-secondaryHover text-gray-900 px-3 py-1.5 rounded-lg text-xs font-bold shadow transition-colors flex items-center gap-1.5">
-                                <i class="fa-solid fa-boxes-stacked"></i> Stok Masuk Frame
+                            <button onclick="app.openPinModalForRestock()" class="bg-secondary hover:bg-secondaryHover text-gray-900 px-3 py-1.5 rounded-xl text-xs font-bold shadow transition-colors flex items-center gap-1.5">
+                                <i class="fa-solid fa-boxes-stacked"></i> Input Stok Masuk (Restock)
                             </button>
                         </div>
                     </div>
                     <div class="overflow-y-auto flex-1">
-                        <table class="w-full text-left border-collapse min-w-[750px]">
-                            <thead class="sticky top-0 bg-gray-50 z-10">
-                                <tr class="text-gray-600 text-xs border-b border-gray-200">
+                        <table class="w-full text-left border-collapse min-w-[700px]">
+                            <thead class="sticky top-0 bg-gray-50/90 backdrop-blur-md z-10">
+                                <tr class="text-gray-600 text-xs border-b border-gray-200/80">
                                     <th class="p-3 font-medium">Ukuran Frame</th>
                                     <th class="p-3 font-medium">Warna / Tipe Ukir</th>
-                                    <th class="p-3 font-medium">Sisa / Aktual Stok</th>
-                                    <th class="p-3 font-medium text-right">Aksi & Penyesuaian</th>
+                                    <th class="p-3 font-medium">Status Ketersediaan Stok</th>
                                 </tr>
                             </thead>
                             <tbody id="frame-stock-list" class="text-xs divide-y divide-gray-100"></tbody>
@@ -363,21 +349,20 @@
                 </div>
 
                 <!-- Subtab Other Content -->
-                <div id="stock-subview-other" class="bg-white rounded-xl shadow-sm border border-gray-200 flex-1 overflow-hidden flex flex-col hidden">
-                    <div class="p-2.5 bg-gray-50 border-b border-gray-200 flex justify-between items-center shrink-0">
-                        <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Daftar Material & Perlengkapan</span>
-                        <button onclick="app.openStockModal()" class="bg-primary hover:bg-primaryHover text-white px-3 py-1.5 rounded-lg text-xs font-bold shadow transition-colors flex items-center gap-1">
-                            <i class="fa-solid fa-plus"></i> Tambah Item
+                <div id="stock-subview-other" class="bg-white/90 backdrop-blur-md rounded-2xl shadow-sm border border-gray-200/80 flex-1 overflow-hidden flex flex-col hidden">
+                    <div class="p-2.5 bg-gray-50/80 border-b border-gray-200/80 flex justify-between items-center shrink-0">
+                        <span class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Status Material & Perlengkapan</span>
+                        <button onclick="app.openPinModalForOtherRestock()" class="bg-primary hover:bg-primaryHover text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow transition-colors flex items-center gap-1">
+                            <i class="fa-solid fa-plus"></i> Tambah / Restock Material
                         </button>
                     </div>
                     <div class="overflow-y-auto flex-1">
                         <table class="w-full text-left border-collapse min-w-[700px]">
-                            <thead class="sticky top-0 bg-gray-50 z-10">
-                                <tr class="text-gray-600 text-xs border-b border-gray-200">
+                            <thead class="sticky top-0 bg-gray-50/90 backdrop-blur-md z-10">
+                                <tr class="text-gray-600 text-xs border-b border-gray-200/80">
                                     <th class="p-3 font-medium">Nama Barang / Material</th>
                                     <th class="p-3 font-medium">Kategori Stok</th>
-                                    <th class="p-3 font-medium">Sisa / Aktual Stok</th>
-                                    <th class="p-3 font-medium text-right">Aksi & Penyesuaian</th>
+                                    <th class="p-3 font-medium">Status Ketersediaan Stok</th>
                                 </tr>
                             </thead>
                             <tbody id="other-stock-list" class="text-xs divide-y divide-gray-100"></tbody>
@@ -390,7 +375,7 @@
     </main>
 
     <!-- MOBILE BOTTOM NAVIGATION -->
-    <nav class="md:hidden fixed bottom-0 w-full bg-white border-t border-gray-200 z-20 flex justify-around items-center pb-safe">
+    <nav class="md:hidden fixed bottom-0 w-full bg-white/90 backdrop-blur-md border-t border-gray-200/80 z-20 flex justify-around items-center pb-safe">
         <button onclick="app.switchView('dashboard')" id="mob-nav-dashboard" class="bottom-nav-btn flex-1 py-2.5 flex flex-col items-center gap-0.5 text-gray-400 hover:text-gray-600">
             <i class="fa-solid fa-chart-pie text-base"></i>
             <span class="text-[10px] font-medium">Dashboard</span>
@@ -413,56 +398,79 @@
         </button>
     </nav>
 
-    <!-- MODAL PIN SECURITY FOR SHIFT CLOSE -->
+    <!-- MODAL PIN SECURITY FOR SHIFT CLOSE / RESTOCK -->
     <div id="modal-pin" class="fixed inset-0 bg-black bg-opacity-60 z-[90] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-xs overflow-hidden shadow-2xl flex flex-col p-5 animate-scale">
             <div class="flex justify-between items-center mb-3 border-b pb-2">
-                <h4 class="font-bold text-gray-800 text-sm flex items-center gap-2"><i class="fa-solid fa-lock text-primary"></i> Konfirmasi PIN Shift</h4>
+                <h4 id="pin-modal-title" class="font-bold text-gray-800 text-sm flex items-center gap-2"><i class="fa-solid fa-lock text-primary"></i> Konfirmasi PIN Keamanan</h4>
                 <button onclick="app.closeModal('modal-pin')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             
             <div class="space-y-3 text-xs mb-4">
-                <p class="text-gray-500">Masukkan kode PIN keamanan 4 digit untuk melanjutkan penutupan shift.</p>
+                <p id="pin-modal-desc" class="text-gray-500">Masukkan kode PIN keamanan 4 digit untuk melanjutkan.</p>
                 <div>
                     <!-- Hidden real input -->
                     <input type="password" id="input-shift-pin" readonly inputmode="none" class="hidden">
                     
                     <!-- 4 Slot Boxes for PIN -->
-                    <div class="flex justify-center gap-2 cursor-pointer" onclick="app.openNumpadForInput('input-shift-pin', 'Masukkan PIN Keamanan', 4)">
+                    <div class="flex justify-center gap-2 cursor-pointer mb-2" onclick="app.openPinModal()">
                         <div id="pin-box-0" class="w-12 h-12 rounded-xl border-2 border-gray-300 bg-gray-50 flex items-center justify-center text-xl font-bold text-primary shadow-sm"></div>
                         <div id="pin-box-1" class="w-12 h-12 rounded-xl border-2 border-gray-300 bg-gray-50 flex items-center justify-center text-xl font-bold text-primary shadow-sm"></div>
                         <div id="pin-box-2" class="w-12 h-12 rounded-xl border-2 border-gray-300 bg-gray-50 flex items-center justify-center text-xl font-bold text-primary shadow-sm"></div>
                         <div id="pin-box-3" class="w-12 h-12 rounded-xl border-2 border-gray-300 bg-gray-50 flex items-center justify-center text-xl font-bold text-primary shadow-sm"></div>
                     </div>
+                    <p id="pin-error" class="text-red-500 text-[11px] text-center hidden font-bold">PIN Salah! Coba lagi</p>
                 </div>
-                <div id="pin-error" class="hidden text-red-600 font-bold text-center">PIN Salah! Akses ditolak.</div>
+
+                <!-- Custom Themed Numpad for PIN -->
+                <div class="grid grid-cols-3 gap-1.5 bg-[#e6f7f6]/50 p-2 rounded-xl border border-primary/30">
+                    <button type="button" onclick="app.pinNumpadPress('1')" class="bg-white hover:bg-primary/10 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-primary/20 text-xs">1</button>
+                    <button type="button" onclick="app.pinNumpadPress('2')" class="bg-white hover:bg-primary/10 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-primary/20 text-xs">2</button>
+                    <button type="button" onclick="app.pinNumpadPress('3')" class="bg-white hover:bg-primary/10 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-primary/20 text-xs">3</button>
+                    <button type="button" onclick="app.pinNumpadPress('4')" class="bg-white hover:bg-primary/10 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-primary/20 text-xs">4</button>
+                    <button type="button" onclick="app.pinNumpadPress('5')" class="bg-white hover:bg-primary/10 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-primary/20 text-xs">5</button>
+                    <button type="button" onclick="app.pinNumpadPress('6')" class="bg-white hover:bg-primary/10 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-primary/20 text-xs">6</button>
+                    <button type="button" onclick="app.pinNumpadPress('7')" class="bg-white hover:bg-primary/10 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-primary/20 text-xs">7</button>
+                    <button type="button" onclick="app.pinNumpadPress('8')" class="bg-white hover:bg-primary/10 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-primary/20 text-xs">8</button>
+                    <button type="button" onclick="app.pinNumpadPress('9')" class="bg-white hover:bg-primary/10 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-primary/20 text-xs">9</button>
+                    <button type="button" onclick="app.pinNumpadPress('C')" class="bg-red-50 hover:bg-red-100 text-red-600 py-2 rounded-lg font-bold shadow-sm border border-red-200 text-[10px]">C</button>
+                    <button type="button" onclick="app.pinNumpadPress('0')" class="bg-white hover:bg-primary/10 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-primary/20 text-xs">0</button>
+                    <button type="button" onclick="app.pinNumpadPress('DEL')" class="bg-secondary/40 hover:bg-secondary text-amber-900 py-2 rounded-lg font-bold shadow-sm border border-secondary/50 text-[10px]"><i class="fa-solid fa-delete-left"></i></button>
+                </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-2">
-                <button onclick="app.closeModal('modal-pin')" class="py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl text-xs transition-colors">Batal</button>
-                <button onclick="app.verifyShiftPin()" class="py-2.5 bg-primary hover:bg-primaryHover text-white font-bold rounded-xl text-xs transition-colors shadow">Konfirmasi</button>
-            </div>
+            <button onclick="app.verifyPinAction()" class="w-full bg-secondary hover:bg-secondaryHover text-gray-900 font-bold py-2 rounded-xl text-xs transition-colors shadow">Konfirmasi PIN</button>
         </div>
     </div>
 
-    <!-- MODAL DAILY PICKER -->
+    <!-- MODAL DAILY PICKER (CUSTOM POPUP) -->
     <div id="modal-daily-picker" class="fixed inset-0 bg-black bg-opacity-60 z-[85] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col p-5 animate-scale">
             <div class="flex justify-between items-center mb-3 border-b pb-2">
-                <h4 class="font-bold text-gray-800 text-sm flex items-center gap-2"><i class="fa-regular fa-calendar text-secondary"></i> Pilih Tanggal Rekap</h4>
+                <h4 class="font-bold text-gray-800 text-sm flex items-center gap-2"><i class="fa-regular fa-calendar text-primary"></i> Pilih Tanggal Rekap</h4>
                 <button onclick="app.closeModal('modal-daily-picker')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             
             <div class="space-y-3 text-xs mb-4">
-                <div>
-                    <label class="block font-medium text-gray-700 mb-1">Tanggal Tertentu</label>
-                    <input type="date" id="picker-daily-input" class="w-full px-3 py-2.5 bg-white border border-gray-300 rounded-xl font-bold text-xs outline-none">
+                <div class="grid grid-cols-3 gap-2">
+                    <div>
+                        <label class="block font-medium text-gray-600 mb-1">Tanggal</label>
+                        <select id="picker-day-select" class="w-full px-2 py-2.5 bg-white border border-gray-300 rounded-xl font-bold text-xs outline-none text-center"></select>
+                    </div>
+                    <div>
+                        <label class="block font-medium text-gray-600 mb-1">Bulan</label>
+                        <select id="picker-day-month-select" class="w-full px-2 py-2.5 bg-white border border-gray-300 rounded-xl font-bold text-xs outline-none"></select>
+                    </div>
+                    <div>
+                        <label class="block font-medium text-gray-600 mb-1">Tahun</label>
+                        <select id="picker-day-year-select" class="w-full px-2 py-2.5 bg-white border border-gray-300 rounded-xl font-bold text-xs outline-none"></select>
+                    </div>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 gap-2">
                 <button onclick="app.resetDailyFilter()" class="py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl text-xs transition-colors">Hari Ini</button>
-                <button onclick="app.applyDailyFilter()" class="py-2.5 bg-secondary hover:bg-secondaryHover text-gray-900 font-bold rounded-xl text-xs transition-colors shadow">Tampilkan</button>
+                <button onclick="app.applyCustomDailyFilter()" class="py-2.5 bg-secondary hover:bg-secondaryHover text-gray-900 font-bold rounded-xl text-xs transition-colors shadow">Tampilkan</button>
             </div>
         </div>
     </div>
@@ -825,7 +833,7 @@
                     <label class="block font-medium text-gray-700 mb-1">Kategori Produk</label>
                     <select id="prod-category" onchange="app.onCategoryChange()" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary outline-none bg-white font-medium text-xs">
                         <option value="">- Pilih Kategori Dulu -</option>
-                        <option value="paket">Paket Photo Studio</option>
+                        <option value="paket">Photo Studio</option>
                         <option value="self_studio">Self Studio</option>
                         <option value="photobox">Photobox</option>
                         <option value="pas_photo">Pas Photo</option>
@@ -886,30 +894,11 @@
         </div>
     </div>
 
-    <!-- MODAL PRODUCT STOCK VIEW -->
-    <div id="modal-product-stock" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-            <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-                <h3 id="product-stock-title" class="text-sm font-bold text-gray-800">Manajemen Stok Frame</h3>
-                <button onclick="app.closeModal('modal-product-stock')" class="text-gray-500 hover:text-red-500">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
-            </div>
-            <div class="p-4 flex-1 overflow-y-auto space-y-2.5 text-xs">
-                <input type="hidden" id="stock-prod-id">
-                <div id="product-stock-items-container" class="space-y-2"></div>
-            </div>
-            <div class="p-3 border-t border-gray-200 flex justify-end bg-gray-50">
-                <button onclick="app.closeModal('modal-product-stock')" class="px-3.5 py-1.5 bg-primary hover:bg-primaryHover text-white rounded-lg font-medium shadow transition-colors text-xs">Selesai</button>
-            </div>
-        </div>
-    </div>
-
     <!-- MODAL OTHER STOCK -->
     <div id="modal-stock" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
             <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
-                <h3 id="stock-modal-title" class="text-base font-bold">Tambah Item Stok</h3>
+                <h3 id="stock-modal-title" class="text-base font-bold">Tambah / Restock Material</h3>
                 <button onclick="app.closeModal('modal-stock')" class="text-gray-500 hover:text-red-500">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
@@ -1002,7 +991,7 @@
     </div>
 
     <!-- TOAST NOTIFICATION -->
-    <div id="toast" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-5 py-2.5 rounded-full shadow-lg z-[100] transition-opacity duration-300 opacity-0 pointer-events-none flex items-center gap-2 text-xs font-medium">
+    <div id="toast" class="fixed top-4 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white px-5 py-2.5 rounded-full shadow-lg z-[100] transition-opacity duration-300 opacity-0 pointer-events-none flex items-center gap-2 text-xs font-medium">
         <i class="fa-solid fa-circle-info text-secondary"></i>
         <span id="toast-message">Pesan disini</span>
     </div>
@@ -1047,38 +1036,102 @@
             dashboardFilterDate: null,
             selectedMonthFilter: null,
             selectedYearFilter: null,
+            shiftPinInput: '',
+            pinActionType: null, // 'restock_frame' or 'restock_other'
 
-            installPWA() {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            this.showToast('Terima kasih telah menginstal aplikasi KHJAM POS!');
-                        }
-                        deferredPrompt = null;
-                        document.getElementById('btn-install-pwa').classList.add('hidden');
-                        const btnMob = document.getElementById('btn-install-pwa-mobile');
-                        if(btnMob) btnMob.classList.add('hidden');
-                    });
+            pinNumpadPress(val) {
+                if (val === 'C') {
+                    this.shiftPinInput = '';
+                } else if (val === 'DEL') {
+                    this.shiftPinInput = this.shiftPinInput.slice(0, -1);
                 } else {
-                    this.showToast('Aplikasi sudah terinstal atau browser Anda menggunakan menu "Add to Home Screen".');
+                    if (this.shiftPinInput.length < 4) {
+                        this.shiftPinInput += val;
+                    }
+                }
+
+                const pinEl = document.getElementById('input-shift-pin');
+                if (pinEl) pinEl.value = this.shiftPinInput;
+
+                for (let i = 0; i < 4; i++) {
+                    const box = document.getElementById(`pin-box-${i}`);
+                    if (box) {
+                        box.innerText = i < this.shiftPinInput.length ? '•' : '';
+                    }
                 }
             },
 
-            openDailyPickerModal() {
-                const todayStr = new Date().toISOString().slice(0, 10);
-                document.getElementById('picker-daily-input').value = this.dashboardFilterDate || todayStr;
+            openPinModalForRestock() {
+                this.pinActionType = 'restock_frame';
+                document.getElementById('pin-modal-title').innerText = 'Otorisasi Restock Frame';
+                document.getElementById('pin-modal-desc').innerText = 'Masukkan PIN keamanan 1212 untuk menambah stok masuk frame.';
+                this.openPinModal();
+            },
+
+            openPinModalForOtherRestock() {
+                this.pinActionType = 'restock_other';
+                document.getElementById('pin-modal-title').innerText = 'Otorisasi Restock Material';
+                document.getElementById('pin-modal-desc').innerText = 'Masukkan PIN keamanan 1212 untuk menambah material.';
+                this.openPinModal();
+            },
+
+            verifyPinAction() {
+                const pin = this.shiftPinInput;
+                if (pin === '1212') {
+                    this.closeModal('modal-pin');
+                    if (this.pinActionType === 'restock_frame') {
+                        this.openBulkInboundModal();
+                    } else if (this.pinActionType === 'restock_other') {
+                        this.openStockModal();
+                    } else {
+                        this.openShiftCheckModal();
+                    }
+                } else {
+                    document.getElementById('pin-error').classList.remove('hidden');
+                }
+            },
+
+            openCustomDailyPickerModal() {
+                const now = new Date();
+                let activeDate = now;
+                if (this.dashboardFilterDate) {
+                    activeDate = new Date(this.dashboardFilterDate);
+                }
+
+                const daySel = document.getElementById('picker-day-select');
+                daySel.innerHTML = '';
+                for (let i = 1; i <= 31; i++) {
+                    daySel.innerHTML += `<option value="${i}" ${i === activeDate.getDate() ? 'selected' : ''}>${i}</option>`;
+                }
+
+                const monthSel = document.getElementById('picker-day-month-select');
+                monthSel.innerHTML = monthNames.map((m, idx) => `<option value="${idx}" ${idx === activeDate.getMonth() ? 'selected' : ''}>${m}</option>`).join('');
+
+                const yearSel = document.getElementById('picker-day-year-select');
+                yearSel.innerHTML = '';
+                for (let y = 2024; y <= 2028; y++) {
+                    yearSel.innerHTML += `<option value="${y}" ${y === activeDate.getFullYear() ? 'selected' : ''}>${y}</option>`;
+                }
+
                 document.getElementById('modal-daily-picker').classList.remove('hidden');
             },
 
-            applyDailyFilter() {
-                const val = document.getElementById('picker-daily-input').value;
-                if (val) {
-                    this.dashboardFilterDate = val;
-                    this.closeModal('modal-daily-picker');
-                    this.renderDashboard();
-                    this.showToast(`Menampilkan rekapitulasi tanggal ${new Date(val).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}`);
+            applyCustomDailyFilter() {
+                const d = parseInt(document.getElementById('picker-day-select').value);
+                const m = parseInt(document.getElementById('picker-day-month-select').value);
+                const y = parseInt(document.getElementById('picker-day-year-select').value);
+
+                const dateObj = new Date(y, m, d);
+                if (dateObj.getMonth() !== m) {
+                    this.showToast('Tanggal tidak valid untuk bulan tersebut!');
+                    return;
                 }
+
+                const valStr = dateObj.toISOString().slice(0, 10);
+                this.dashboardFilterDate = valStr;
+                this.closeModal('modal-daily-picker');
+                this.renderDashboard();
+                this.showToast(`Menampilkan rekapitulasi tanggal ${d} ${monthNames[m]} ${y}`);
             },
 
             resetDailyFilter() {
@@ -1189,15 +1242,6 @@
                         } else {
                             el.value = this.activeNumpadRaw !== '' ? new Intl.NumberFormat('id-ID').format(this.activeNumpadRaw) : '';
                         }
-                        
-                        if (this.activeNumpadTarget === 'input-shift-pin') {
-                            for (let i = 0; i < 4; i++) {
-                                const box = document.getElementById(`pin-box-${i}`);
-                                if (box) {
-                                    box.innerText = i < this.activeNumpadRaw.length ? '•' : '';
-                                }
-                            }
-                        }
                     }
                 }
                 if (this.activeNumpadTarget === 'input-actual-cash') {
@@ -1239,8 +1283,8 @@
                 
                 if (loadedProducts.length === 0) {
                     loadedProducts = [
-                        { id: generateId(), name: 'Paket Family Gold', category: 'paket', price: 350000, frames: [{ size: '10R', color: 'Gold', qty: 2 }, { size: '4R', color: 'Putih', qty: 4 }] },
-                        { id: generateId(), name: 'Paket Couple Romantic', category: 'paket', price: 250000, frames: [{ size: '6R', color: 'Hitam', qty: 1 }, { size: '4R', color: 'Putih', qty: 2 }] },
+                        { id: generateId(), name: 'Paket Family Gold', category: 'paket', price: 350000, frames: [{ size: '10R', color: 'Gold', ukirType: 'Gold', qty: 2 }, { size: '4R', color: 'Putih', ukirType: '-', qty: 4 }] },
+                        { id: generateId(), name: 'Paket Couple Romantic', category: 'paket', price: 250000, frames: [{ size: '6R', color: 'Hitam', ukirType: '-', qty: 1 }, { size: '4R', color: 'Putih', ukirType: '-', qty: 2 }] },
                         { id: generateId(), name: 'Self Studio Regular', category: 'self_studio', price: 100000, frames: [] },
                         { id: generateId(), name: 'Photobox Basic', category: 'photobox', price: 35000, frames: [] },
                         { id: generateId(), name: 'Pas Photo 3x4 / 4x6', category: 'pas_photo', price: 25000, frames: [] }
@@ -1340,13 +1384,13 @@
                 }
 
                 document.querySelectorAll('.nav-btn').forEach(btn => {
-                    btn.classList.remove('bg-primary', 'text-white');
-                    btn.classList.add('text-gray-600', 'hover:bg-gray-100');
+                    btn.classList.remove('bg-primary', 'text-white', 'shadow-sm');
+                    btn.classList.add('text-gray-600', 'hover:bg-gray-100/80');
                 });
                 const activeNavDesktop = document.getElementById(`nav-${viewName}`);
                 if (activeNavDesktop) {
-                    activeNavDesktop.classList.remove('text-gray-600', 'hover:bg-gray-100');
-                    activeNavDesktop.classList.add('bg-primary', 'text-white');
+                    activeNavDesktop.classList.remove('text-gray-600', 'hover:bg-gray-100/80');
+                    activeNavDesktop.classList.add('bg-primary', 'text-white', 'shadow-sm');
                 }
 
                 document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
@@ -1388,13 +1432,15 @@
             filterProducts(category) {
                 this.currentFilter = category;
                 document.querySelectorAll('.filter-btn').forEach(btn => {
-                    btn.classList.remove('bg-gray-800', 'text-white');
-                    btn.classList.add('bg-gray-100', 'text-gray-600');
+                    if (btn.id === 'filter-all') {
+                        btn.className = "filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap bg-white/85 text-gray-600 border border-gray-200 transition-colors";
+                    } else {
+                        btn.className = "filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap bg-secondary text-black shadow-sm transition-colors";
+                    }
                 });
                 const activeBtn = document.getElementById(`filter-${category}`);
                 if (activeBtn) {
-                    activeBtn.classList.remove('bg-gray-100', 'text-gray-600');
-                    activeBtn.classList.add('bg-gray-800', 'text-white');
+                    activeBtn.className = "filter-btn px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap bg-gray-900 text-white shadow-sm transition-colors";
                 }
                 this.renderProducts();
             },
@@ -1418,11 +1464,11 @@
                 }
 
                 grid.innerHTML = filtered.map(prod => `
-                    <div onclick="app.promptAddToCart('${prod.id}')" class="bg-white p-3.5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between group active:scale-[0.98]">
+                    <div onclick="app.promptAddToCart('${prod.id}')" class="bg-white/90 backdrop-blur-md p-3.5 rounded-2xl border border-gray-200/80 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between group active:scale-[0.98]">
                         <div>
                             <div class="flex justify-between items-start gap-2 mb-1.5">
                                 <h3 class="font-bold text-gray-800 text-xs group-hover:text-primary transition-colors line-clamp-1">${prod.name}</h3>
-                                <span class="text-[9px] font-semibold px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full uppercase tracking-wider">${prod.category.replace('_', ' ')}</span>
+                                <span class="text-[9px] font-bold px-2 py-0.5 bg-secondary text-black rounded-full uppercase tracking-wider">${prod.category === 'paket' ? 'PHOTO STUDIO' : prod.category.replace('_', ' ')}</span>
                             </div>
                             ${prod.frames && prod.frames.length > 0 ? `
                                 <div class="text-[10px] text-gray-500 mb-2 space-y-0.5">
@@ -1430,7 +1476,7 @@
                                 </div>
                             ` : '<div class="text-[10px] text-gray-400 mb-2">Layanan Cepat / Studio</div>'}
                         </div>
-                        <div class="bg-primary/10 border border-primary/20 text-primary font-extrabold text-xs py-1.5 px-3 rounded-lg text-center mt-1">
+                        <div class="bg-primary text-white font-extrabold text-xs py-1.5 px-3 rounded-xl text-center mt-1 shadow-sm">
                             ${formatRupiah(prod.price)}
                         </div>
                     </div>
@@ -1502,7 +1548,7 @@
                 container.innerHTML = this.data.cart.map((item, idx) => {
                     subtotal += item.price;
                     return `
-                        <div class="bg-gray-50 border border-gray-200 p-2.5 rounded-xl space-y-1.5 text-xs">
+                        <div class="bg-gray-50/80 border border-gray-200/80 p-2.5 rounded-xl space-y-1.5 text-xs">
                             <div class="flex justify-between items-start">
                                 <div>
                                     <h4 class="font-bold text-gray-800">${item.name}</h4>
@@ -1516,7 +1562,7 @@
                                 </div>
                             </div>
                             ${item.frames && item.frames.length > 0 ? `
-                                <div class="text-[10px] bg-white p-2 rounded-lg border border-gray-200 space-y-1">
+                                <div class="text-[10px] bg-white p-2 rounded-lg border border-gray-200/80 space-y-1">
                                     <span class="font-bold text-gray-600 block">Warna Frame:</span>
                                     ${item.frames.map((f, fIdx) => `
                                         <div class="flex justify-between items-center text-gray-700">
@@ -1585,8 +1631,13 @@
                 item.frames.forEach((f, fIdx) => {
                     const colorEl = document.getElementById(`edit-frame-color-${fIdx}`);
                     if (colorEl) f.color = colorEl.value;
-                    const ukirEl = document.getElementById(`edit-frame-ukir-${fIdx}`);
-                    if (ukirEl) f.ukirType = ukirEl.value;
+                    const isSmall = ['4R', '5R', '6R'].includes(f.size);
+                    if (!isSmall && f.color === 'Ukir') {
+                        const ukirEl = document.getElementById(`edit-frame-ukir-${fIdx}`);
+                        if (ukirEl) f.ukirType = ukirEl.value;
+                    } else {
+                        f.ukirType = '-';
+                    }
                 });
 
                 this.closeModal('modal-edit-cart-item');
@@ -1679,12 +1730,23 @@
                     change = received - total;
                 }
 
+                // Automatically deduct stock based on selected frame size, color, and ukirType
                 this.data.cart.forEach(item => {
                     if (item.frames && item.frames.length > 0) {
                         item.frames.forEach(f => {
-                            const found = this.data.frameStock.find(fs => fs.size === f.size && fs.color === f.color && fs.ukirType === (f.ukirType || '-'));
+                            const found = this.data.frameStock.find(fs => 
+                                fs.size === f.size && 
+                                fs.color === f.color && 
+                                fs.ukirType === (f.ukirType || '-')
+                            );
                             if (found) {
                                 found.qty = Math.max(0, found.qty - f.qty);
+                            } else {
+                                // Fallback matching if exact ukirType wasn't indexed
+                                const fallback = this.data.frameStock.find(fs => fs.size === f.size && fs.color === f.color);
+                                if (fallback) {
+                                    fallback.qty = Math.max(0, fallback.qty - f.qty);
+                                }
                             }
                         });
                     }
@@ -1708,7 +1770,7 @@
                 document.getElementById('modal-checkout').classList.add('hidden');
                 this.renderCart();
                 this.showReceiptModal(transaction);
-                this.showToast('Transaksi berhasil diselesaikan!');
+                this.showToast('Transaksi berhasil dan stok frame terpotong otomatis!');
             },
 
             showReceiptModal(trx) {
@@ -1858,11 +1920,8 @@
                 let dailyRev = 0, dailyCount = 0;
                 let monthlyRev = 0, monthlyCount = 0;
                 let yearlyRev = 0, yearlyCount = 0;
-                let allTimeRev = 0, allTimeCount = this.data.history.length;
 
                 this.data.history.forEach(trx => {
-                    allTimeRev += trx.total;
-                    
                     const trxDateObj = new Date(trx.timestamp);
                     const trxDateStr = trxDateObj.toISOString().slice(0, 10);
 
@@ -1882,11 +1941,6 @@
                     }
                 });
 
-                this.data.shiftHistory.forEach(sh => {
-                    allTimeRev += sh.totalRev;
-                    allTimeCount += sh.totalTrx;
-                });
-
                 document.getElementById('dash-daily-revenue').innerText = formatRupiah(dailyRev);
                 document.getElementById('dash-daily-count').innerText = dailyCount;
 
@@ -1895,9 +1949,6 @@
 
                 document.getElementById('dash-yearly-revenue').innerText = formatRupiah(yearlyRev);
                 document.getElementById('dash-yearly-count').innerText = yearlyCount;
-
-                document.getElementById('dash-all-time-revenue').innerText = formatRupiah(allTimeRev);
-                document.getElementById('dash-all-time-count').innerText = allTimeCount;
             },
 
             renderHistory() {
@@ -1914,7 +1965,7 @@
                 }
 
                 list.innerHTML = this.data.history.map(trx => `
-                    <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
+                    <tr class="hover:bg-gray-50/80 transition-colors border-b border-gray-100">
                         <td class="p-3 font-bold text-gray-800">${trx.id}</td>
                         <td class="p-3 text-gray-500">${trx.date}</td>
                         <td class="p-3"><span class="px-2 py-0.5 bg-gray-100 rounded text-[10px] font-bold text-gray-700">${trx.method}</span></td>
@@ -1935,6 +1986,7 @@
             },
 
             openPinModal() {
+                this.shiftPinInput = '';
                 document.getElementById('input-shift-pin').value = '';
                 for (let i = 0; i < 4; i++) {
                     const box = document.getElementById(`pin-box-${i}`);
@@ -1945,7 +1997,7 @@
             },
 
             verifyShiftPin() {
-                const pin = document.getElementById('input-shift-pin').value;
+                const pin = this.shiftPinInput;
                 if (pin === '1212') {
                     this.closeModal('modal-pin');
                     this.openShiftCheckModal();
@@ -2168,9 +2220,9 @@
                 }
 
                 list.innerHTML = this.data.products.map(prod => `
-                    <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
+                    <tr class="hover:bg-gray-50/80 transition-colors border-b border-gray-100">
                         <td class="p-3 font-bold text-gray-800">${prod.name}</td>
-                        <td class="p-3"><span class="px-2 py-0.5 bg-gray-100 rounded text-[10px] font-bold text-gray-700 uppercase">${prod.category.replace('_', ' ')}</span></td>
+                        <td class="p-3"><span class="px-2.5 py-1 bg-secondary text-black rounded-lg text-[10px] font-bold uppercase">${prod.category === 'paket' ? 'PHOTO STUDIO' : prod.category.replace('_', ' ')}</span></td>
                         <td class="p-3 text-gray-600">
                             ${prod.frames && prod.frames.length > 0 ? prod.frames.map(f => `${f.qty}x ${f.size} (${f.color}${f.ukirType && f.ukirType !== '-' ? ' ' + f.ukirType : ''})`).join(', ') : '-'}
                         </td>
@@ -2243,7 +2295,7 @@
                 const rowId = generateId();
                 const size = data ? data.size : '4R';
                 const color = data ? data.color : 'Putih';
-                const ukirType = data ? data.ukirType : 'Gold';
+                const ukirType = data ? (data.ukirType || 'Gold') : 'Gold';
                 const qty = data ? data.qty : 1;
 
                 const isSmall = ['4R', '5R', '6R'].includes(size);
@@ -2382,14 +2434,14 @@
                 const subOther = document.getElementById('stock-subview-other');
 
                 if (tab === 'frame') {
-                    btnFrame.className = "px-3.5 py-1.5 rounded-lg font-bold text-xs bg-primary text-white shadow transition-colors";
-                    btnOther.className = "px-3.5 py-1.5 rounded-lg font-medium text-xs bg-white text-gray-600 border border-gray-300 hover:bg-gray-100 transition-colors";
+                    btnFrame.className = "px-3.5 py-1.5 rounded-xl font-bold text-xs bg-primary text-white shadow transition-colors";
+                    btnOther.className = "px-3.5 py-1.5 rounded-xl font-medium text-xs bg-white/90 text-gray-600 border border-gray-300 hover:bg-gray-100 transition-colors";
                     subFrame.classList.remove('hidden');
                     subOther.classList.add('hidden');
                     this.renderStockFrame();
                 } else {
-                    btnOther.className = "px-3.5 py-1.5 rounded-lg font-bold text-xs bg-primary text-white shadow transition-colors";
-                    btnFrame.className = "px-3.5 py-1.5 rounded-lg font-medium text-xs bg-white text-gray-600 border border-gray-300 hover:bg-gray-100 transition-colors";
+                    btnOther.className = "px-3.5 py-1.5 rounded-xl font-bold text-xs bg-primary text-white shadow transition-colors";
+                    btnFrame.className = "px-3.5 py-1.5 rounded-xl font-medium text-xs bg-white/90 text-gray-600 border border-gray-300 hover:bg-gray-100 transition-colors";
                     subOther.classList.remove('hidden');
                     subFrame.classList.add('hidden');
                     this.renderStockOther();
@@ -2401,35 +2453,28 @@
                 if (!list) return;
 
                 if (this.data.frameStock.length === 0) {
-                    list.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-gray-400">Belum ada data stok frame.</td></tr>`;
+                    list.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-gray-400">Belum ada data stok frame.</td></tr>`;
                     return;
                 }
 
-                list.innerHTML = this.data.frameStock.map(fs => `
-                    <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
-                        <td class="p-3 font-bold text-gray-800">${fs.size}</td>
-                        <td class="p-3 text-gray-600">${fs.color}${fs.ukirType && fs.ukirType !== '-' ? ' (' + fs.ukirType + ')' : ''}</td>
-                        <td class="p-3">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-bold ${fs.qty <= 3 ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-700'}">${fs.qty} Pcs</span>
-                        </td>
-                        <td class="p-3 text-right">
-                            <div class="inline-flex items-center gap-1">
-                                <button onclick="app.adjustFrameStock('${fs.id}', -1)" class="w-7 h-7 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded font-bold">-</button>
-                                <span class="w-8 text-center font-bold text-xs">${fs.qty}</span>
-                                <button onclick="app.adjustFrameStock('${fs.id}', 1)" class="w-7 h-7 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded font-bold">+</button>
-                            </div>
-                        </td>
-                    </tr>
-                `).join('');
-            },
+                list.innerHTML = this.data.frameStock.map(fs => {
+                    let statusBadge = '';
+                    if (fs.qty <= 3) {
+                        statusBadge = `<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-red-100 text-red-600"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Menipis (${fs.qty} Pcs)</span>`;
+                    } else if (fs.qty <= 8) {
+                        statusBadge = `<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-100 text-amber-700"><i class="fa-solid fa-circle-exclamation mr-1"></i> Terbatas (${fs.qty} Pcs)</span>`;
+                    } else {
+                        statusBadge = `<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700"><i class="fa-solid fa-check mr-1"></i> Aman (${fs.qty} Pcs)</span>`;
+                    }
 
-            adjustFrameStock(id, delta) {
-                const fs = this.data.frameStock.find(f => f.id === id);
-                if (fs) {
-                    fs.qty = Math.max(0, fs.qty + delta);
-                    this.saveData();
-                    this.renderStockFrame();
-                }
+                    return `
+                        <tr class="hover:bg-gray-50/80 transition-colors border-b border-gray-100">
+                            <td class="p-3 font-bold text-gray-800">${fs.size}</td>
+                            <td class="p-3 text-gray-600">${fs.color}${fs.ukirType && fs.ukirType !== '-' ? ' (' + fs.ukirType + ')' : ''}</td>
+                            <td class="p-3">${statusBadge}</td>
+                        </tr>
+                    `;
+                }).join('');
             },
 
             openBulkInboundModal() {
@@ -2451,7 +2496,7 @@
                 }
 
                 const variants = this.data.frameStock.filter(f => f.size === size);
-                variantSelect.innerHTML = variants.map(v => `<option value="${v.id}">${v.color}${v.ukirType && v.ukirType !== '-' ? ' (' + v.ukirType + ')' : ''} (Stok: ${v.qty})</option>`).join('');
+                variantSelect.innerHTML = variants.map(v => `<option value="${v.id}">${v.color}${v.ukirType && v.ukirType !== '-' ? ' (' + v.ukirType + ')' : ''} (Stok Saat Ini: ${v.qty})</option>`).join('');
                 section.classList.remove('hidden');
             },
 
@@ -2479,40 +2524,31 @@
                 if (!list) return;
 
                 if (this.data.stock.length === 0) {
-                    list.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-gray-400">Belum ada data material stok.</td></tr>`;
+                    list.innerHTML = `<tr><td colspan="3" class="p-8 text-center text-gray-400">Belum ada data material stok.</td></tr>`;
                     return;
                 }
 
-                list.innerHTML = this.data.stock.map(stk => `
-                    <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
-                        <td class="p-3 font-bold text-gray-800">${stk.name}</td>
-                        <td class="p-3"><span class="px-2 py-0.5 bg-gray-100 rounded text-[10px] font-bold text-gray-700">${stk.category}</span></td>
-                        <td class="p-3">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-bold ${stk.qty <= 5 ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-700'}">${stk.qty} Pcs</span>
-                        </td>
-                        <td class="p-3 text-right">
-                            <div class="inline-flex items-center gap-1">
-                                <button onclick="app.adjustOtherStock('${stk.id}', -1)" class="w-7 h-7 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded font-bold">-</button>
-                                <span class="w-8 text-center font-bold text-xs">${stk.qty}</span>
-                                <button onclick="app.adjustOtherStock('${stk.id}', 1)" class="w-7 h-7 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded font-bold">+</button>
-                            </div>
-                        </td>
-                    </tr>
-                `).join('');
-            },
+                list.innerHTML = this.data.stock.map(stk => {
+                    let statusBadge = '';
+                    if (stk.qty <= 5) {
+                        statusBadge = `<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-red-100 text-red-600"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Menipis (${stk.qty} Pcs)</span>`;
+                    } else {
+                        statusBadge = `<span class="px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-700"><i class="fa-solid fa-check mr-1"></i> Aman (${stk.qty} Pcs)</span>`;
+                    }
 
-            adjustOtherStock(id, delta) {
-                const stk = this.data.stock.find(s => s.id === id);
-                if (stk) {
-                    stk.qty = Math.max(0, stk.qty + delta);
-                    this.saveData();
-                    this.renderStockOther();
-                }
+                    return `
+                        <tr class="hover:bg-gray-50/80 transition-colors border-b border-gray-100">
+                            <td class="p-3 font-bold text-gray-800">${stk.name}</td>
+                            <td class="p-3"><span class="px-2 py-0.5 bg-gray-100 rounded text-[10px] font-bold text-gray-700">${stk.category}</span></td>
+                            <td class="p-3">${statusBadge}</td>
+                        </tr>
+                    `;
+                }).join('');
             },
 
             openStockModal(id = null) {
                 document.getElementById('stock-id').value = id || '';
-                document.getElementById('stock-modal-title').innerText = id ? 'Edit Item Stok' : 'Tambah Item Stok';
+                document.getElementById('stock-modal-title').innerText = 'Tambah / Restock Material';
                 document.getElementById('stock-name').value = '';
                 document.getElementById('stock-qty').value = '';
                 document.getElementById('modal-stock').classList.remove('hidden');
@@ -2568,4 +2604,3 @@
     </script>
 </body>
 </html>
-```
