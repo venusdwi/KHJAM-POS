@@ -25,49 +25,6 @@
     <!-- jsPDF Library for PDF Export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <!-- Dynamic Inline Manifest & Service Worker Blob Injector for PWA Installation -->
-    <script>
-        // Generate Manifest Blob URL dynamically so it never fails 404
-        const manifestData = {
-            "name": "KHJAM Photo Studio POS",
-            "short_name": "KHJAM POS",
-            "start_url": window.location.href.split('?')[0],
-            "display": "standalone",
-            "background_color": "#f8fafc",
-            "theme_color": "#76cdca",
-            "icons": [
-                {
-                    "src": "https://raw.githubusercontent.com/khjampostudio/logo/main/logo.svg",
-                    "sizes": "192x192 512x512",
-                    "type": "image/svg+xml",
-                    "purpose": "any maskable"
-                }
-            ]
-        };
-        const stringManifest = JSON.stringify(manifestData);
-        const blob = new Blob([stringManifest], {type: 'application/json'});
-        const manifestURL = URL.createObjectURL(blob);
-        document.addEventListener("DOMContentLoaded", () => {
-            let mLink = document.querySelector('link[rel="manifest"]');
-            if (!mLink) {
-                mLink = document.createElement('link');
-                mLink.rel = 'manifest';
-                document.head.appendChild(mLink);
-            }
-            mLink.href = manifestURL;
-        });
-
-        // Register dummy service worker for PWA install eligibility
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                const swCode = "self.addEventListener('fetch', function(event) { event.respondWith(fetch(event.request).catch(() => caches.match(event.request))); });";
-                const swBlob = new Blob([swCode], { type: 'text/javascript' });
-                const swUrl = URL.createObjectURL(swBlob);
-                navigator.serviceWorker.register(swUrl).catch(err => console.log('SW registration error:', err));
-            });
-        }
-    </script>
-
     <script>
         tailwind.config = {
             theme: {
@@ -2271,7 +2228,7 @@
                         <td class="p-3 font-bold text-gray-800">${prod.name}</td>
                         <td class="p-3"><span class="px-2.5 py-1 bg-secondary text-black rounded-lg text-[10px] font-bold uppercase">${prod.category === 'paket' ? 'PHOTO STUDIO' : prod.category.replace('_', ' ')}</span></td>
                         <td class="p-3 text-gray-600">
-                            ${prod.frames && prod.frames.length > 0 ? prod.frames.map(f => `${f.qty}x ${f.size} (${f.color}${f.ukirType && f.ukirType !== '-' ? ' ' + f.ukirType : ''})`).join(', ') : '-'}
+                            ${prod.frames && prod.frames.length > 0 ? prod.frames.map(f => `${f.qty}x${f.size} (${f.color}${f.ukirType && f.ukirType !== '-' ? ' ' + f.ukirType : ''})`).join(', ') : '-'}
                         </td>
                         <td class="p-3 font-bold text-primary">${formatRupiah(prod.price)}</td>
                         <td class="p-3 text-right space-x-1">
@@ -2647,6 +2604,15 @@
                 document.getElementById('modal-confirm').classList.add('hidden');
             }
         };
+
+        // Registrasi Service Worker untuk PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('Service Worker berhasil didaftarkan'))
+                    .catch(err => console.log('Service Worker gagal:', err));
+            });
+        }
 
         window.onload = function() {
             app.init();
