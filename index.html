@@ -401,7 +401,12 @@
                 <button onclick="app.closeModal('modal-install-guide')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="space-y-3 text-gray-600 mb-4">
-                <p>Aplikasi ini mendukung instalasi langsung (PWA) di perangkat Anda agar dapat berjalan seperti aplikasi APK di Home Screen:</p>
+                <div id="pwa-install-action-container" class="hidden">
+                    <button onclick="app.triggerNativeInstall()" class="w-full bg-primary text-white font-bold py-3 rounded-xl shadow transition-colors flex items-center justify-center gap-2 text-sm mb-2">
+                        <i class="fa-solid fa-download"></i> Klik untuk Install Sekarang
+                    </button>
+                </div>
+                <p>Aplikasi ini dapat diinstal langsung (PWA) di perangkat Anda agar dapat berjalan seperti aplikasi APK di Home Screen:</p>
                 <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 space-y-2">
                     <div class="font-bold text-gray-800"><i class="fa-brands fa-android text-emerald-600 mr-1"></i> Android (Chrome):</div>
                     <p>Ketuk ikon titik tiga (⋮) di kanan atas browser, lalu pilih <strong class="text-gray-900">"Install Aplikasi"</strong> atau <strong class="text-gray-900">"Tambahkan ke Layar Utama"</strong>.</p>
@@ -411,7 +416,7 @@
                     <p>Ketuk tombol Bagikan (Share) di bagian bawah, lalu pilih <strong class="text-gray-900">"Tambahkan ke Layar Utama"</strong>.</p>
                 </div>
             </div>
-            <button onclick="app.closeModal('modal-install-guide')" class="w-full bg-primary text-white font-bold py-2.5 rounded-xl shadow transition-colors">Mengerti</button>
+            <button onclick="app.closeModal('modal-install-guide')" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2.5 rounded-xl transition-colors">Tutup</button>
         </div>
     </div>
 
@@ -1028,6 +1033,7 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
+            console.log('PWA install prompt captured successfully');
         });
 
         const app = {
@@ -1048,16 +1054,27 @@
             pinActionType: null,
 
             installPWA() {
+                const actionContainer = document.getElementById('pwa-install-action-container');
+                if (deferredPrompt) {
+                    if (actionContainer) actionContainer.classList.remove('hidden');
+                } else {
+                    if (actionContainer) actionContainer.classList.add('hidden');
+                }
+                document.getElementById('modal-install-guide').classList.remove('hidden');
+            },
+
+            triggerNativeInstall() {
                 if (deferredPrompt) {
                     deferredPrompt.prompt();
                     deferredPrompt.userChoice.then((choiceResult) => {
                         if (choiceResult.outcome === 'accepted') {
-                            console.log('User accepted the install prompt');
+                            this.showToast('Aplikasi berhasil diinstal!');
                         }
                         deferredPrompt = null;
+                        this.closeModal('modal-install-guide');
                     });
                 } else {
-                    document.getElementById('modal-install-guide').classList.remove('hidden');
+                    this.showToast('Gunakan menu browser (⋮) lalu pilih "Install Aplikasi" atau "Add to Home Screen".');
                 }
             },
 
