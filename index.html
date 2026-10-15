@@ -10,8 +10,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="KHJAM POS">
     
-    <!-- Custom Favicon -->
-    <link rel="icon" type="image/svg+xml" href="https://api.iconify.design/lucide:camera.svg?color=%2376cdca">
+    <!-- Custom Logo Favicon from GitHub -->
+    <link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/khjampostudio/logo/main/logo.svg" onerror="this.href='https://api.iconify.design/lucide:camera.svg?color=%2376cdca'">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/khjampostudio/logo/main/logo.svg">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,7 +21,7 @@
     <!-- jsPDF Library for PDF Export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <!-- PWA Web App Manifest (Inlined via Blob) -->
+    <!-- PWA Web App Manifest with GitHub Logo Icons -->
     <script>
         const manifestData = {
             "name": "KHJAM Photo Studio POS",
@@ -31,9 +32,10 @@
             "theme_color": "#76cdca",
             "icons": [
                 {
-                    "src": "https://api.iconify.design/lucide:camera.svg?color=%2376cdca",
+                    "src": "https://raw.githubusercontent.com/khjampostudio/logo/main/logo.svg",
                     "sizes": "192x192 512x512",
-                    "type": "image/svg+xml"
+                    "type": "image/svg+xml",
+                    "purpose": "any maskable"
                 }
             ]
         };
@@ -87,11 +89,7 @@
     <!-- SIDEBAR DESKTOP -->
     <aside class="hidden md:flex flex-col w-64 bg-white/90 backdrop-blur-md border-r border-gray-200/80 shadow-sm z-20 h-full shrink-0">
         <div class="p-4 border-b border-gray-100 flex flex-col items-center justify-center">
-            <svg class="w-8 h-8 mb-1" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M48 90 C 20 85, 10 70, 10 55 L 10 45 C 15 30, 30 20, 48 10 L 48 35 C 38 40, 25 50, 30 65 L 48 70 Z" fill="#76cdca"/>
-                <path d="M52 90 C 80 85, 90 70, 90 55 L 90 45 C 85 30, 70 20, 52 10 L 52 35 C 62 40, 75 50, 70 65 L 52 70 Z" fill="#fdd375"/>
-                <path d="M57 15 Q 65 20, 60 28 Q 55 25, 57 15 Z" fill="#ffffff"/>
-            </svg>
+            <img src="https://raw.githubusercontent.com/khjampostudio/logo/main/logo.svg" alt="KHJAM Logo" class="w-10 h-10 mb-1 object-contain" onerror="this.src='https://api.iconify.design/lucide:camera.svg?color=%2376cdca'">
             <h1 class="text-base font-bold text-gray-800 tracking-tight">KHJAM</h1>
         </div>
         <nav class="flex-1 overflow-y-auto p-3 space-y-1">
@@ -112,7 +110,7 @@
             </button>
         </nav>
         <div class="p-3 border-t border-gray-100 bg-white/50 flex flex-col gap-1.5 shrink-0">
-            <button id="btn-install-pwa" onclick="app.installPWA()" class="w-full bg-secondary hover:bg-secondaryHover text-gray-900 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-sm hidden">
+            <button id="btn-install-pwa" onclick="app.installPWA()" class="w-full bg-secondary hover:bg-secondaryHover text-gray-900 py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-sm hidden">
                 <i class="fa-solid fa-mobile-screen-button text-sm"></i> Install Aplikasi (APK)
             </button>
         </div>
@@ -121,11 +119,7 @@
     <!-- HEADER MOBILE -->
     <header class="md:hidden bg-white/90 backdrop-blur-md shadow-sm px-4 py-3 flex justify-between items-center z-25 shrink-0 border-b border-gray-100">
         <div class="flex items-center gap-2">
-            <svg class="w-6 h-6" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M48 90 C 20 85, 10 70, 10 55 L 10 45 C 15 30, 30 20, 48 10 L 48 35 C 38 40, 25 50, 30 65 L 48 70 Z" fill="#76cdca"/>
-                <path d="M52 90 C 80 85, 90 70, 90 55 L 90 45 C 85 30, 70 20, 52 10 L 52 35 C 62 40, 75 50, 70 65 L 52 70 Z" fill="#fdd375"/>
-                <path d="M57 15 Q 65 20, 60 28 Q 55 25, 57 15 Z" fill="#ffffff"/>
-            </svg>
+            <img src="https://raw.githubusercontent.com/khjampostudio/logo/main/logo.svg" alt="KHJAM Logo" class="w-7 h-7 object-contain" onerror="this.src='https://api.iconify.design/lucide:camera.svg?color=%2376cdca'">
             <h1 class="text-base font-bold text-gray-800 tracking-tight">KHJAM</h1>
         </div>
         <div class="flex items-center gap-2">
@@ -956,7 +950,7 @@
             <h4 class="font-bold text-gray-800 text-sm mb-1">Tambahkan Produk</h4>
             <p id="add-cart-confirm-msg" class="text-xs text-gray-500 mb-4">Tambahkan produk ini ke keranjang?</p>
             <div class="grid grid-cols-2 gap-2">
-                <button onclick="app.closeAddCartModal()" class="py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl text-xs transition-colors">Tidak</button>
+                <button onclick="app.closeAddCartModal()" class="py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl text-xs transition-colors">Batal</button>
                 <button onclick="app.confirmAddToCart()" class="py-2 bg-primary hover:bg-primaryHover text-white font-bold rounded-xl text-xs transition-colors shadow">Ya, Tambahkan</button>
             </div>
         </div>
@@ -1037,7 +1031,21 @@
             selectedMonthFilter: null,
             selectedYearFilter: null,
             shiftPinInput: '',
-            pinActionType: null, // 'restock_frame' or 'restock_other'
+            pinActionType: null,
+
+            installPWA() {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('User accepted the install prompt');
+                        }
+                        deferredPrompt = null;
+                    });
+                } else {
+                    this.showToast('Untuk menginstall, buka menu browser (titik tiga) lalu pilih "Tambahkan ke Layar Utama" atau "Install Aplikasi".');
+                }
+            },
 
             pinNumpadPress(val) {
                 if (val === 'C') {
@@ -1064,14 +1072,14 @@
             openPinModalForRestock() {
                 this.pinActionType = 'restock_frame';
                 document.getElementById('pin-modal-title').innerText = 'Otorisasi Restock Frame';
-                document.getElementById('pin-modal-desc').innerText = 'Masukkan PIN keamanan 1212 untuk menambah stok masuk frame.';
+                document.getElementById('pin-modal-desc').innerText = 'Masukkan PIN keamanan untuk menambah stok masuk frame.';
                 this.openPinModal();
             },
 
             openPinModalForOtherRestock() {
                 this.pinActionType = 'restock_other';
                 document.getElementById('pin-modal-title').innerText = 'Otorisasi Restock Material';
-                document.getElementById('pin-modal-desc').innerText = 'Masukkan PIN keamanan 1212 untuk menambah material.';
+                document.getElementById('pin-modal-desc').innerText = 'Masukkan PIN keamanan untuk menambah material.';
                 this.openPinModal();
             },
 
@@ -1742,7 +1750,6 @@
                             if (found) {
                                 found.qty = Math.max(0, found.qty - f.qty);
                             } else {
-                                // Fallback matching if exact ukirType wasn't indexed
                                 const fallback = this.data.frameStock.find(fs => fs.size === f.size && fs.color === f.color);
                                 if (fallback) {
                                     fallback.qty = Math.max(0, fallback.qty - f.qty);
@@ -2293,10 +2300,10 @@
                 const wrapper = document.getElementById('frame-rows-wrapper');
                 if (!wrapper) return;
                 const rowId = generateId();
-                const size = data ? data.size : '4R';
+                const size = data ? data.size : '';
                 const color = data ? data.color : 'Putih';
                 const ukirType = data ? (data.ukirType || 'Gold') : 'Gold';
-                const qty = data ? data.qty : 1;
+                const qty = data ? data.qty : '';
 
                 const isSmall = ['4R', '5R', '6R'].includes(size);
 
@@ -2308,12 +2315,13 @@
                         <div>
                             <label class="block text-[10px] text-gray-500 mb-0.5">Ukuran</label>
                             <select onchange="app.onFrameSizeRowChange('${rowId}')" id="size-${rowId}" class="w-full px-2 py-1 bg-white border border-gray-300 rounded text-xs outline-none">
+                                <option value="" ${!size ? 'selected' : ''} disabled>- Pilih Ukuran -</option>
                                 ${sizeOptions.map(s => `<option value="${s}" ${s === size ? 'selected' : ''}>${s}</option>`).join('')}
                             </select>
                         </div>
                         <div>
                             <label class="block text-[10px] text-gray-500 mb-0.5">Jumlah (QTY)</label>
-                            <input type="text" id="qty-${rowId}" readonly inputmode="none" onclick="app.openNumpadForInput('qty-${rowId}', 'Jumlah Frame')" value="${qty}" class="w-full px-2 py-1 bg-white border border-gray-300 rounded text-xs font-bold text-primary cursor-pointer outline-none">
+                            <input type="text" id="qty-${rowId}" readonly inputmode="none" onclick="app.openNumpadForInput('qty-${rowId}', 'Jumlah Frame')" value="${qty}" class="w-full px-2 py-1 bg-white border border-gray-300 rounded text-xs font-bold text-primary cursor-pointer outline-none" placeholder="0">
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-2">
@@ -2389,11 +2397,13 @@
                     rows.forEach(r => {
                         const rowId = r.id.replace('row-', '');
                         const size = document.getElementById(`size-${rowId}`).value;
-                        const qty = parseInt(document.getElementById(`qty-${rowId}`).value.replace(/\D/g, '') || '1');
-                        const color = document.getElementById(`color-${rowId}`).value;
-                        const isSmall = ['4R', '5R', '6R'].includes(size);
-                        const ukirType = (!isSmall && color === 'Ukir') ? document.getElementById(`ukir-${rowId}`).value : '-';
-                        frames.push({ size, color, ukirType, qty });
+                        const qty = parseInt(document.getElementById(`qty-${rowId}`).value.replace(/\D/g, '') || '0');
+                        if (size && qty > 0) {
+                            const color = document.getElementById(`color-${rowId}`).value;
+                            const isSmall = ['4R', '5R', '6R'].includes(size);
+                            const ukirType = (!isSmall && color === 'Ukir') ? document.getElementById(`ukir-${rowId}`).value : '-';
+                            frames.push({ size, color, ukirType, qty });
+                        }
                     });
                 }
 
