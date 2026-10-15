@@ -132,9 +132,11 @@
             <button id="btn-install-pwa-mobile" onclick="app.installPWA()" class="bg-secondary hover:bg-secondaryHover text-gray-900 text-xs font-bold px-2.5 py-1.5 rounded-lg flex items-center gap-1 shadow-sm hidden">
                 <i class="fa-solid fa-download"></i> Install
             </button>
-            <div id="mobile-cart-btn" class="relative cursor-pointer" onclick="app.toggleMobileCart()">
-                <i class="fa-solid fa-cart-shopping text-gray-600 text-lg"></i>
-                <span id="mobile-cart-badge" class="absolute -top-2 -right-2 bg-secondary text-gray-800 text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+            <div id="mobile-cart-btn-wrapper" class="hidden">
+                <div id="mobile-cart-btn" class="relative cursor-pointer" onclick="app.toggleMobileCart()">
+                    <i class="fa-solid fa-cart-shopping text-gray-600 text-lg"></i>
+                    <span id="mobile-cart-badge" class="absolute -top-2 -right-2 bg-secondary text-gray-800 text-[10px] font-bold px-1.5 py-0.5 rounded-full hidden">0</span>
+                </div>
             </div>
         </div>
     </header>
@@ -144,10 +146,24 @@
             
             <!-- Dashboard View -->
             <div id="view-dashboard" class="view-section hidden h-full flex flex-col p-4 md:p-6 bg-gray-50 overflow-y-auto">
-                <div class="mb-6 flex justify-between items-center">
+                <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <div>
                         <h2 class="text-2xl font-bold text-gray-800">Dashboard KHJAM</h2>
-                        <p class="text-sm text-gray-500">Ringkasan pendapatan dan aktivitas studio Anda.</p>
+                        <p class="text-sm text-gray-500">Ringkasan pendapatan real-time dan analisis studio Anda.</p>
+                    </div>
+                    <!-- Custom Date Filter Bar -->
+                    <div class="flex items-center gap-2 bg-white p-1.5 rounded-xl border border-gray-200 shadow-sm text-xs relative">
+                        <span class="text-gray-500 font-medium px-2"><i class="fa-solid fa-filter mr-1 text-amber-500"></i> Filter:</span>
+                        
+                        <!-- Wrapper to allow direct native date input click interaction -->
+                        <div class="relative bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2 border border-amber-200 cursor-pointer">
+                            <i class="fa-regular fa-calendar text-amber-600"></i>
+                            <span id="dash-filter-label">Hari Ini</span>
+                            <!-- Native date picker overlayed & transparent so click triggers calendar picker natively -->
+                            <input type="date" id="dash-filter-date" onchange="app.onDateFilterChange(this)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
+                        </div>
+
+                        <button onclick="app.resetDashboardFilter()" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-lg transition-colors">Reset</button>
                     </div>
                 </div>
                 
@@ -155,7 +171,7 @@
                     <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-primary">
                         <div class="flex items-center gap-3 mb-2">
                             <div class="w-8 h-8 rounded-full bg-[#e6f7f6] text-primary flex items-center justify-center"><i class="fa-solid fa-calendar-day"></i></div>
-                            <div class="text-gray-500 text-sm font-medium">Hari Ini (Shift)</div>
+                            <div id="dash-card-title-label" class="text-gray-500 text-sm font-medium">Hari Ini (Shift Real-time)</div>
                         </div>
                         <div id="dash-daily-revenue" class="text-2xl font-bold text-gray-800">Rp 0</div>
                         <div class="text-xs text-gray-400 mt-2"><span id="dash-daily-count" class="font-bold text-gray-600">0</span> Transaksi diselesaikan</div>
@@ -210,7 +226,7 @@
                 </div>
 
                 <!-- Cart Panel -->
-                <div id="cart-container" class="fixed inset-y-0 right-0 w-full sm:w-88 bg-white shadow-2xl transform translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-30 flex flex-col md:relative md:w-80 md:border-l md:border-gray-200 h-full">
+                <div id="cart-container" class="fixed inset-y-0 right-0 w-full sm:w-96 bg-white shadow-2xl transform translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out z-30 flex flex-col md:relative md:w-96 md:border-l md:border-gray-200 h-full">
                     <div class="px-4 py-3 border-b border-gray-200 flex justify-between items-center bg-gray-50 md:bg-white shrink-0">
                         <h2 class="text-base font-bold text-gray-800">Keranjang Pesanan</h2>
                         <button class="md:hidden text-gray-500 hover:text-red-500" onclick="app.toggleMobileCart()">
@@ -218,7 +234,7 @@
                         </button>
                     </div>
                     
-                    <div id="cart-items" class="flex-1 overflow-y-auto p-3 space-y-2">
+                    <div id="cart-items" class="flex-1 overflow-y-auto p-3 space-y-2.5">
                         <div class="flex flex-col items-center justify-center h-full text-gray-400">
                             <i class="fa-solid fa-cart-arrow-down text-3xl mb-1.5"></i>
                             <p class="text-xs">Keranjang kosong</p>
@@ -468,6 +484,22 @@
         </div>
     </div>
 
+    <!-- MODAL EDIT CART ITEM SPEC -->
+    <div id="modal-edit-cart-item" class="fixed inset-0 bg-black bg-opacity-60 z-[85] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col p-4 animate-scale">
+            <div class="flex justify-between items-center mb-3 border-b pb-2">
+                <h4 id="edit-cart-title" class="font-bold text-gray-800 text-sm">Edit Item Keranjang</h4>
+                <button onclick="app.closeModal('modal-edit-cart-item')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <input type="hidden" id="edit-cart-item-index">
+            <div id="edit-cart-body" class="space-y-3 text-xs mb-4"></div>
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="app.closeModal('modal-edit-cart-item')" class="py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl text-xs transition-colors">Batal</button>
+                <button onclick="app.saveCartItemEdit()" class="py-2.5 bg-primary hover:bg-primaryHover text-white font-bold rounded-xl text-xs transition-colors shadow">Simpan Perubahan</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL RECEIPT -->
     <div id="modal-receipt" class="fixed inset-0 bg-black bg-opacity-60 z-[80] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col max-h-[95vh]">
@@ -502,7 +534,8 @@
                         </div>
                     </div>
 
-                    <div class="text-center text-[10px] text-gray-400 font-sans pt-0.5 space-y-1">
+                    <div class="text-center text-[10px] text-gray-500 font-sans pt-0.5 space-y-1">
+                        <p class="font-bold text-gray-700">Terima kasih telah berkunjung</p>
                         <p class="font-extrabold text-primary tracking-widest text-xs">SAVE YOUR MOMENT</p>
                         <div class="flex justify-center items-center gap-3 text-[10px] text-gray-600 pt-1">
                             <span class="flex items-center gap-1"><i class="fa-brands fa-whatsapp text-emerald-600"></i> 0812-9344-4477</span>
@@ -856,6 +889,7 @@
             pendingProductId: null,
             currentExpectedCash: 0,
             lastAuditData: null,
+            dashboardFilterDate: null,
 
             installPWA() {
                 if (deferredPrompt) {
@@ -923,6 +957,22 @@
                 this.switchView('pos');
                 this.renderProducts();
                 this.renderCart();
+
+                // Setup default date filter in dashboard to today
+                const todayStr = new Date().toISOString().slice(0, 10);
+                const dateInput = document.getElementById('dash-filter-date');
+                if (dateInput) {
+                    dateInput.value = todayStr;
+                    document.getElementById('dash-filter-label').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+                }
+
+                // Realtime interval updates for dashboard if active
+                setInterval(() => {
+                    const dashView = document.getElementById('view-dashboard');
+                    if (dashView && !dashView.classList.contains('hidden')) {
+                        this.renderDashboard();
+                    }
+                }, 3000);
             },
 
             loadData() {
@@ -936,6 +986,16 @@
                             if (Array.isArray(parsed) && parsed.length > 0) { loadedProducts = parsed; break; }
                         }
                     } catch(e) {}
+                }
+                
+                if (loadedProducts.length === 0) {
+                    loadedProducts = [
+                        { id: generateId(), name: 'Paket Family Gold', category: 'paket', price: 350000, frames: [{ size: '10R', color: 'Gold', qty: 2 }, { size: '4R', color: 'Putih', qty: 4 }] },
+                        { id: generateId(), name: 'Paket Couple Romantic', category: 'paket', price: 250000, frames: [{ size: '6R', color: 'Hitam', qty: 1 }, { size: '4R', color: 'Putih', qty: 2 }] },
+                        { id: generateId(), name: 'Self Studio Regular', category: 'self_studio', price: 100000, frames: [] },
+                        { id: generateId(), name: 'Photobox Basic', category: 'photobox', price: 35000, frames: [] },
+                        { id: generateId(), name: 'Pas Photo 3x4 / 4x6', category: 'pas_photo', price: 25000, frames: [] }
+                    ];
                 }
                 this.data.products = loadedProducts;
 
@@ -962,6 +1022,12 @@
                             if (Array.isArray(parsed) && parsed.length > 0) { loadedStock = parsed; break; }
                         }
                     } catch(e) {}
+                }
+                if (loadedStock.length === 0) {
+                    loadedStock = [
+                        { id: generateId(), name: 'Kertas Glossy A4', category: 'Kertas', qty: 150 },
+                        { id: generateId(), name: 'Album Foto Magnetik', category: 'Album', qty: 20 }
+                    ];
                 }
                 this.data.stock = loadedStock;
 
@@ -1006,77 +1072,60 @@
                 document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
                 document.getElementById(`view-${viewName}`).classList.remove('hidden');
 
+                // Toggle mobile cart icon visibility: only show on POS view
+                const mobileCartWrapper = document.getElementById('mobile-cart-btn-wrapper');
+                if (mobileCartWrapper) {
+                    if (viewName === 'pos') {
+                        mobileCartWrapper.classList.remove('hidden');
+                    } else {
+                        mobileCartWrapper.classList.add('hidden');
+                    }
+                }
+
                 document.querySelectorAll('.nav-btn').forEach(btn => {
                     btn.classList.remove('bg-primary', 'text-white');
                     btn.classList.add('text-gray-600', 'hover:bg-gray-100');
                 });
-                const activeDeskNav = document.getElementById(`nav-${viewName}`);
-                if(activeDeskNav) {
-                    activeDeskNav.classList.remove('text-gray-600', 'hover:bg-gray-100');
-                    activeDeskNav.classList.add('bg-primary', 'text-white');
+                const activeNavDesktop = document.getElementById(`nav-${viewName}`);
+                if (activeNavDesktop) {
+                    activeNavDesktop.classList.remove('text-gray-600', 'hover:bg-gray-100');
+                    activeNavDesktop.classList.add('bg-primary', 'text-white');
                 }
 
                 document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
                     btn.classList.remove('text-primary');
                     btn.classList.add('text-gray-400');
                 });
-                const activeMobNav = document.getElementById(`mob-nav-${viewName}`);
-                if (activeMobNav) {
-                    activeMobNav.classList.remove('text-gray-400');
-                    activeMobNav.classList.add('text-primary');
+                const activeNavMobile = document.getElementById(`mob-nav-${viewName}`);
+                if (activeNavMobile) {
+                    activeNavMobile.classList.remove('text-gray-400');
+                    activeNavMobile.classList.add('text-primary');
                 }
 
-                if (viewName === 'inventory') this.renderInventory();
-                if (viewName === 'history') this.renderHistory();
                 if (viewName === 'dashboard') this.renderDashboard();
+                if (viewName === 'pos') this.renderProducts();
+                if (viewName === 'history') this.renderHistory();
+                if (viewName === 'inventory') this.renderInventory();
                 if (viewName === 'stock') {
-                    this.switchStockSubTab('frame');
-                }
-            },
-
-            switchStockSubTab(subTab) {
-                const btnFrame = document.getElementById('stock-tab-frame');
-                const btnOther = document.getElementById('stock-tab-other');
-                const viewFrame = document.getElementById('stock-subview-frame');
-                const viewOther = document.getElementById('stock-subview-other');
-
-                if (subTab === 'frame') {
-                    btnFrame.className = "px-3.5 py-1.5 rounded-lg font-bold text-xs bg-primary text-white shadow transition-colors";
-                    btnOther.className = "px-3.5 py-1.5 rounded-lg font-medium text-xs bg-white text-gray-600 border border-gray-300 hover:bg-gray-100 transition-colors";
-                    viewFrame.classList.remove('hidden');
-                    viewOther.classList.add('hidden');
-                    this.renderFrameStock();
-                } else {
-                    btnOther.className = "px-3.5 py-1.5 rounded-lg font-bold text-xs bg-primary text-white shadow transition-colors";
-                    btnFrame.className = "px-3.5 py-1.5 rounded-lg font-medium text-xs bg-white text-gray-600 border border-gray-300 hover:bg-gray-100 transition-colors";
-                    viewOther.classList.remove('hidden');
-                    viewFrame.classList.add('hidden');
-                    this.renderOtherStock();
+                    this.renderStockFrame();
+                    this.renderStockOther();
                 }
             },
 
             showToast(message) {
                 const toast = document.getElementById('toast');
                 document.getElementById('toast-message').innerText = message;
-                toast.classList.remove('opacity-0');
-                setTimeout(() => toast.classList.add('opacity-0'), 2500);
+                toast.classList.remove('opacity-0', 'pointer-events-none');
+                setTimeout(() => {
+                    toast.classList.add('opacity-0', 'pointer-events-none');
+                }, 3000);
             },
 
-            showConfirmModal(title, message, onConfirmCallback) {
-                document.getElementById('confirm-title').innerText = title;
-                document.getElementById('confirm-message').innerText = message;
-                const yesBtn = document.getElementById('confirm-yes-btn');
-                const newYesBtn = yesBtn.cloneNode(true);
-                yesBtn.parentNode.replaceChild(newYesBtn, yesBtn);
-                newYesBtn.onclick = () => {
-                    this.closeConfirmModal();
-                    onConfirmCallback();
-                };
-                document.getElementById('modal-confirm').classList.remove('hidden');
-            },
-
-            closeConfirmModal() {
-                document.getElementById('modal-confirm').classList.add('hidden');
+            toggleMobileCart() {
+                const cart = document.getElementById('cart-container');
+                const overlay = document.getElementById('cart-overlay');
+                cart.classList.toggle('translate-x-full');
+                overlay.classList.toggle('hidden');
             },
 
             filterProducts(category) {
@@ -1085,1368 +1134,1148 @@
                     btn.classList.remove('bg-gray-800', 'text-white');
                     btn.classList.add('bg-gray-100', 'text-gray-600');
                 });
-                document.getElementById(`filter-${category}`).classList.remove('bg-gray-100', 'text-gray-600');
-                document.getElementById(`filter-${category}`).classList.add('bg-gray-800', 'text-white');
+                const activeBtn = document.getElementById(`filter-${category}`);
+                if (activeBtn) {
+                    activeBtn.classList.remove('bg-gray-100', 'text-gray-600');
+                    activeBtn.classList.add('bg-gray-800', 'text-white');
+                }
                 this.renderProducts();
             },
 
             renderProducts() {
                 const grid = document.getElementById('product-grid');
-                grid.innerHTML = '';
+                if (!grid) return;
                 
                 const filtered = this.currentFilter === 'all' 
                     ? this.data.products 
                     : this.data.products.filter(p => p.category === this.currentFilter);
 
                 if (filtered.length === 0) {
-                    grid.innerHTML = `<div class="col-span-full text-center py-8 text-gray-400 text-xs">Belum ada produk di kategori ini.</div>`;
+                    grid.innerHTML = `
+                        <div class="col-span-full py-12 text-center text-gray-400">
+                            <i class="fa-solid fa-box-open text-3xl mb-2"></i>
+                            <p class="text-xs">Tidak ada produk dalam kategori ini.</p>
+                        </div>
+                    `;
                     return;
                 }
 
-                filtered.forEach(p => {
-                    let icon, bgColor, textColor;
-                    if (p.category === 'paket') { icon = 'fa-camera'; bgColor = 'bg-[#e6f7f6]'; textColor = 'text-primary'; }
-                    else if (p.category === 'self_studio') { icon = 'fa-wand-magic-sparkles'; bgColor = 'bg-[#fff8e6]'; textColor = 'text-[#d49f2a]'; }
-                    else if (p.category === 'photobox') { icon = 'fa-images'; bgColor = 'bg-pink-100'; textColor = 'text-pink-600'; }
-                    else if (p.category === 'pas_photo') { icon = 'fa-id-card'; bgColor = 'bg-indigo-100'; textColor = 'text-indigo-600'; }
-                    else { icon = 'fa-box'; bgColor = 'bg-gray-100'; textColor = 'text-gray-600'; }
-
-                    let detailHtml = '';
-                    if (p.category === 'pas_photo') {
-                        detailHtml += `<div class="text-[11px] text-gray-500 truncate"><i class="fa-solid fa-id-card text-indigo-500 mr-1"></i>${p.pasPhotoSize || '-'} (${p.pasPhotoBg || '-'})</div>`;
-                    } else if (p.category === 'photobox') {
-                        let cetakSummary = p.cetakDetails && p.cetakDetails.length > 0 ? p.cetakDetails.map(c => `${c.size} (${c.lembar} Lbr)`).join(', ') : '';
-                        if (cetakSummary) {
-                            detailHtml += `<div class="text-[11px] text-gray-500 truncate"><i class="fa-solid fa-print text-pink-500 mr-1"></i>${cetakSummary}</div>`;
-                        }
-                    } else {
-                        let cetakSummary = p.cetakDetails && p.cetakDetails.length > 0 ? p.cetakDetails.map(c => `${c.size} (${c.lembar}L)`).join(', ') : '';
-                        let frameSummary = p.frameDetails && p.frameDetails.length > 0 ? p.frameDetails.map(f => `${f.size} (${f.pcs}P)`).join(', ') : '';
-                        let combined = [cetakSummary, frameSummary].filter(Boolean).join(' | ');
-                        if (combined) {
-                            detailHtml += `<div class="text-[11px] text-gray-500 truncate"><i class="fa-solid fa-layer-group text-primary mr-1"></i>${combined}</div>`;
-                        }
-                    }
-
-                    const card = document.createElement('div');
-                    card.className = `relative bg-white p-3 rounded-xl border border-gray-200 shadow-sm transition-all hover:shadow-md flex flex-col justify-between cursor-pointer group hover:border-primary`;
-                    card.onclick = () => { this.promptAddToCart(p.id); };
-
-                    card.innerHTML = `
-                        <div class="flex items-center gap-2.5 mb-2">
-                            <div class="w-8 h-8 ${bgColor} ${textColor} rounded-lg flex items-center justify-center shrink-0 text-xs">
-                                <i class="fa-solid ${icon}"></i>
+                grid.innerHTML = filtered.map(prod => `
+                    <div onclick="app.promptAddToCart('${prod.id}')" class="bg-white p-3.5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between group active:scale-[0.98]">
+                        <div>
+                            <div class="flex justify-between items-start gap-2 mb-1.5">
+                                <h3 class="font-bold text-gray-800 text-xs group-hover:text-primary transition-colors line-clamp-1">${prod.name}</h3>
+                                <span class="text-[9px] font-semibold px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full uppercase tracking-wider">${prod.category.replace('_', ' ')}</span>
                             </div>
-                            <div class="min-w-0 flex-1">
-                                <h3 class="font-bold text-gray-800 text-xs leading-snug truncate">${p.name}</h3>
-                                ${detailHtml}
-                            </div>
+                            ${prod.frames && prod.frames.length > 0 ? `
+                                <div class="text-[10px] text-gray-500 mb-2 space-y-0.5">
+                                    ${prod.frames.map(f => `<div>• ${f.qty}x Frame ${f.size} (${f.color}${f.ukirType && f.ukirType !== '-' ? ' ' + f.ukirType : ''})</div>`).join('')}
+                                </div>
+                            ` : '<div class="text-[10px] text-gray-400 mb-2">Layanan Cepat / Studio</div>'}
                         </div>
-                        <div class="pt-2 border-t border-gray-100 flex justify-between items-center">
-                            <span class="bg-[#e6f7f6] text-primary font-bold text-xs px-2.5 py-1 rounded-lg border border-[#76cdca]/30 tracking-tight">${formatRupiah(p.price)}</span>
-                            <div class="bg-primary text-white w-6 h-6 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                <i class="fa-solid fa-plus text-[10px]"></i>
-                            </div>
+                        <div class="bg-primary/10 border border-primary/20 text-primary font-extrabold text-xs py-1.5 px-3 rounded-lg text-center mt-1">
+                            ${formatRupiah(prod.price)}
                         </div>
-                    `;
-                    grid.appendChild(card);
-                });
+                    </div>
+                `).join('');
             },
 
-            promptAddToCart(id) {
-                const product = this.data.products.find(p => p.id === id);
-                if (!product) return;
-                this.pendingProductId = id;
-                document.getElementById('add-cart-confirm-msg').innerText = `Tambahkan "${product.name}" ke keranjang?`;
+            promptAddToCart(productId) {
+                this.pendingProductId = productId;
+                const prod = this.data.products.find(p => p.id === productId);
+                if (!prod) return;
+                document.getElementById('add-cart-confirm-msg').innerText = `Tambahkan "${prod.name}" (${formatRupiah(prod.price)}) ke keranjang?`;
                 document.getElementById('modal-add-cart-confirm').classList.remove('hidden');
             },
 
             closeAddCartModal() {
-                this.pendingProductId = null;
                 document.getElementById('modal-add-cart-confirm').classList.add('hidden');
+                this.pendingProductId = null;
             },
 
             confirmAddToCart() {
-                if (this.pendingProductId) {
-                    this.addToCart(this.pendingProductId);
-                    this.pendingProductId = null;
-                }
-                document.getElementById('modal-add-cart-confirm').classList.add('hidden');
-            },
-
-            addToCart(id) {
-                const product = this.data.products.find(p => p.id === id);
-                if (!product) return;
-
-                if (product.frameDetails && product.frameDetails.length > 0) {
-                    product.frameDetails.forEach(f => {
-                        let stockItem = this.data.frameStock.find(s => s.size === f.size && s.color === f.color && (f.color !== 'Ukir' || s.ukirType === f.ukirType));
-                        if (stockItem) {
-                            stockItem.qty = Math.max(0, stockItem.qty - f.pcs);
-                        }
-                    });
-                    this.saveData();
-                }
-
-                const existingItem = this.data.cart.find(item => item.id === id);
-                if (existingItem) existingItem.qty += 1;
-                else this.data.cart.push({ ...product, qty: 1 });
-                
-                this.renderCart();
-                this.renderProducts();
-                this.showToast('Produk ditambahkan ke keranjang!');
-            },
-
-            updateCartQty(id, change) {
-                const itemIndex = this.data.cart.findIndex(i => i.id === id);
-                if (itemIndex > -1) {
-                    const item = this.data.cart[itemIndex];
-                    let newQty = item.qty + change;
-                    if (newQty <= 0) {
-                        this.data.cart.splice(itemIndex, 1);
-                    } else {
-                        item.qty = newQty;
-                    }
+                if (!this.pendingProductId) return;
+                const prod = this.data.products.find(p => p.id === this.pendingProductId);
+                this.closeAddCartModal();
+                if (prod) {
+                    // Deep clone product into cart item with editable specs
+                    const cartItem = {
+                        cartId: generateId(),
+                        id: prod.id,
+                        name: prod.name,
+                        category: prod.category,
+                        price: prod.price,
+                        frames: prod.frames ? JSON.parse(JSON.stringify(prod.frames)) : []
+                    };
+                    this.data.cart.push(cartItem);
                     this.renderCart();
-                    this.renderProducts();
+                    this.showToast(`Berhasil menambahkan ${prod.name}`);
                 }
             },
 
             renderCart() {
                 const container = document.getElementById('cart-items');
                 const subtotalEl = document.getElementById('cart-subtotal');
-                const checkoutBtn = document.getElementById('btn-checkout');
+                const btnCheckout = document.getElementById('btn-checkout');
                 const badge = document.getElementById('mobile-cart-badge');
 
-                container.innerHTML = '';
-                let total = 0;
-                let totalItems = 0;
+                if (!container) return;
+
+                if (badge) {
+                    if (this.data.cart.length > 0) {
+                        badge.innerText = this.data.cart.length;
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                }
 
                 if (this.data.cart.length === 0) {
                     container.innerHTML = `
-                        <div class="flex flex-col items-center justify-center h-full text-gray-400 mt-10">
+                        <div class="flex flex-col items-center justify-center h-full text-gray-400 py-12">
                             <i class="fa-solid fa-cart-arrow-down text-3xl mb-1.5"></i>
                             <p class="text-xs">Keranjang kosong</p>
-                        </div>`;
-                    checkoutBtn.disabled = true;
-                    badge.classList.add('hidden');
-                } else {
-                    this.data.cart.forEach(item => {
-                        total += (item.price * item.qty);
-                        totalItems += item.qty;
-
-                        const el = document.createElement('div');
-                        el.className = 'flex justify-between items-center bg-white p-2.5 border border-gray-100 rounded-xl shadow-sm';
-                        el.innerHTML = `
-                            <div class="flex-1 min-w-0 pr-2">
-                                <h4 class="text-xs font-semibold text-gray-800 truncate">${item.name}</h4>
-                                <div class="text-[11px] text-gray-500">${formatRupiah(item.price)}</div>
-                            </div>
-                            <div class="flex items-center gap-1.5 bg-gray-50 rounded-lg p-0.5 border border-gray-200">
-                                <button onclick="app.updateCartQty('${item.id}', -1)" class="w-5 h-5 flex items-center justify-center text-gray-500 hover:text-red-500 rounded"><i class="fa-solid fa-minus text-[9px]"></i></button>
-                                <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
-                                <button onclick="app.updateCartQty('${item.id}', 1)" class="w-5 h-5 flex items-center justify-center text-gray-500 hover:text-green-500 rounded"><i class="fa-solid fa-plus text-[9px]"></i></button>
-                            </div>
-                        `;
-                        container.appendChild(el);
-                    });
-                    checkoutBtn.disabled = false;
-                    badge.innerText = totalItems;
-                    badge.classList.remove('hidden');
+                        </div>
+                    `;
+                    subtotalEl.innerText = formatRupiah(0);
+                    btnCheckout.disabled = true;
+                    return;
                 }
-                subtotalEl.innerText = formatRupiah(total);
-                this.currentTotal = total;
+
+                let subtotal = 0;
+                container.innerHTML = this.data.cart.map((item, idx) => {
+                    subtotal += item.price;
+                    return `
+                        <div class="bg-gray-50 border border-gray-200 p-2.5 rounded-xl space-y-1.5 text-xs">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">${item.name}</h4>
+                                    <p class="text-[10px] text-primary font-bold">${formatRupiah(item.price)}</p>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    ${item.frames && item.frames.length > 0 ? `
+                                        <button onclick="app.openEditCartItemModal(${idx})" class="p-1.5 text-gray-500 hover:text-primary transition-colors" title="Edit Warna Frame"><i class="fa-solid fa-pen-to-square"></i></button>
+                                    ` : ''}
+                                    <button onclick="app.removeFromCart(${idx})" class="p-1.5 text-gray-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash-can"></i></button>
+                                </div>
+                            </div>
+                            ${item.frames && item.frames.length > 0 ? `
+                                <div class="text-[10px] bg-white p-2 rounded-lg border border-gray-200 space-y-1">
+                                    <span class="font-bold text-gray-600 block">Warna Frame:</span>
+                                    ${item.frames.map((f, fIdx) => `
+                                        <div class="flex justify-between items-center text-gray-700">
+                                            <span>${f.qty}x ${f.size}</span>
+                                            <span class="font-medium bg-gray-100 px-2 py-0.5 rounded">${f.color}${f.ukirType && f.ukirType !== '-' ? ' ' + f.ukirType : ''}</span>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                subtotalEl.innerText = formatRupiah(subtotal);
+                btnCheckout.disabled = false;
             },
 
-            toggleMobileCart() {
-                const cartContainer = document.getElementById('cart-container');
-                const overlay = document.getElementById('cart-overlay');
-                if (cartContainer.classList.contains('translate-x-full')) {
-                    cartContainer.classList.remove('translate-x-full');
-                    overlay.classList.remove('hidden');
-                } else {
-                    cartContainer.classList.add('translate-x-full');
-                    overlay.classList.add('hidden');
-                }
+            removeFromCart(index) {
+                this.data.cart.splice(index, 1);
+                this.renderCart();
+            },
+
+            openEditCartItemModal(index) {
+                const item = this.data.cart[index];
+                if (!item || !item.frames) return;
+                document.getElementById('edit-cart-item-index').value = index;
+                document.getElementById('edit-cart-title').innerText = `Edit Spesifikasi: ${item.name}`;
+
+                const body = document.getElementById('edit-cart-body');
+                body.innerHTML = item.frames.map((f, fIdx) => {
+                    const isSmall = ['4R', '5R', '6R'].includes(f.size);
+                    return `
+                        <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-200 space-y-1.5">
+                            <div class="font-bold text-gray-700">${f.qty}x Frame Ukuran ${f.size}</div>
+                            <div>
+                                <label class="block text-[10px] text-gray-500 mb-0.5">Warna Frame</label>
+                                <select id="edit-frame-color-${fIdx}" class="w-full px-2 py-1 bg-white border border-gray-300 rounded-lg text-xs outline-none">
+                                    <option value="Putih" ${f.color === 'Putih' ? 'selected' : ''}>Putih</option>
+                                    <option value="Hitam" ${f.color === 'Hitam' ? 'selected' : ''}>Hitam</option>
+                                    ${!isSmall ? '<option value="Ukir" ' + (f.color === 'Ukir' ? 'selected' : '') + '>Ukir</option>' : ''}
+                                </select>
+                            </div>
+                            ${!isSmall ? `
+                                <div>
+                                    <label class="block text-[10px] text-gray-500 mb-0.5">Tipe Ukir</label>
+                                    <select id="edit-frame-ukir-${fIdx}" class="w-full px-2 py-1 bg-white border border-gray-300 rounded-lg text-xs outline-none">
+                                        <option value="Gold" ${f.ukirType === 'Gold' ? 'selected' : ''}>Gold</option>
+                                        <option value="Coklat" ${f.ukirType === 'Coklat' ? 'selected' : ''}>Coklat</option>
+                                        <option value="Silver" ${f.ukirType === 'Silver' ? 'selected' : ''}>Silver</option>
+                                        <option value="Putih" ${f.ukirType === 'Putih' ? 'selected' : ''}>Putih</option>
+                                    </select>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
+
+                document.getElementById('modal-edit-cart-item').classList.remove('hidden');
+            },
+
+            saveCartItemEdit() {
+                const index = parseInt(document.getElementById('edit-cart-item-index').value);
+                const item = this.data.cart[index];
+                if (!item || !item.frames) return;
+
+                item.frames.forEach((f, fIdx) => {
+                    const colorEl = document.getElementById(`edit-frame-color-${fIdx}`);
+                    if (colorEl) f.color = colorEl.value;
+                    const ukirEl = document.getElementById(`edit-frame-ukir-${fIdx}`);
+                    if (ukirEl) f.ukirType = ukirEl.value;
+                });
+
+                this.closeModal('modal-edit-cart-item');
+                this.renderCart();
+                this.showToast('Spesifikasi keranjang berhasil diperbarui');
             },
 
             showCheckoutModal() {
                 if (this.data.cart.length === 0) return;
-                document.getElementById('checkout-total-display').innerText = formatRupiah(this.currentTotal);
-                document.getElementById('input-payment').value = '';
-                document.getElementById('checkout-change-display').innerText = 'Rp 0';
+                const total = this.data.cart.reduce((sum, item) => sum + item.price, 0);
+                document.getElementById('checkout-total-display').innerText = formatRupiah(total);
+                this.selectedPaymentMethod = 'cash';
+                this.updatePaymentMethodUI();
+                document.getElementById('input-payment').value = new Intl.NumberFormat('id-ID').format(total);
+                this.activeNumpadRaw = total.toString();
+                document.getElementById('checkout-change-display').innerText = formatRupiah(0);
                 document.getElementById('checkout-error').classList.add('hidden');
-                this.setPaymentMethod('cash');
                 document.getElementById('modal-checkout').classList.remove('hidden');
             },
 
             setPaymentMethod(method) {
                 this.selectedPaymentMethod = method;
+                this.updatePaymentMethodUI();
+            },
+
+            updatePaymentMethodUI() {
                 ['cash', 'qris', 'debit'].forEach(m => {
                     const btn = document.getElementById(`pm-${m}`);
-                    if (m === method) {
-                        btn.className = "py-2 px-3 rounded-xl border-2 font-bold text-xs transition-all border-primary bg-[#e6f7f6] text-primary flex items-center justify-center gap-1.5";
-                    } else {
-                        btn.className = "py-2 px-3 rounded-xl border-2 font-bold text-xs transition-all border-gray-200 bg-white text-gray-600 flex items-center justify-center gap-1.5";
+                    if (btn) {
+                        if (m === this.selectedPaymentMethod) {
+                            btn.className = "py-2 px-3 rounded-xl border-2 font-bold text-xs transition-all border-primary bg-[#e6f7f6] text-primary flex items-center justify-center gap-1.5";
+                        } else {
+                            btn.className = "py-2 px-3 rounded-xl border-2 font-bold text-xs transition-all border-gray-200 bg-white text-gray-600 flex items-center justify-center gap-1.5";
+                        }
                     }
                 });
+
                 const cashSection = document.getElementById('cash-payment-section');
                 const nonCashInfo = document.getElementById('noncash-payment-info');
-                if (method === 'cash') {
+                const total = this.data.cart.reduce((sum, item) => sum + item.price, 0);
+
+                if (this.selectedPaymentMethod === 'cash') {
                     cashSection.classList.remove('hidden');
                     nonCashInfo.classList.add('hidden');
                 } else {
                     cashSection.classList.add('hidden');
                     nonCashInfo.classList.remove('hidden');
+                    document.getElementById('input-payment').value = new Intl.NumberFormat('id-ID').format(total);
                 }
             },
 
             numpadPress(val) {
-                const input = document.getElementById('input-payment');
-                let rawVal = input.value.replace(/\D/g, '');
-                if (val === 'C') rawVal = '';
-                else if (val === 'DEL') rawVal = rawVal.slice(0, -1);
-                else rawVal += val;
-                input.value = rawVal !== '' ? new Intl.NumberFormat('id-ID').format(rawVal) : '';
-                this.calculateChange();
-            },
-
-            calculateChange() {
-                const paymentValue = document.getElementById('input-payment').value.replace(/\./g, '');
-                const payment = parseFloat(paymentValue) || 0;
-                const change = payment - this.currentTotal;
-                const changeDisplay = document.getElementById('checkout-change-display');
-                if (change < 0) {
-                    changeDisplay.innerText = '-';
-                    changeDisplay.classList.add('text-red-500');
-                    changeDisplay.classList.remove('text-gray-800');
+                if (val === 'C') {
+                    this.activeNumpadRaw = '';
+                } else if (val === 'DEL') {
+                    this.activeNumpadRaw = this.activeNumpadRaw.slice(0, -1);
                 } else {
-                    changeDisplay.innerText = formatRupiah(change);
-                    changeDisplay.classList.remove('text-red-500');
-                    changeDisplay.classList.add('text-gray-800');
+                    this.activeNumpadRaw += val;
+                }
+                const displayVal = this.activeNumpadRaw !== '' ? new Intl.NumberFormat('id-ID').format(this.activeNumpadRaw) : '0';
+                document.getElementById('input-payment').value = displayVal;
+
+                const total = this.data.cart.reduce((sum, item) => sum + item.price, 0);
+                const received = parseInt(this.activeNumpadRaw || '0');
+                const change = received - total;
+                const changeEl = document.getElementById('checkout-change-display');
+                if (change >= 0) {
+                    changeEl.innerText = formatRupiah(change);
+                    document.getElementById('checkout-error').classList.add('hidden');
+                } else {
+                    changeEl.innerText = formatRupiah(0);
+                    document.getElementById('checkout-error').classList.remove('hidden');
                 }
             },
 
             processPayment() {
-                let payment = this.currentTotal;
+                const total = this.data.cart.reduce((sum, item) => sum + item.price, 0);
+                let received = total;
+                let change = 0;
+
                 if (this.selectedPaymentMethod === 'cash') {
-                    const paymentValue = document.getElementById('input-payment').value.replace(/\./g, '');
-                    payment = parseFloat(paymentValue) || 0;
-                    if (payment < this.currentTotal) {
+                    received = parseInt(this.activeNumpadRaw || '0');
+                    if (received < total) {
                         document.getElementById('checkout-error').classList.remove('hidden');
                         return;
                     }
+                    change = received - total;
                 }
 
+                // Deduct stock for frames in cart
+                this.data.cart.forEach(item => {
+                    if (item.frames && item.frames.length > 0) {
+                        item.frames.forEach(f => {
+                            const found = this.data.frameStock.find(fs => fs.size === f.size && fs.color === f.color && fs.ukirType === (f.ukirType || '-'));
+                            if (found) {
+                                found.qty = Math.max(0, found.qty - f.qty);
+                            }
+                        });
+                    }
+                });
+
                 const transaction = {
-                    id: 'TRX-' + Date.now().toString().slice(-6),
+                    id: 'TRX-' + Math.floor(100000 + Math.random() * 900000),
                     date: getFormatDate(),
                     timestamp: Date.now(),
+                    items: JSON.parse(JSON.stringify(this.data.cart)),
+                    total,
                     method: this.selectedPaymentMethod.toUpperCase(),
-                    items: [...this.data.cart],
-                    total: this.currentTotal,
-                    payment: payment,
-                    change: this.selectedPaymentMethod === 'cash' ? (payment - this.currentTotal) : 0
+                    received,
+                    change
                 };
 
                 this.data.history.unshift(transaction);
-                this.saveData();
-                
                 this.data.cart = [];
+                this.saveData();
+
+                document.getElementById('modal-checkout').classList.add('hidden');
                 this.renderCart();
-                this.renderProducts();
-                
-                this.closeModal('modal-checkout');
-                if(window.innerWidth < 768) this.toggleMobileCart();
-                
-                this.lastCompletedTrx = transaction;
                 this.showReceiptModal(transaction);
+                this.showToast('Transaksi berhasil diselesaikan!');
             },
 
             showReceiptModal(trx) {
+                this.lastCompletedTrx = trx;
                 document.getElementById('receipt-date').innerText = trx.date;
-                document.getElementById('receipt-trxid').innerText = `ID: ${trx.id}`;
+                document.getElementById('receipt-trxid').innerText = trx.id;
+
+                const listEl = document.getElementById('receipt-items-list');
+                listEl.innerHTML = trx.items.map(item => `
+                    <div class="flex justify-between items-start text-xs">
+                        <div>
+                            <span class="font-bold text-gray-900">${item.name}</span>
+                            ${item.frames && item.frames.length > 0 ? `
+                                <div class="text-[9px] text-gray-500">
+                                    ${item.frames.map(f => `<div>• ${f.qty}x ${f.size} (${f.color}${f.ukirType && f.ukirType !== '-' ? ' ' + f.ukirType : ''})</div>`).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                        <span class="font-bold text-gray-900">${formatRupiah(item.price)}</span>
+                    </div>
+                `).join('');
+
                 document.getElementById('receipt-total').innerText = formatRupiah(trx.total);
                 document.getElementById('receipt-method-label').innerText = `Metode Bayar (${trx.method}):`;
-                document.getElementById('receipt-payment').innerText = formatRupiah(trx.payment);
+                document.getElementById('receipt-payment').innerText = formatRupiah(trx.received);
                 document.getElementById('receipt-change').innerText = formatRupiah(trx.change);
-
-                const itemsListEl = document.getElementById('receipt-items-list');
-                itemsListEl.innerHTML = '';
-                trx.items.forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = 'flex justify-between items-start text-xs';
-                    div.innerHTML = `
-                        <div class="pr-2">
-                            <p class="font-bold text-gray-800">${item.qty}x ${item.name}</p>
-                            <p class="text-[10px] text-gray-500">@ ${formatRupiah(item.price)}</p>
-                        </div>
-                        <span class="font-bold text-gray-800">${formatRupiah(item.price * item.qty)}</span>
-                    `;
-                    itemsListEl.appendChild(div);
-                });
 
                 document.getElementById('modal-receipt').classList.remove('hidden');
             },
 
             downloadReceiptPDF() {
                 if (!this.lastCompletedTrx) return;
-                const trx = this.lastCompletedTrx;
                 const { jsPDF } = window.jspdf;
-                const doc = new jsPDF({ unit: 'mm', format: [80, 165] });
-
-                // Header Background Accent (Theme Matching)
-                doc.setFillColor(118, 205, 202); // #76cdca
-                doc.rect(0, 0, 80, 22, 'F');
+                const doc = new jsPDF({ unit: 'mm', format: [80, 150] });
                 
-                doc.setFillColor(253, 211, 117); // #fdd375 accent line
-                doc.rect(0, 22, 80, 2, 'F');
-
-                doc.setFont("Helvetica", "bold");
-                doc.setFontSize(13);
-                doc.setTextColor(255, 255, 255);
+                doc.setFont("courier", "bold");
+                doc.setFontSize(11);
                 doc.text("KHJAM PHOTO STUDIO", 40, 10, { align: "center" });
                 
-                doc.setFont("Helvetica", "normal");
+                doc.setFont("courier", "normal");
                 doc.setFontSize(8);
-                doc.text("Jl. Ir. H. Juanda no. 5C Cikampek Timur", 40, 16, { align: "center" });
+                doc.text("Jl. Ir. H. Juanda no. 5C Cikampek Timur", 40, 15, { align: "center" });
+                doc.text(this.lastCompletedTrx.date, 40, 20, { align: "center" });
+                doc.text(`ID: ${this.lastCompletedTrx.id}`, 40, 24, { align: "center" });
 
-                let y = 30;
-                doc.setTextColor(80, 80, 80);
-                doc.setFontSize(8);
-                doc.text(`Waktu: ${trx.date}`, 5, y);
-                doc.text(`ID: ${trx.id}`, 75, y, { align: "right" });
-                y += 4;
+                doc.setLineDash([1, 1], 0);
+                doc.line(5, 27, 75, 27);
 
-                doc.setLineWidth(0.3);
-                doc.setDrawColor(200, 200, 200);
-                doc.line(5, y, 75, y);
-                y += 6;
-
-                trx.items.forEach(i => {
-                    doc.setFont("Helvetica", "bold");
-                    doc.setTextColor(50, 50, 50);
-                    doc.text(`${i.qty}x ${i.name}`, 5, y);
-                    doc.text(formatRupiah(i.price * i.qty), 75, y, { align: "right" });
-                    y += 4.5;
-                    doc.setFont("Helvetica", "normal");
-                    doc.setFontSize(7.5);
-                    doc.setTextColor(120, 120, 120);
-                    doc.text(`@ ${formatRupiah(i.price)}`, 5, y);
-                    y += 5.5;
+                let y = 32;
+                this.lastCompletedTrx.items.forEach(item => {
+                    doc.setFont("courier", "bold");
+                    doc.text(item.name, 5, y);
+                    doc.text(formatRupiah(item.price), 75, y, { align: "right" });
+                    y += 4;
+                    if (item.frames && item.frames.length > 0) {
+                        item.frames.forEach(f => {
+                            doc.setFont("courier", "normal");
+                            doc.setFontSize(7);
+                            doc.text(`  - ${f.qty}x ${f.size} (${f.color}${f.ukirType && f.ukirType !== '-' ? ' ' + f.ukirType : ''})`, 5, y);
+                            y += 3.5;
+                        });
+                        doc.setFontSize(8);
+                    }
+                    y += 1;
                 });
 
                 doc.line(5, y, 75, y);
-                y += 6;
-
-                doc.setFont("Helvetica", "bold");
-                doc.setFontSize(8.5);
-                doc.setTextColor(50, 50, 50);
-                doc.text("Total Tagihan:", 5, y);
-                doc.setTextColor(118, 205, 202);
-                doc.text(formatRupiah(trx.total), 75, y, { align: "right" });
-                y += 5.5;
-
-                doc.setFont("Helvetica", "normal");
-                doc.setFontSize(8);
-                doc.setTextColor(100, 100, 100);
-                doc.text(`Bayar (${trx.method}):`, 5, y);
-                doc.text(formatRupiah(trx.payment), 75, y, { align: "right" });
                 y += 5;
 
-                doc.text("Kembalian:", 5, y);
-                doc.text(formatRupiah(trx.change), 75, y, { align: "right" });
-                y += 7;
+                doc.setFont("courier", "bold");
+                doc.text(`Total Tagihan:`, 5, y);
+                doc.text(formatRupiah(this.lastCompletedTrx.total), 75, y, { align: "right" });
+                y += 4;
 
-                doc.setLineWidth(0.3);
-                doc.line(5, y, 75, y);
-                y += 8;
+                doc.setFont("courier", "normal");
+                doc.text(`Bayar (${this.lastCompletedTrx.method}):`, 5, y);
+                doc.text(formatRupiah(this.lastCompletedTrx.received), 75, y, { align: "right" });
+                y += 4;
 
-                doc.setFont("Helvetica", "bold");
-                doc.setFontSize(10);
-                doc.setTextColor(118, 205, 202);
-                doc.text("SAVE YOUR MOMENT", 40, y, { align: "center" });
+                doc.text(`Kembalian:`, 5, y);
+                doc.text(formatRupiah(this.lastCompletedTrx.change), 75, y, { align: "right" });
                 y += 6;
 
-                doc.setFont("Helvetica", "bold");
-                doc.setFontSize(8);
-                doc.setTextColor(80, 80, 80);
-                doc.text(`WA: 0812-9344-4477   |   IG: kharisma.photography`, 40, y, { align: "center" });
+                doc.line(5, y, 75, y);
+                y += 6;
 
-                doc.save(`Struk_KHJAM_${trx.id}.pdf`);
-                this.showToast('Struk PDF bertema KHJAM berhasil diunduh!');
+                doc.setFont("courier", "bold");
+                doc.text("Terima kasih telah berkunjung", 40, y, { align: "center" });
+                y += 4;
+                doc.text("SAVE YOUR MOMENT", 40, y, { align: "center" });
+                y += 4;
+                doc.setFontSize(7);
+                doc.text("WA: 0812-9344-4477 | IG: kharisma.photography", 40, y, { align: "center" });
+
+                doc.save(`Struk_${this.lastCompletedTrx.id}.pdf`);
+                this.showToast('Struk PDF berhasil diunduh!');
             },
 
             shareReceipt() {
                 if (!this.lastCompletedTrx) return;
                 const trx = this.lastCompletedTrx;
-                let text = `*KHJAM PHOTO STUDIO*\nJl. Ir. H. Juanda no. 5C Cikampek Timur\nID: ${trx.id}\nWaktu: ${trx.date}\n--------------------------------\n`;
-                trx.items.forEach(i => { text += `• ${i.qty}x ${i.name} (${formatRupiah(i.price * i.qty)})\n`; });
-                text += `--------------------------------\n*Total: ${formatRupiah(trx.total)}*\nBayar (${trx.method}): ${formatRupiah(trx.payment)}\nKembalian: ${formatRupiah(trx.change)}\n--------------------------------\n*SAVE YOUR MOMENT*\nWA: 0812-9344-4477\nIG: kharisma.photography`;
+                const text = `*KHJAM PHOTO STUDIO*\nJl. Ir. H. Juanda no. 5C Cikampek Timur\n${trx.date}\nID: ${trx.id}\n\n` +
+                    trx.items.map(i => `${i.name} - ${formatRupiah(i.price)}`).join('\n') +
+                    `\n\n*Total: ${formatRupiah(trx.total)}*\nBayar (${trx.method}): ${formatRupiah(trx.received)}\nKembalian: ${formatRupiah(trx.change)}\n\nTerima kasih telah berkunjung!\n*SAVE YOUR MOMENT*\nWA: 0812-9344-4477`;
 
                 if (navigator.share) {
-                    navigator.share({ title: 'Struk KHJAM Photo Studio', text: text }).catch(() => {});
+                    navigator.share({ title: 'Struk KHJAM', text }).catch(() => {});
                 } else {
-                    const textarea = document.createElement('textarea');
-                    textarea.value = text;
-                    document.body.appendChild(textarea);
-                    textarea.select();
+                    const el = document.createElement('textarea');
+                    el.value = text;
+                    document.body.appendChild(el);
+                    el.select();
                     document.execCommand('copy');
-                    textarea.remove();
+                    document.body.removeChild(el);
                     this.showToast('Struk disalin ke clipboard!');
                 }
             },
 
-            renderHistory() {
-                const list = document.getElementById('history-list');
-                list.innerHTML = '';
-                if(this.data.history.length === 0) {
-                    list.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-gray-500">Belum ada transaksi</td></tr>`;
-                    return;
-                }
-                this.data.history.forEach(trx => {
-                    const itemsHtml = trx.items.map(i => `${i.qty}x ${i.name}`).join('<br>');
-                    const methodBadge = `<span class="px-2 py-0.5 rounded text-[10px] font-bold ${trx.method === 'QRIS' ? 'bg-purple-100 text-purple-700' : trx.method === 'DEBIT' ? 'bg-blue-100 text-blue-700' : 'bg-emerald-100 text-emerald-700'}">${trx.method || 'CASH'}</span>`;
-                    
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-gray-50 transition-colors";
-                    tr.innerHTML = `
-                        <td class="p-3 text-primary font-bold text-xs">${trx.id}</td>
-                        <td class="p-3 text-xs text-gray-500">${trx.date}</td>
-                        <td class="p-3">${methodBadge}</td>
-                        <td class="p-3 text-xs text-gray-700">${itemsHtml}</td>
-                        <td class="p-3 font-bold text-gray-800">${formatRupiah(trx.total)}</td>
-                        <td class="p-3 text-right">
-                            <button onclick="app.showReceiptModalFromHistory('${trx.id}')" class="text-primary hover:text-primaryHover p-1.5 bg-[#e6f7f6] hover:bg-[#d0f0ee] rounded-lg transition-colors text-xs font-semibold inline-flex items-center gap-1 ml-auto">
-                                <i class="fa-solid fa-receipt"></i> Struk
-                            </button>
-                        </td>
-                    `;
-                    list.appendChild(tr);
-                });
-            },
-
-            showReceiptModalFromHistory(id) {
-                const trx = this.data.history.find(t => t.id === id);
-                if (trx) {
-                    this.lastCompletedTrx = trx;
-                    this.showReceiptModal(trx);
-                }
-            },
-
-            openShiftCheckModal() {
-                let expectedCash = 0;
-                this.data.history.forEach(trx => {
-                    if ((trx.method || 'CASH').toUpperCase() === 'CASH') {
-                        expectedCash += (trx.total || 0);
-                    }
-                });
-                this.currentExpectedCash = expectedCash;
-                document.getElementById('shift-expected-cash').innerText = formatRupiah(expectedCash);
-                document.getElementById('input-actual-cash').value = new Intl.NumberFormat('id-ID').format(expectedCash);
-                
-                const diffBox = document.getElementById('diff-box');
-                diffBox.className = "bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-center";
-                document.getElementById('diff-label').innerText = "SELISIH KAS";
-                document.getElementById('diff-amount').className = "text-sm font-extrabold text-emerald-600";
-                document.getElementById('diff-amount').innerText = "Rp 0 (Pas)";
-                diffBox.classList.remove('hidden');
-
-                document.getElementById('modal-shift-check').classList.remove('hidden');
-            },
-
-            calculateCashDifference() {
-                const actualValStr = document.getElementById('input-actual-cash').value.replace(/\./g, '');
-                const actualCash = parseFloat(actualValStr) || 0;
-                const diff = actualCash - this.currentExpectedCash;
-
-                const diffBox = document.getElementById('diff-box');
-                const diffAmount = document.getElementById('diff-amount');
-                const diffLabel = document.getElementById('diff-label');
-
-                diffBox.classList.remove('hidden');
-                if (diff === 0) {
-                    diffBox.className = "bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-center";
-                    diffLabel.innerText = "STATUS KAS FISIK";
-                    diffAmount.className = "text-sm font-extrabold text-emerald-600";
-                    diffAmount.innerText = "Rp 0 (Pas / Seimbang)";
-                } else if (diff > 0) {
-                    diffBox.className = "bg-blue-50 border border-blue-200 p-3 rounded-xl text-center";
-                    diffLabel.innerText = "KAS LEBIH (SURPLUS)";
-                    diffAmount.className = "text-sm font-extrabold text-blue-600";
-                    diffAmount.innerText = `+ ${formatRupiah(diff)}`;
-                } else {
-                    diffBox.className = "bg-red-50 border border-red-200 p-3 rounded-xl text-center";
-                    diffLabel.innerText = "KAS KURANG (DEFISIT)";
-                    diffAmount.className = "text-sm font-extrabold text-red-600";
-                    diffAmount.innerText = `- ${formatRupiah(Math.abs(diff))}`;
-                }
-
-                this.lastAuditData = { expected: this.currentExpectedCash, actual: actualCash, diff };
-            },
-
-            proceedToShiftSummary() {
-                const actualValStr = document.getElementById('input-actual-cash').value.replace(/\./g, '');
-                const actualCash = parseFloat(actualValStr) || 0;
-                const diff = actualCash - this.currentExpectedCash;
-
-                this.lastAuditData = { expected: this.currentExpectedCash, actual: actualCash, diff };
-                this.closeModal('modal-shift-check');
-                this.openShiftSummaryModal();
-            },
-
-            openShiftSummaryModal() {
-                const history = this.data.history;
-                const totalTrx = history.length;
-                let totalRevenue = 0;
-                let paymentStats = { CASH: 0, QRIS: 0, DEBIT: 0 };
-                let productStats = {};
-
-                history.forEach(trx => {
-                    const rev = trx.total || 0;
-                    totalRevenue += rev;
-
-                    const method = (trx.method || 'CASH').toUpperCase();
-                    if (paymentStats[method] !== undefined) {
-                        paymentStats[method] += rev;
-                    } else {
-                        paymentStats[method] = rev;
-                    }
-
-                    if (trx.items && Array.isArray(trx.items)) {
-                        trx.items.forEach(item => {
-                            const name = item.name || 'Produk';
-                            const qty = item.qty || 1;
-                            const subtotal = (item.price || 0) * qty;
-
-                            if (!productStats[name]) {
-                                productStats[name] = { qty: 0, total: 0 };
-                            }
-                            productStats[name].qty += qty;
-                            productStats[name].total += subtotal;
-                        });
-                    }
-                });
-
-                const audit = this.lastAuditData || { expected: paymentStats['CASH'] || 0, actual: paymentStats['CASH'] || 0, diff: 0 };
-                this.currentShiftSummaryData = { totalTrx, totalRevenue, paymentStats, productStats, audit };
-
-                document.getElementById('shift-date-range').innerText = `Waktu Cetak: ${getFormatDate()}`;
-                document.getElementById('shift-total-trx').innerText = `${totalTrx} Transaksi`;
-                document.getElementById('shift-total-revenue').innerText = formatRupiah(totalRevenue);
-
-                const pmContainer = document.getElementById('shift-payment-methods-list');
-                pmContainer.innerHTML = '';
-                Object.keys(paymentStats).forEach(method => {
-                    const amount = paymentStats[method];
-                    const div = document.createElement('div');
-                    div.className = 'flex justify-between text-gray-600 text-xs py-0.5';
-                    div.innerHTML = `<span>Metode ${method}:</span><span class="font-bold text-gray-800">${formatRupiah(amount)}</span>`;
-                    pmContainer.appendChild(div);
-                });
-
-                const auditSummaryEl = document.getElementById('shift-audit-result-summary');
-                auditSummaryEl.innerHTML = `
-                    <div class="bg-gray-50 p-2 rounded-lg border border-gray-200 space-y-1 text-xs">
-                        <div class="flex justify-between"><span>Kas Fisik Aktual:</span><b class="text-gray-800">${formatRupiah(audit.actual)}</b></div>
-                        <div class="flex justify-between"><span>Selisih Kas:</span><b class="${audit.diff < 0 ? 'text-red-600' : audit.diff > 0 ? 'text-blue-600' : 'text-emerald-600'}">${audit.diff === 0 ? 'Rp 0 (Pas)' : (audit.diff > 0 ? '+' : '') + formatRupiah(audit.diff)}</b></div>
-                    </div>
-                `;
-
-                const prodContainer = document.getElementById('shift-products-list');
-                prodContainer.innerHTML = '';
-                const prodKeys = Object.keys(productStats);
-                if (prodKeys.length === 0) {
-                    prodContainer.innerHTML = `<div class="text-gray-400 italic text-center py-2">Belum ada produk terjual dalam riwayat.</div>`;
-                } else {
-                    prodKeys.forEach(name => {
-                        const pData = productStats[name];
-                        const div = document.createElement('div');
-                        div.className = 'flex justify-between items-center text-xs bg-gray-50 p-2 rounded-lg border border-gray-100';
-                        div.innerHTML = `
-                            <div>
-                                <span class="font-bold text-gray-800 block">${name}</span>
-                                <span class="text-[10px] text-gray-500 font-sans">Terjual: <b>${pData.qty} Pcs</b></span>
-                            </div>
-                            <span class="font-bold text-primary">${formatRupiah(pData.total)}</span>
-                        `;
-                        prodContainer.appendChild(div);
-                    });
-                }
-
-                document.getElementById('modal-shift-summary').classList.remove('hidden');
-            },
-
-            downloadShiftSummaryPDF() {
-                const data = this.currentShiftSummaryData;
-                if (!data) return;
-
-                const { jsPDF } = window.jspdf;
-                const doc = new jsPDF();
-                
-                doc.setFont("Helvetica", "bold");
-                doc.setFontSize(16);
-                doc.text("KHJAM PHOTO STUDIO", 105, 15, { align: "center" });
-
-                doc.setFontSize(11);
-                doc.text("LAPORAN REKAPITULASI SHIFT / TUTUP KASIR", 105, 22, { align: "center" });
-                
-                doc.setFont("Helvetica", "normal");
-                doc.setFontSize(9);
-                doc.text(`Waktu Cetak: ${getFormatDate()}`, 105, 28, { align: "center" });
-
-                doc.setLineWidth(0.5);
-                doc.line(14, 33, 196, 33);
-
-                let y = 40;
-                doc.setFont("Helvetica", "bold");
-                doc.setFontSize(11);
-                doc.text("1. Ringkasan Pendapatan & Transaksi", 14, y);
-                y += 6;
-
-                doc.setFont("Helvetica", "normal");
-                doc.setFontSize(10);
-                doc.text(`Jumlah Total Transaksi : ${data.totalTrx} Transaksi`, 14, y);
-                y += 6;
-                doc.text(`Total Pendapatan       : ${formatRupiah(data.totalRevenue)}`, 14, y);
-                y += 10;
-
-                doc.setFont("Helvetica", "bold");
-                doc.setFontSize(11);
-                doc.text("2. Rincian Jenis Pembayaran & Audit Kas", 14, y);
-                y += 6;
-
-                doc.setFont("Helvetica", "normal");
-                doc.setFontSize(10);
-                Object.keys(data.paymentStats).forEach(method => {
-                    doc.text(`- Metode ${method.padEnd(8, ' ')} : ${formatRupiah(data.paymentStats[method])}`, 14, y);
-                    y += 6;
-                });
-                doc.text(`- Kas Fisik Aktual     : ${formatRupiah(data.audit.actual)}`, 14, y);
-                y += 6;
-                let diffText = data.audit.diff === 0 ? 'Rp 0 (Pas / Seimbang)' : (data.audit.diff > 0 ? '+' : '') + formatRupiah(data.audit.diff);
-                doc.text(`- Selisih Kas          : ${diffText}`, 14, y);
-                y += 10;
-
-                doc.setFont("Helvetica", "bold");
-                doc.setFontSize(11);
-                doc.text("3. Rincian Produk Terjual", 14, y);
-                y += 6;
-
-                const prodKeys = Object.keys(data.productStats);
-                if (prodKeys.length === 0) {
-                    doc.setFont("Helvetica", "normal");
-                    doc.text("(Belum ada produk terjual dalam shift ini)", 14, y);
-                    y += 6;
-                } else {
-                    doc.setFont("Helvetica", "bold");
-                    doc.setFontSize(9);
-                    doc.text("Nama Produk", 14, y);
-                    doc.text("Terjual", 130, y);
-                    doc.text("Subtotal", 170, y);
-                    y += 4;
-                    doc.setLineWidth(0.2);
-                    doc.line(14, y, 196, y);
-                    y += 5;
-
-                    doc.setFont("Helvetica", "normal");
-                    prodKeys.forEach(name => {
-                        const p = data.productStats[name];
-                        if (y > 275) { doc.addPage(); y = 20; }
-                        doc.text(name, 14, y);
-                        doc.text(`${p.qty} Pcs`, 130, y);
-                        doc.text(formatRupiah(p.total), 170, y);
-                        y += 6;
-                    });
-                }
-
-                y += 10;
-                if (y > 270) { doc.addPage(); y = 20; }
-                doc.setFont("Helvetica", "italic");
-                doc.setFontSize(8);
-                doc.text("Laporan rekap shift ini digenerate otomatis oleh sistem KHJAM POS.", 105, y, { align: "center" });
-
-                doc.save(`Rekap_Shift_${new Date().toISOString().slice(0,10)}.pdf`);
-                this.showToast('Laporan Shift PDF berhasil diunduh!');
-            },
-
-            renderInventory() {
-                const list = document.getElementById('inventory-list');
-                list.innerHTML = '';
-                if (this.data.products.length === 0) {
-                    list.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-gray-500">Belum ada produk. Silakan tambah produk baru.</td></tr>`;
-                    return;
-                }
-                this.data.products.forEach(p => {
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-gray-50 transition-colors";
-                    
-                    let catLabel = '';
-                    if (p.category === 'paket') catLabel = '<span class="bg-[#e6f7f6] text-primary px-2 py-0.5 rounded text-[10px] font-bold border border-[#76cdca]">Paket Studio</span>';
-                    else if (p.category === 'self_studio') catLabel = '<span class="bg-[#fff8e6] text-[#d49f2a] px-2 py-0.5 rounded text-[10px] font-bold border border-[#fdd375]">Self Studio</span>';
-                    else if (p.category === 'photobox') catLabel = '<span class="bg-pink-100 text-pink-700 px-2 py-0.5 rounded text-[10px] font-bold border border-pink-300">Photobox</span>';
-                    else if (p.category === 'pas_photo') catLabel = '<span class="bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded text-[10px] font-bold border border-indigo-300">Pas Photo</span>';
-                    else catLabel = '<span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-300">Lainnya</span>';
-                    
-                    let detailsList = '-';
-                    if (p.category === 'pas_photo') {
-                        detailsList = `<div class="text-xs space-y-0.5"><div><span class="text-indigo-600 font-bold">Ukuran:</span> ${p.pasPhotoSize || '-'}</div><div><span class="text-indigo-600 font-bold">Latar:</span> ${p.pasPhotoBg || '-'}</div></div>`;
-                    } else {
-                        let cetakText = p.cetakDetails && p.cetakDetails.length > 0 ? p.cetakDetails.map(c => `<b>${c.size}</b> (${c.lembar} Lbr)`).join(', ') : '';
-                        let frameText = p.frameDetails && p.frameDetails.length > 0 ? p.frameDetails.map(f => {
-                            let colorText = f.color === 'Ukir' ? `Ukir (${f.ukirType || 'Gold'})` : f.color;
-                            return `<b>${f.size}</b> (${f.pcs} Frm, ${colorText})`;
-                        }).join(', ') : '';
-
-                        if (cetakText || frameText) {
-                            detailsList = `<div class="text-xs space-y-0.5">`;
-                            if (cetakText) detailsList += `<div><span class="text-primary font-bold">Cetak:</span> ${cetakText}</div>`;
-                            if (frameText) detailsList += `<div><span class="text-amber-600 font-bold">Frame:</span> ${frameText}</div>`;
-                            detailsList += `</div>`;
-                        }
-                    }
-
-                    tr.innerHTML = `
-                        <td class="p-3 font-medium text-gray-800">${p.name}</td>
-                        <td class="p-3">${catLabel}</td>
-                        <td class="p-3 text-gray-600 max-w-xs">${detailsList}</td>
-                        <td class="p-3 font-semibold">${formatRupiah(p.price)}</td>
-                        <td class="p-3 text-right space-x-1 whitespace-nowrap">
-                            <button onclick="app.openProductStockModal('${p.id}')" class="text-amber-600 hover:text-amber-800 p-1.5 bg-amber-50 hover:bg-amber-100 rounded-lg transition-colors text-xs font-semibold inline-flex items-center gap-1" title="Manajemen Stok Produk"><i class="fa-solid fa-warehouse"></i> Stok</button>
-                            <button onclick="app.editProduct('${p.id}')" class="text-blue-500 hover:text-blue-700 p-1.5 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors" title="Edit Produk"><i class="fa-solid fa-pen text-xs"></i></button>
-                            <button onclick="app.confirmDeleteProduct('${p.id}')" class="text-red-500 hover:text-red-700 p-1.5 bg-red-50 hover:bg-red-100 rounded-lg transition-colors" title="Hapus Produk"><i class="fa-solid fa-trash text-xs"></i></button>
-                        </td>
-                    `;
-                    list.appendChild(tr);
-                });
-            },
-
-            openBulkInboundModal() {
-                const sizeSelect = document.getElementById('bulk-inbound-size-select');
-                sizeSelect.innerHTML = '<option value="">- Pilih Ukuran -</option>';
-                
-                frameStockSizes.forEach(size => {
-                    const opt = document.createElement('option');
-                    opt.value = size;
-                    opt.innerText = `Frame ${size}`;
-                    sizeSelect.appendChild(opt);
-                });
-
-                document.getElementById('bulk-inbound-color-section').classList.add('hidden');
-                document.getElementById('bulk-inbound-qty').value = '';
-                document.getElementById('modal-bulk-inbound').classList.remove('hidden');
-            },
-
-            onBulkInboundSizeChange() {
-                const selectedSize = document.getElementById('bulk-inbound-size-select').value;
-                const colorSection = document.getElementById('bulk-inbound-color-section');
-                const variantSelect = document.getElementById('bulk-inbound-variant-select');
-                variantSelect.innerHTML = '';
-
-                if (!selectedSize) {
-                    colorSection.classList.add('hidden');
-                    return;
-                }
-
-                colorSection.classList.remove('hidden');
-                const variants = this.data.frameStock.filter(fs => fs.size === selectedSize);
-                
-                variants.forEach(v => {
-                    let label = v.color === 'Ukir' ? `Warna: Ukir (${v.ukirType})` : `Warna: ${v.color}`;
-                    const opt = document.createElement('option');
-                    opt.value = v.id;
-                    opt.innerText = `${label} (Stok Saat Ini: ${v.qty} Pcs)`;
-                    variantSelect.appendChild(opt);
-                });
-            },
-
-            saveBulkInbound() {
-                const variantId = document.getElementById('bulk-inbound-variant-select').value;
-                const qtyToAdd = parseInt(document.getElementById('bulk-inbound-qty').value) || 0;
-                
-                if (!variantId) {
-                    this.showToast('Silakan pilih ukuran dan variasi frame terlebih dahulu!');
-                    return;
-                }
-                if (qtyToAdd <= 0) {
-                    this.showToast('Jumlah stok masuk harus lebih dari 0!');
-                    return;
-                }
-
-                const fs = this.data.frameStock.find(item => item.id === variantId);
-                if (fs) {
-                    fs.qty += qtyToAdd;
-                    this.saveData();
-                    this.renderFrameStock();
-                    this.showToast(`Berhasil menambahkan ${qtyToAdd} pcs ke Stok Frame ${fs.size}!`);
-                    this.closeModal('modal-bulk-inbound');
-                }
-            },
-
-            openProductStockModal(productId) {
-                const product = this.data.products.find(p => p.id === productId);
-                if (!product) return;
-
-                document.getElementById('stock-prod-id').value = product.id;
-                document.getElementById('product-stock-title').innerText = `Sisa Stok Frame: ${product.name}`;
-                const container = document.getElementById('product-stock-items-container');
-                container.innerHTML = '';
-
-                if (!product.frameDetails || product.frameDetails.length === 0) {
-                    container.innerHTML = `<div class="text-center py-4 text-gray-400 text-xs">Produk ini tidak memiliki rincian frame.</div>`;
-                } else {
-                    product.frameDetails.forEach((f) => {
-                        let colorText = f.color === 'Ukir' ? `Ukir (${f.ukirType || 'Gold'})` : f.color;
-                        let stockItem = this.data.frameStock.find(s => s.size === f.size && s.color === f.color && (f.color !== 'Ukir' || s.ukirType === f.ukirType));
-                        let currentStock = stockItem ? stockItem.qty : 0;
-
-                        const div = document.createElement('div');
-                        div.className = 'bg-gray-50 p-2.5 rounded-xl border border-gray-200 flex justify-between items-center';
-                        div.innerHTML = `
-                            <div>
-                                <h4 class="font-bold text-xs text-gray-800">Frame ${f.size} - ${colorText}</h4>
-                                <p class="text-[11px] text-gray-500">Dibutuhkan: ${f.pcs} Pcs</p>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-[9px] text-gray-400 uppercase font-semibold block">Sisa Stok</span>
-                                <span class="text-sm font-bold text-primary">${currentStock} Pcs</span>
-                            </div>
-                        `;
-                        container.appendChild(div);
-                    });
-                }
-                document.getElementById('modal-product-stock').classList.remove('hidden');
-            },
-
-            renderFrameStock() {
-                const list = document.getElementById('frame-stock-list');
-                list.innerHTML = '';
-
-                if (!this.data.frameStock || this.data.frameStock.length === 0) {
-                    list.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-gray-500">Belum ada data stok frame.</td></tr>`;
-                    return;
-                }
-
-                let lastSize = '';
-                this.data.frameStock.forEach((fs, index) => {
-                    if (fs.size !== lastSize) {
-                        if (index > 0) {
-                            const dividerRow = document.createElement('tr');
-                            dividerRow.innerHTML = `<td colspan="4" class="bg-gray-100 p-1 border-t-2 border-gray-300"></td>`;
-                            list.appendChild(dividerRow);
-                        }
-                        lastSize = fs.size;
-                    }
-
-                    let colorBadge = '';
-                    if (fs.color === 'Putih') colorBadge = '<span class="bg-gray-100 text-gray-800 px-2 py-0.5 rounded text-[11px] font-semibold border border-gray-300">Putih</span>';
-                    else if (fs.color === 'Hitam') colorBadge = '<span class="bg-gray-900 text-white px-2 py-0.5 rounded text-[11px] font-semibold">Hitam</span>';
-                    else colorBadge = `<span class="bg-amber-100 text-amber-800 px-2 py-0.5 rounded text-[11px] font-semibold border border-amber-300">Ukir (${fs.ukirType})</span>`;
-
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-gray-50 transition-colors border-b border-gray-100";
-                    tr.innerHTML = `
-                        <td class="p-3 font-bold text-gray-800">${fs.size}</td>
-                        <td class="p-3">${colorBadge}</td>
-                        <td class="p-3 font-extrabold text-primary text-sm">${fs.qty} Pcs</td>
-                        <td class="p-3 text-right space-x-1">
-                            <button onclick="app.adjustFrameStock('${fs.id}', -1)" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-bold transition-colors" title="Kurangi"><i class="fa-solid fa-minus text-[10px]"></i></button>
-                            <button onclick="app.adjustFrameStock('${fs.id}', 1)" class="px-2 py-1 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg text-xs font-bold transition-colors" title="Tambah"><i class="fa-solid fa-plus text-[10px]"></i></button>
-                        </td>
-                    `;
-                    list.appendChild(tr);
-                });
-            },
-
-            adjustFrameStock(id, amount) {
-                const fs = this.data.frameStock.find(item => item.id === id);
-                if (fs) {
-                    fs.qty = Math.max(0, fs.qty + amount);
-                    this.saveData();
-                    this.renderFrameStock();
-                }
-            },
-
-            renderOtherStock() {
-                const list = document.getElementById('other-stock-list');
-                list.innerHTML = '';
-                
-                if (!this.data.stock || this.data.stock.length === 0) {
-                    list.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-gray-500">Belum ada item material/perlengkapan.</td></tr>`;
-                    return;
-                }
-
-                this.data.stock.forEach(s => {
-                    const tr = document.createElement('tr');
-                    tr.className = "hover:bg-gray-50 transition-colors";
-                    
-                    let catBadge = '';
-                    if (s.category === 'Kertas') catBadge = '<span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-[10px] font-bold border border-blue-300">Kertas</span>';
-                    else if (s.category === 'Album') catBadge = '<span class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-[10px] font-bold border border-purple-300">Album</span>';
-                    else catBadge = '<span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-[10px] font-bold border border-gray-300">Lainnya</span>';
-
-                    tr.innerHTML = `
-                        <td class="p-3 font-medium text-gray-800">${s.name}</td>
-                        <td class="p-3">${catBadge}</td>
-                        <td class="p-3 font-bold text-gray-800 text-sm">${s.qty} Pcs</td>
-                        <td class="p-3 text-right space-x-1">
-                            <button onclick="app.adjustOtherStock('${s.id}', -1)" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-bold transition-colors"><i class="fa-solid fa-minus text-[10px]"></i></button>
-                            <button onclick="app.adjustOtherStock('${s.id}', 1)" class="px-2 py-1 bg-green-50 hover:bg-green-100 text-green-600 rounded-lg text-xs font-bold transition-colors"><i class="fa-solid fa-plus text-[10px]"></i></button>
-                            <button onclick="app.editOtherStock('${s.id}')" class="text-blue-500 hover:text-blue-700 p-1.5 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"><i class="fa-solid fa-pen text-xs"></i></button>
-                            <button onclick="app.confirmDeleteOtherStock('${s.id}')" class="text-red-500 hover:text-red-700 p-1.5 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"><i class="fa-solid fa-trash text-xs"></i></button>
-                        </td>
-                    `;
-                    list.appendChild(tr);
-                });
-            },
-
-            adjustOtherStock(id, amount) {
-                const sItem = this.data.stock.find(s => s.id === id);
-                if (sItem) {
-                    sItem.qty = Math.max(0, (parseInt(sItem.qty) || 0) + amount);
-                    this.saveData();
-                    this.renderOtherStock();
-                }
-            },
-
-            openProductModal() {
-                document.getElementById('product-modal-title').innerText = 'Tambah Produk';
-                document.getElementById('prod-id').value = '';
-                document.getElementById('prod-category').value = '';
-                document.getElementById('prod-name').value = '';
-                document.getElementById('prod-price').value = '';
-                document.getElementById('dynamic-fields-container').innerHTML = '<div class="text-xs text-gray-400 italic text-center py-3">Silakan pilih kategori produk terlebih dahulu di atas.</div>';
-                document.getElementById('modal-product').classList.remove('hidden');
-            },
-
-            openStockModal() {
-                document.getElementById('stock-modal-title').innerText = 'Tambah Item Stok';
-                document.getElementById('stock-id').value = '';
-                document.getElementById('stock-name').value = '';
-                document.getElementById('stock-category').value = 'Kertas';
-                document.getElementById('stock-qty').value = '0';
-                document.getElementById('modal-stock').classList.remove('hidden');
-            },
-
-            onCategoryChange(selectedData = null) {
-                const cat = document.getElementById('prod-category').value;
-                const container = document.getElementById('dynamic-fields-container');
-                container.innerHTML = '';
-
-                if (!cat) {
-                    container.innerHTML = '<div class="text-xs text-gray-400 italic text-center py-3">Silakan pilih kategori produk terlebih dahulu di atas.</div>';
-                    return;
-                }
-
-                if (cat === 'pas_photo') {
-                    const currSize = selectedData ? selectedData.pasPhotoSize : '4x6';
-                    const currBg = selectedData ? selectedData.pasPhotoBg : 'Merah';
-
-                    container.innerHTML = `
-                        <div class="grid grid-cols-2 gap-2.5 bg-indigo-50 p-2.5 rounded-xl border border-indigo-100">
-                            <div>
-                                <label class="block font-bold text-indigo-900 mb-1">Ukuran Pas Photo</label>
-                                <select id="pas-photo-size" class="w-full px-2.5 py-1.5 border border-indigo-200 rounded-lg bg-white outline-none">
-                                    <option value="4x6" ${currSize === '4x6' ? 'selected' : ''}>4x6</option>
-                                    <option value="3x4" ${currSize === '3x4' ? 'selected' : ''}>3x4</option>
-                                    <option value="2x3" ${currSize === '2x3' ? 'selected' : ''}>2x3</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block font-bold text-indigo-900 mb-1">Latar Belakang</label>
-                                <select id="pas-photo-bg" class="w-full px-2.5 py-1.5 border border-indigo-200 rounded-lg bg-white outline-none">
-                                    <option value="Merah" ${currBg === 'Merah' ? 'selected' : ''}>Merah</option>
-                                    <option value="Biru" ${currBg === 'Biru' ? 'selected' : ''}>Biru</option>
-                                    <option value="Putih" ${currBg === 'Putih' ? 'selected' : ''}>Putih</option>
-                                </select>
-                            </div>
-                        </div>
-                    `;
-                } else if (cat === 'photobox') {
-                    container.innerHTML = `
-                        <div class="border border-pink-200 rounded-xl p-2.5 bg-pink-50">
-                            <div class="flex justify-between items-center mb-2">
-                                <label class="font-bold text-pink-900"><i class="fa-solid fa-print text-pink-600 mr-1"></i> Ukuran & Jumlah Cetak</label>
-                                <button type="button" onclick="app.addCetakRow()" class="text-[11px] bg-pink-600 text-white px-2.5 py-1 rounded-md font-medium hover:bg-pink-700 transition-colors flex items-center gap-1">
-                                    <i class="fa-solid fa-plus"></i> Tambah
-                                </button>
-                            </div>
-                            <div id="cetak-rows-container" class="space-y-2"></div>
-                        </div>
-                    `;
-                    if (selectedData && selectedData.cetakDetails && selectedData.cetakDetails.length > 0) {
-                        selectedData.cetakDetails.forEach(c => this.addCetakRow(c.size, c.lembar));
-                    } else {
-                        this.addCetakRow();
-                    }
-                } else {
-                    container.innerHTML = `
-                        <div class="space-y-2.5">
-                            <div class="border border-gray-200 rounded-xl p-2.5 bg-gray-50">
-                                <div class="flex justify-between items-center mb-2">
-                                    <label class="font-bold text-gray-700"><i class="fa-solid fa-print text-primary mr-1"></i> Rincian Cetak</label>
-                                    <button type="button" onclick="app.addCetakRow()" class="text-[11px] bg-primary text-white px-2.5 py-1 rounded-md font-medium hover:bg-primaryHover transition-colors flex items-center gap-1">
-                                        <i class="fa-solid fa-plus"></i> Tambah
-                                    </button>
-                                </div>
-                                <div id="cetak-rows-container" class="space-y-2"></div>
-                            </div>
-
-                            <div class="border border-gray-200 rounded-xl p-2.5 bg-gray-50">
-                                <div class="flex justify-between items-center mb-2">
-                                    <label class="font-bold text-gray-700"><i class="fa-solid fa-image text-secondary mr-1"></i> Rincian Frame</label>
-                                    <button type="button" onclick="app.addFrameRow()" class="text-[11px] bg-gray-700 text-white px-2.5 py-1 rounded-md font-medium hover:bg-gray-800 transition-colors flex items-center gap-1">
-                                        <i class="fa-solid fa-plus"></i> Tambah
-                                    </button>
-                                </div>
-                                <div id="frame-rows-container" class="space-y-2"></div>
-                            </div>
-                        </div>
-                    `;
-
-                    if (selectedData) {
-                        const cetakContainer = document.getElementById('cetak-rows-container');
-                        const frameContainer = document.getElementById('frame-rows-container');
-                        if (cetakContainer) cetakContainer.innerHTML = '';
-                        if (frameContainer) frameContainer.innerHTML = '';
-
-                        if (selectedData.cetakDetails && selectedData.cetakDetails.length > 0) {
-                            selectedData.cetakDetails.forEach(c => this.addCetakRow(c.size, c.lembar));
-                        } else {
-                            this.addCetakRow();
-                        }
-
-                        if (selectedData.frameDetails && selectedData.frameDetails.length > 0) {
-                            selectedData.frameDetails.forEach(f => this.addFrameRow(f.size, f.pcs, f.color, f.ukirType));
-                        } else {
-                            this.addFrameRow();
-                        }
-                    } else {
-                        this.addCetakRow();
-                        this.addFrameRow();
-                    }
-                }
-            },
-
-            editProduct(id) {
-                const product = this.data.products.find(p => p.id === id);
-                if(!product) return;
-
-                document.getElementById('product-modal-title').innerText = 'Edit Produk';
-                document.getElementById('prod-id').value = product.id;
-                document.getElementById('prod-name').value = product.name;
-                document.getElementById('prod-price').value = product.price ? new Intl.NumberFormat('id-ID').format(product.price) : '';
-                document.getElementById('prod-category').value = product.category;
-                this.onCategoryChange(product);
-
-                document.getElementById('modal-product').classList.remove('hidden');
-            },
-
-            editOtherStock(id) {
-                const stockItem = this.data.stock.find(s => s.id === id);
-                if(!stockItem) return;
-
-                document.getElementById('stock-modal-title').innerText = 'Edit Item Stok';
-                document.getElementById('stock-id').value = stockItem.id;
-                document.getElementById('stock-name').value = stockItem.name;
-                document.getElementById('stock-category').value = stockItem.category;
-                document.getElementById('stock-qty').value = stockItem.qty;
-                document.getElementById('modal-stock').classList.remove('hidden');
-            },
-
-            addCetakRow(selectedSize = '', lembarVal = '') {
-                const container = document.getElementById('cetak-rows-container');
-                if (!container) return;
-                
-                let optionsHtml = '<option value="">- Pilih Ukuran -</option>';
-                sizeOptions.forEach(sz => {
-                    const selected = sz === selectedSize ? 'selected' : '';
-                    optionsHtml += `<option value="${sz}" ${selected}>${sz}</option>`;
-                });
-
-                const isCustom = selectedSize && !sizeOptions.includes(selectedSize);
-                const customDisplay = isCustom ? 'block' : 'hidden';
-
-                const rowDiv = document.createElement('div');
-                rowDiv.className = 'flex flex-col gap-1.5 bg-white p-2 rounded-lg border border-gray-200 cetak-row';
-                rowDiv.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <div class="flex-1">
-                            <select class="cetak-size-select w-full px-2 py-1.5 border border-gray-300 rounded-md bg-white outline-none" onchange="app.handleSizeSelectChange(this)">
-                                ${optionsHtml}
-                                <option value="CUSTOM" ${isCustom ? 'selected' : ''}>-- Ketik Manual --</option>
-                            </select>
-                        </div>
-                        <div class="w-16">
-                            <input type="text" readonly inputmode="none" onclick="app.openNumpadForInput(this.id, 'Jumlah Lembar')" id="lembar_${Math.random().toString(36).substr(2,5)}" class="cetak-lembar w-full px-1.5 py-1.5 border border-gray-300 rounded-md text-center bg-white cursor-pointer font-bold text-primary" placeholder="0" value="${lembarVal !== '' ? lembarVal : ''}">
-                        </div>
-                        <span class="text-[11px] text-gray-500 font-medium">Lbr</span>
-                        <button type="button" onclick="this.closest('.cetak-row').remove()" class="text-red-400 hover:text-red-600 p-1"><i class="fa-solid fa-trash text-[11px]"></i></button>
-                    </div>
-                    <div class="cetak-custom-wrapper ${customDisplay}">
-                        <input type="text" class="cetak-size-custom w-full px-2 py-1.5 border border-gray-300 rounded-md outline-none" placeholder="Ukuran manual" value="${isCustom ? selectedSize : ''}">
-                    </div>
-                `;
-                container.appendChild(rowDiv);
-            },
-
-            addFrameRow(selectedSize = '', pcsVal = '', selectedColor = '', selectedUkirType = 'Gold') {
-                const container = document.getElementById('frame-rows-container');
-                if (!container) return;
-
-                let optionsHtml = '<option value="">- Pilih Ukuran -</option>';
-                sizeOptions.forEach(sz => {
-                    const selected = sz === selectedSize ? 'selected' : '';
-                    optionsHtml += `<option value="${sz}" ${selected}>${sz}</option>`;
-                });
-
-                const isCustom = selectedSize && !sizeOptions.includes(selectedSize);
-                const customDisplay = isCustom ? 'block' : 'hidden';
-                const hasSelectedSize = selectedSize && selectedSize !== '';
-                const colorContainerDisplay = hasSelectedSize ? 'grid' : 'none';
-                const isSmallSize = ['2R', '3R', '4R', '5R', '6R'].includes(selectedSize);
-                const ukirSelectDisplay = (selectedColor === 'Ukir' && !isSmallSize) ? 'block' : 'hidden';
-
-                const rowDiv = document.createElement('div');
-                rowDiv.className = 'flex flex-col gap-2 bg-white p-2.5 rounded-lg border border-gray-200 frame-row';
-                rowDiv.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <div class="flex-1">
-                            <select class="frame-size-select w-full px-2 py-1.5 border border-gray-300 rounded-md bg-white outline-none font-medium" onchange="app.handleFrameSizeChange(this)">
-                                ${optionsHtml}
-                                <option value="CUSTOM" ${isCustom ? 'selected' : ''}>-- Ketik Manual --</option>
-                            </select>
-                        </div>
-                        <button type="button" onclick="this.closest('.frame-row').remove()" class="text-red-400 hover:text-red-600 p-1"><i class="fa-solid fa-trash text-[11px]"></i></button>
-                    </div>
-                    <div class="cetak-custom-wrapper ${customDisplay}">
-                        <input type="text" class="frame-size-custom w-full px-2 py-1.5 border border-gray-300 rounded-md outline-none" placeholder="Ukuran manual" value="${isCustom ? selectedSize : ''}">
-                    </div>
-                    
-                    <div class="grid-cols-3 gap-1.5 pt-1.5 border-t border-gray-100 frame-color-qty-section" style="display: ${colorContainerDisplay};">
-                        <div>
-                            <label class="block text-[9px] uppercase font-bold text-gray-500 mb-0.5">Warna</label>
-                            <select class="frame-color-select w-full px-2 py-1.5 border border-gray-300 rounded-md bg-white outline-none font-medium" onchange="app.handleFrameColorChange(this)">
-                                <option value="" ${!selectedColor ? 'selected' : ''}>- Pilih -</option>
-                                <option value="Putih" ${selectedColor === 'Putih' ? 'selected' : ''}>Putih</option>
-                                <option value="Hitam" ${selectedColor === 'Hitam' ? 'selected' : ''}>Hitam</option>
-                                <option id="option-ukir-dynamic" value="Ukir" class="${isSmallSize ? 'hidden' : 'block'}" ${selectedColor === 'Ukir' ? 'selected' : ''}>Ukir</option>
-                            </select>
-                        </div>
-                        <div class="frame-ukir-container" style="display: ${ukirSelectDisplay};">
-                            <label class="block text-[9px] uppercase font-bold text-gray-500 mb-0.5">Tipe Ukir</label>
-                            <select class="frame-ukir-select w-full px-2 py-1.5 border border-gray-300 rounded-md bg-white outline-none font-medium">
-                                <option value="Gold" ${selectedUkirType === 'Gold' ? 'selected' : ''}>Gold</option>
-                                <option value="Coklat" ${selectedUkirType === 'Coklat' ? 'selected' : ''}>Coklat</option>
-                                <option value="Silver" ${selectedUkirType === 'Silver' ? 'selected' : ''}>Silver</option>
-                                <option value="Putih" ${selectedUkirType === 'Putih' ? 'selected' : ''}>Putih</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[9px] uppercase font-bold text-gray-500 mb-0.5">QTY</label>
-                            <input type="text" readonly inputmode="none" onclick="app.openNumpadForInput(this.id, 'Jumlah Pcs')" id="pcs_${Math.random().toString(36).substr(2,5)}" class="frame-pcs w-full px-1.5 py-1.5 border border-gray-300 rounded-md text-center bg-white cursor-pointer font-bold text-primary" placeholder="0" value="${pcsVal !== '' ? pcsVal : ''}">
-                        </div>
-                    </div>
-                `;
-                container.appendChild(rowDiv);
-            },
-
-            handleSizeSelectChange(selectEl) {
-                const parentRow = selectEl.closest('.cetak-row, .frame-row');
-                const customWrapper = parentRow.querySelector('.cetak-custom-wrapper, .frame-custom-wrapper');
-                if (selectEl.value === 'CUSTOM') {
-                    customWrapper.classList.remove('hidden');
-                    customWrapper.querySelector('input').focus();
-                } else {
-                    customWrapper.classList.add('hidden');
-                }
-            },
-
-            handleFrameSizeChange(selectEl) {
-                this.handleSizeSelectChange(selectEl);
-                const parentRow = selectEl.closest('.frame-row');
-                const val = selectEl.value;
-                const colorQtySection = parentRow.querySelector('.frame-color-qty-section');
-                const colorSelect = parentRow.querySelector('.frame-color-select');
-                const ukirOption = parentRow.querySelector('#option-ukir-dynamic');
-                const ukirContainer = parentRow.querySelector('.frame-ukir-container');
-
-                if (val && val !== 'CUSTOM') {
-                    colorQtySection.style.display = 'grid';
-                    colorSelect.value = '';
-                    if (ukirContainer) ukirContainer.style.display = 'none';
-
-                    if (['2R', '3R', '4R', '5R', '6R'].includes(val)) {
-                        if (ukirOption) ukirOption.classList.add('hidden');
-                    } else {
-                        if (ukirOption) ukirOption.classList.remove('hidden');
-                    }
-                } else if (!val) {
-                    colorQtySection.style.display = 'none';
-                }
-            },
-
-            handleFrameColorChange(colorSelectEl) {
-                const parentRow = colorSelectEl.closest('.frame-row');
-                const ukirContainer = parentRow.querySelector('.frame-ukir-container');
-                if (colorSelectEl.value === 'Ukir') {
-                    if (ukirContainer) ukirContainer.style.display = 'block';
-                } else {
-                    if (ukirContainer) ukirContainer.style.display = 'none';
-                }
-            },
-
-            saveProduct() {
-                const id = document.getElementById('prod-id').value;
-                const name = document.getElementById('prod-name').value.trim();
-                const category = document.getElementById('prod-category').value;
-                const priceValue = document.getElementById('prod-price').value.replace(/\./g, '');
-                const price = parseFloat(priceValue);
-                
-                if(!category || !name || isNaN(price)) {
-                    this.showToast('Kategori, nama, dan harga harus diisi!');
-                    return;
-                }
-
-                let cetakDetails = [];
-                let frameDetails = [];
-                let pasPhotoSize = null;
-                let pasPhotoBg = null;
-
-                if (category === 'pas_photo') {
-                    pasPhotoSize = document.getElementById('pas-photo-size').value;
-                    pasPhotoBg = document.getElementById('pas-photo-bg').value;
-                } else {
-                    document.querySelectorAll('.cetak-row').forEach(row => {
-                        const selectVal = row.querySelector('.cetak-size-select').value;
-                        let size = selectVal === 'CUSTOM' ? row.querySelector('.cetak-size-custom').value.trim() : selectVal;
-                        const lembar = parseInt(row.querySelector('.cetak-lembar').value) || 0;
-                        if (size) cetakDetails.push({ size, lembar });
-                    });
-
-                    if (category !== 'photobox') {
-                        document.querySelectorAll('.frame-row').forEach(row => {
-                            const selectVal = row.querySelector('.frame-size-select').value;
-                            let size = selectVal === 'CUSTOM' ? row.querySelector('.frame-size-custom').value.trim() : selectVal;
-                            const pcs = parseInt(row.querySelector('.frame-pcs').value) || 0;
-                            const color = row.querySelector('.frame-color-select').value;
-                            const isSmall = ['4R', '5R', '6R'].includes(size);
-                            const ukirType = (color === 'Ukir' && !isSmall) ? row.querySelector('.frame-ukir-select').value : null;
-                            if (size && color) frameDetails.push({ size, pcs, color, ukirType });
-                        });
-                    }
-                }
-
-                const payload = { id: id || generateId(), name, category, price, cetakDetails, frameDetails, pasPhotoSize, pasPhotoBg };
-
-                if (id) {
-                    const index = this.data.products.findIndex(p => p.id === id);
-                    if(index > -1) this.data.products[index] = payload;
-                    this.showToast('Produk diperbarui!');
-                } else {
-                    this.data.products.push(payload);
-                    this.showToast('Produk ditambahkan!');
-                }
-
-                this.saveData();
-                this.renderInventory();
-                this.renderProducts();
-                this.closeModal('modal-product');
-            },
-
-            saveStock() {
-                const id = document.getElementById('stock-id').value;
-                const name = document.getElementById('stock-name').value.trim();
-                const category = document.getElementById('stock-category').value;
-                const qty = parseInt(document.getElementById('stock-qty').value) || 0;
-
-                if (!name) {
-                    this.showToast('Nama barang stok harus diisi!');
-                    return;
-                }
-
-                const payload = { id: id || generateId(), name, category, qty };
-
-                if (id) {
-                    const index = this.data.stock.findIndex(s => s.id === id);
-                    if (index > -1) this.data.stock[index] = payload;
-                    this.showToast('Stok diperbarui!');
-                } else {
-                    this.data.stock.push(payload);
-                    this.showToast('Item stok ditambahkan!');
-                }
-
-                this.saveData();
-                this.renderOtherStock();
-                this.closeModal('modal-stock');
-            },
-
-            confirmDeleteProduct(id) {
-                this.showConfirmModal(
-                    'Hapus Produk',
-                    'Apakah Anda yakin ingin menghapus produk ini dari daftar?',
-                    () => {
-                        this.data.products = this.data.products.filter(p => p.id !== id);
-                        this.data.cart = this.data.cart.filter(c => c.id !== id);
-                        this.saveData();
-                        this.renderInventory();
-                        this.renderProducts();
-                        this.renderCart();
-                        this.showToast('Produk berhasil dihapus!');
-                    }
-                );
-            },
-
-            confirmDeleteOtherStock(id) {
-                this.showConfirmModal(
-                    'Hapus Item Stok',
-                    'Apakah Anda yakin ingin menghapus item material ini?',
-                    () => {
-                        this.data.stock = this.data.stock.filter(s => s.id !== id);
-                        this.saveData();
-                        this.renderOtherStock();
-                        this.showToast('Item stok berhasil dihapus!');
-                    }
-                );
-            },
-
             renderDashboard() {
-                const now = new Date();
-                const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-                const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
-                const startOfYear = new Date(now.getFullYear(), 0, 1).getTime();
+                const today = this.dashboardFilterDate || new Date().toISOString().slice(0, 10);
+                const isCustomFilter = !!this.dashboardFilterDate;
+
+                const labelEl = document.getElementById('dash-card-title-label');
+                if (labelEl) {
+                    labelEl.innerText = isCustomFilter ? `Tanggal (${today})` : 'Hari Ini (Shift Real-time)';
+                }
 
                 let dailyRev = 0, dailyCount = 0;
                 let monthlyRev = 0, monthlyCount = 0;
                 let yearlyRev = 0, yearlyCount = 0;
                 let allTimeRev = 0, allTimeCount = this.data.history.length;
 
-                this.data.history.forEach(trx => {
-                    const trxTime = trx.timestamp || 0; 
-                    const total = trx.total || 0;
-                    allTimeRev += total;
+                const now = new Date();
+                const currentMonth = now.getMonth();
+                const currentYear = now.getFullYear();
 
-                    if (trxTime >= startOfDay) { dailyRev += total; dailyCount++; }
-                    if (trxTime >= startOfMonth) { monthlyRev += total; monthlyCount++; }
-                    if (trxTime >= startOfYear) { yearlyRev += total; yearlyCount++; }
+                this.data.history.forEach(trx => {
+                    allTimeRev += trx.total;
+                    
+                    const trxDateObj = new Date(trx.timestamp);
+                    const trxDateStr = trxDateObj.toISOString().slice(0, 10);
+
+                    if (trxDateStr === today) {
+                        dailyRev += trx.total;
+                        dailyCount++;
+                    }
+
+                    if (trxDateObj.getMonth() === currentMonth && trxDateObj.getFullYear() === currentYear) {
+                        monthlyRev += trx.total;
+                        monthlyCount++;
+                    }
+
+                    if (trxDateObj.getFullYear() === currentYear) {
+                        yearlyRev += trx.total;
+                        yearlyCount++;
+                    }
                 });
 
                 document.getElementById('dash-daily-revenue').innerText = formatRupiah(dailyRev);
                 document.getElementById('dash-daily-count').innerText = dailyCount;
+
                 document.getElementById('dash-monthly-revenue').innerText = formatRupiah(monthlyRev);
                 document.getElementById('dash-monthly-count').innerText = monthlyCount;
+
                 document.getElementById('dash-yearly-revenue').innerText = formatRupiah(yearlyRev);
                 document.getElementById('dash-yearly-count').innerText = yearlyCount;
+
                 document.getElementById('dash-all-time-revenue').innerText = formatRupiah(allTimeRev);
                 document.getElementById('dash-all-time-count').innerText = allTimeCount;
             },
 
+            onDateFilterChange(input) {
+                const val = input.value;
+                if (val) {
+                    this.dashboardFilterDate = val;
+                    document.getElementById('dash-filter-label').innerText = new Date(val).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+                    this.renderDashboard();
+                }
+            },
+
+            resetDashboardFilter() {
+                this.dashboardFilterDate = null;
+                const todayStr = new Date().toISOString().slice(0, 10);
+                const dateInput = document.getElementById('dash-filter-date');
+                if (dateInput) dateInput.value = todayStr;
+                document.getElementById('dash-filter-label').innerText = 'Hari Ini';
+                this.renderDashboard();
+            },
+
+            renderHistory() {
+                const list = document.getElementById('history-list');
+                if (!list) return;
+
+                if (this.data.history.length === 0) {
+                    list.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="p-8 text-center text-gray-400">Belum ada riwayat transaksi.</td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                list.innerHTML = this.data.history.map(trx => `
+                    <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
+                        <td class="p-3 font-bold text-gray-800">${trx.id}</td>
+                        <td class="p-3 text-gray-500">${trx.date}</td>
+                        <td class="p-3"><span class="px-2 py-0.5 bg-gray-100 rounded text-[10px] font-bold text-gray-700">${trx.method}</span></td>
+                        <td class="p-3 text-gray-600">${trx.items.length} Item</td>
+                        <td class="p-3 font-bold text-primary">${formatRupiah(trx.total)}</td>
+                        <td class="p-3 text-right">
+                            <button onclick="app.viewTransactionReceipt('${trx.id}')" class="px-2.5 py-1 bg-primary/10 hover:bg-primary hover:text-white text-primary rounded-lg font-bold text-xs transition-colors">Struk</button>
+                        </td>
+                    </tr>
+                `).join('');
+            },
+
+            viewTransactionReceipt(trxId) {
+                const trx = this.data.history.find(t => t.id === trxId);
+                if (trx) {
+                    this.showReceiptModal(trx);
+                }
+            },
+
+            openShiftCheckModal() {
+                const todayStr = new Date().toISOString().slice(0, 10);
+                let expectedCash = 0;
+                this.data.history.forEach(trx => {
+                    const trxDateStr = new Date(trx.timestamp).toISOString().slice(0, 10);
+                    if (trxDateStr === todayStr && trx.method === 'CASH') {
+                        expectedCash += trx.total;
+                    }
+                });
+
+                this.currentExpectedCash = expectedCash;
+                document.getElementById('shift-expected-cash').innerText = formatRupiah(expectedCash);
+                document.getElementById('input-actual-cash').value = new Intl.NumberFormat('id-ID').format(expectedCash);
+                this.activeNumpadRaw = expectedCash.toString();
+                this.calculateCashDifference();
+
+                document.getElementById('modal-shift-check').classList.remove('hidden');
+            },
+
+            calculateCashDifference() {
+                const actual = parseInt(this.activeNumpadRaw || '0');
+                const diff = actual - this.currentExpectedCash;
+                const diffBox = document.getElementById('diff-box');
+                const diffLabel = document.getElementById('diff-label');
+                const diffAmount = document.getElementById('diff-amount');
+
+                diffBox.classList.remove('hidden');
+                if (diff === 0) {
+                    diffBox.className = "bg-emerald-50 border border-emerald-200 p-3 rounded-xl text-center";
+                    diffLabel.innerText = "STATUS KAS FISIK";
+                    diffAmount.innerText = "Rp 0 (Sempurna / Pas)";
+                    diffAmount.className = "text-sm font-extrabold text-emerald-600";
+                } else if (diff > 0) {
+                    diffBox.className = "bg-blue-50 border border-blue-200 p-3 rounded-xl text-center";
+                    diffLabel.innerText = "SURPLUS KAS (LEBIH)";
+                    diffAmount.innerText = `+ ${formatRupiah(diff)}`;
+                    diffAmount.className = "text-sm font-extrabold text-blue-600";
+                } else {
+                    diffBox.className = "bg-red-50 border border-red-200 p-3 rounded-xl text-center";
+                    diffLabel.innerText = "DEFISIT KAS (KURANG)";
+                    diffAmount.innerText = `- ${formatRupiah(Math.abs(diff))}`;
+                    diffAmount.className = "text-sm font-extrabold text-red-600";
+                }
+
+                this.lastAuditData = { expected: this.currentExpectedCash, actual, diff };
+            },
+
+            proceedToShiftSummary() {
+                this.closeModal('modal-shift-check');
+                this.showShiftSummaryModal();
+            },
+
+            showShiftSummaryModal() {
+                const todayStr = new Date().toISOString().slice(0, 10);
+                const shiftTrx = this.data.history.filter(trx => new Date(trx.timestamp).toISOString().slice(0, 10) === todayStr);
+
+                let totalRev = 0;
+                let methodCounts = { CASH: 0, QRIS: 0, DEBIT: 0 };
+                let methodTotals = { CASH: 0, QRIS: 0, DEBIT: 0 };
+                let productMap = {};
+
+                shiftTrx.forEach(trx => {
+                    totalRev += trx.total;
+                    if (methodTotals[trx.method] !== undefined) {
+                        methodTotals[trx.method] += trx.total;
+                        methodCounts[trx.method]++;
+                    }
+
+                    trx.items.forEach(item => {
+                        if (!productMap[item.name]) {
+                            productMap[item.name] = { qty: 0, revenue: 0 };
+                        }
+                        productMap[item.name].qty += 1;
+                        productMap[item.name].revenue += item.price;
+                    });
+                });
+
+                document.getElementById('shift-date-range').innerText = `Tanggal: ${todayStr} | Total Sesi Shift`;
+                document.getElementById('shift-total-trx').innerText = `${shiftTrx.length} Transaksi`;
+                document.getElementById('shift-total-revenue').innerText = formatRupiah(totalRev);
+
+                const pmList = document.getElementById('shift-payment-methods-list');
+                pmList.innerHTML = `
+                    <div class="flex justify-between text-gray-600"><span>Cash (${methodCounts.CASH} trx):</span><span class="font-bold">${formatRupiah(methodTotals.CASH)}</span></div>
+                    <div class="flex justify-between text-gray-600"><span>QRIS (${methodCounts.QRIS} trx):</span><span class="font-bold">${formatRupiah(methodTotals.QRIS)}</span></div>
+                    <div class="flex justify-between text-gray-600"><span>Debit (${methodCounts.DEBIT} trx):</span><span class="font-bold">${formatRupiah(methodTotals.DEBIT)}</span></div>
+                `;
+
+                const auditSum = document.getElementById('shift-audit-result-summary');
+                if (this.lastAuditData) {
+                    const { expected, actual, diff } = this.lastAuditData;
+                    auditSum.innerHTML = `
+                        <div class="text-[11px] space-y-0.5 text-gray-700">
+                            <div class="flex justify-between"><span>Kas Sistem (Cash):</span><span class="font-bold">${formatRupiah(expected)}</span></div>
+                            <div class="flex justify-between"><span>Kas Fisik Aktual:</span><span class="font-bold">${formatRupiah(actual)}</span></div>
+                            <div class="flex justify-between font-bold ${diff < 0 ? 'text-red-600' : 'text-emerald-600'}"><span>Selisih:</span><span>${diff === 0 ? 'Pas (0)' : formatRupiah(diff)}</span></div>
+                        </div>
+                    `;
+                } else {
+                    auditSum.innerHTML = '';
+                }
+
+                const prodList = document.getElementById('shift-products-list');
+                const prodKeys = Object.keys(productMap);
+                if (prodKeys.length === 0) {
+                    prodList.innerHTML = `<p class="text-gray-400">Belum ada produk terjual hari ini.</p>`;
+                } else {
+                    prodList.innerHTML = prodKeys.map(name => `
+                        <div class="flex justify-between text-gray-700">
+                            <span>• ${name} (${productMap[name].qty}x)</span>
+                            <span class="font-bold">${formatRupiah(productMap[name].revenue)}</span>
+                        </div>
+                    `).join('');
+                }
+
+                document.getElementById('modal-shift-summary').classList.remove('hidden');
+            },
+
+            downloadShiftSummaryPDF() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+                
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(16);
+                doc.text("KHJAM PHOTO STUDIO", 105, 15, { align: "center" });
+
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(10);
+                doc.text("LAPORAN REKAPITULASI SHIFT / KASIR", 105, 22, { align: "center" });
+                doc.text(`Dicetak pada: ${getFormatDate()}`, 105, 27, { align: "center" });
+
+                doc.setLineWidth(0.5);
+                doc.line(15, 32, 195, 32);
+
+                let y = 40;
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(12);
+                doc.text("1. Pendapatan & Ringkasan Transaksi", 15, y);
+                y += 6;
+
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(10);
+                const todayStr = new Date().toISOString().slice(0, 10);
+                const shiftTrx = this.data.history.filter(trx => new Date(trx.timestamp).toISOString().slice(0, 10) === todayStr);
+                let totalRev = shiftTrx.reduce((sum, t) => sum + t.total, 0);
+
+                doc.text(`Total Transaksi: ${shiftTrx.length}`, 20, y); y += 6;
+                doc.text(`Total Pendapatan Shift: ${formatRupiah(totalRev)}`, 20, y); y += 10;
+
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(12);
+                doc.text("2. Rincian Metode Pembayaran & Audit Kas", 15, y);
+                y += 6;
+
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(10);
+                let methodTotals = { CASH: 0, QRIS: 0, DEBIT: 0 };
+                shiftTrx.forEach(t => { if(methodTotals[t.method] !== undefined) methodTotals[t.method] += t.total; });
+                doc.text(`- Cash: ${formatRupiah(methodTotals.CASH)}`, 20, y); y += 5;
+                doc.text(`- QRIS: ${formatRupiah(methodTotals.QRIS)}`, 20, y); y += 5;
+                doc.text(`- Debit: ${formatRupiah(methodTotals.DEBIT)}`, 20, y); y += 6;
+
+                if (this.lastAuditData) {
+                    doc.text(`Kas Sistem (Cash): ${formatRupiah(this.lastAuditData.expected)}`, 20, y); y += 5;
+                    doc.text(`Kas Fisik Aktual: ${formatRupiah(this.lastAuditData.actual)}`, 20, y); y += 5;
+                    doc.text(`Selisih Kas: ${this.lastAuditData.diff === 0 ? 'Pas' : formatRupiah(this.lastAuditData.diff)}`, 20, y); y += 10;
+                } else {
+                    y += 4;
+                }
+
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(12);
+                doc.text("3. Rincian Produk Terjual", 15, y);
+                y += 6;
+
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(10);
+                let productMap = {};
+                shiftTrx.forEach(trx => {
+                    trx.items.forEach(item => {
+                        if (!productMap[item.name]) productMap[item.name] = { qty: 0, rev: 0 };
+                        productMap[item.name].qty += 1;
+                        productMap[item.name].rev += item.price;
+                    });
+                });
+
+                Object.keys(productMap).forEach(name => {
+                    doc.text(`- ${name} (${productMap[name].qty}x) : ${formatRupiah(productMap[name].rev)}`, 20, y);
+                    y += 6;
+                });
+
+                doc.save(`Rekap_Shift_${todayStr}.pdf`);
+                this.showToast('Laporan Shift PDF berhasil diunduh!');
+            },
+
+            renderInventory() {
+                const list = document.getElementById('inventory-list');
+                if (!list) return;
+
+                if (this.data.products.length === 0) {
+                    list.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-gray-400">Belum ada produk.</td></tr>`;
+                    return;
+                }
+
+                list.innerHTML = this.data.products.map(prod => `
+                    <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
+                        <td class="p-3 font-bold text-gray-800">${prod.name}</td>
+                        <td class="p-3"><span class="px-2 py-0.5 bg-gray-100 rounded text-[10px] font-bold text-gray-700 uppercase">${prod.category.replace('_', ' ')}</span></td>
+                        <td class="p-3 text-gray-600">
+                            ${prod.frames && prod.frames.length > 0 ? prod.frames.map(f => `${f.qty}x ${f.size} (${f.color}${f.ukirType && f.ukirType !== '-' ? ' ' + f.ukirType : ''})`).join(', ') : '-'}
+                        </td>
+                        <td class="p-3 font-bold text-primary">${formatRupiah(prod.price)}</td>
+                        <td class="p-3 text-right space-x-1">
+                            <button onclick="app.openProductModal('${prod.id}')" class="px-2 py-1 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded text-xs font-bold transition-colors">Edit</button>
+                            <button onclick="app.confirmDeleteProduct('${prod.id}')" class="px-2 py-1 bg-red-50 hover:bg-red-100 text-red-600 rounded text-xs font-bold transition-colors">Hapus</button>
+                        </td>
+                    </tr>
+                `).join('');
+            },
+
+            openProductModal(id = null) {
+                document.getElementById('prod-id').value = id || '';
+                document.getElementById('product-modal-title').innerText = id ? 'Edit Produk' : 'Tambah Produk';
+                
+                const catSelect = document.getElementById('prod-category');
+                const nameInput = document.getElementById('prod-name');
+                const priceInput = document.getElementById('prod-price');
+
+                if (id) {
+                    const prod = this.data.products.find(p => p.id === id);
+                    if (prod) {
+                        catSelect.value = prod.category;
+                        nameInput.value = prod.name;
+                        priceInput.value = new Intl.NumberFormat('id-ID').format(prod.price);
+                        this.onCategoryChange(prod.frames || []);
+                    }
+                } else {
+                    catSelect.value = '';
+                    nameInput.value = '';
+                    priceInput.value = '';
+                    document.getElementById('dynamic-fields-container').innerHTML = '';
+                }
+
+                document.getElementById('modal-product').classList.remove('hidden');
+            },
+
+            onCategoryChange(existingFrames = []) {
+                const category = document.getElementById('prod-category').value;
+                const container = document.getElementById('dynamic-fields-container');
+                if (!container) return;
+
+                if (category === 'paket') {
+                    let html = `
+                        <div class="border-t pt-2 mt-2">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="block font-bold text-gray-700">Rincian Frame Paket</label>
+                                <button type="button" onclick="app.addFrameRow()" class="px-2 py-1 bg-primary text-white rounded text-[10px] font-bold"><i class="fa-solid fa-plus mr-1"></i> Tambah Frame</button>
+                            </div>
+                            <div id="frame-rows-wrapper" class="space-y-2"></div>
+                        </div>
+                    `;
+                    container.innerHTML = html;
+                    const wrapper = document.getElementById('frame-rows-wrapper');
+                    wrapper.innerHTML = '';
+                    if (existingFrames.length > 0) {
+                        existingFrames.forEach(f => this.addFrameRow(f));
+                    } else {
+                        this.addFrameRow();
+                    }
+                } else {
+                    container.innerHTML = '';
+                }
+            },
+
+            addFrameRow(data = null) {
+                const wrapper = document.getElementById('frame-rows-wrapper');
+                if (!wrapper) return;
+                const rowId = generateId();
+                const size = data ? data.size : '4R';
+                const color = data ? data.color : 'Putih';
+                const ukirType = data ? data.ukirType : 'Gold';
+                const qty = data ? data.qty : 1;
+
+                const isSmall = ['4R', '5R', '6R'].includes(size);
+
+                const div = document.createElement('div');
+                div.id = `row-${rowId}`;
+                div.className = "bg-gray-50 p-2.5 rounded-xl border border-gray-200 space-y-2";
+                div.innerHTML = `
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[10px] text-gray-500 mb-0.5">Ukuran</label>
+                            <select onchange="app.onFrameSizeRowChange('${rowId}')" id="size-${rowId}" class="w-full px-2 py-1 bg-white border border-gray-300 rounded text-xs outline-none">
+                                ${sizeOptions.map(s => `<option value="${s}" ${s === size ? 'selected' : ''}>${s}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] text-gray-500 mb-0.5">Jumlah (QTY)</label>
+                            <input type="text" id="qty-${rowId}" readonly inputmode="none" onclick="app.openNumpadForInput('qty-${rowId}', 'Jumlah Frame')" value="${qty}" class="w-full px-2 py-1 bg-white border border-gray-300 rounded text-xs font-bold text-primary cursor-pointer outline-none">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[10px] text-gray-500 mb-0.5">Warna Frame</label>
+                            <select onchange="app.onFrameColorRowChange('${rowId}')" id="color-${rowId}" class="w-full px-2 py-1 bg-white border border-gray-300 rounded text-xs outline-none">
+                                <option value="Putih" ${color === 'Putih' ? 'selected' : ''}>Putih</option>
+                                <option value="Hitam" ${color === 'Hitam' ? 'selected' : ''}>Hitam</option>
+                                ${!isSmall ? '<option value="Ukir" ' + (color === 'Ukir' ? 'selected' : '') + '>Ukir</option>' : ''}
+                            </select>
+                        </div>
+                        <div id="ukir-container-${rowId}" class="${color === 'Ukir' && !isSmall ? '' : 'hidden'}">
+                            <label class="block text-[10px] text-gray-500 mb-0.5">Tipe Ukir</label>
+                            <select id="ukir-${rowId}" class="w-full px-2 py-1 bg-white border border-gray-300 rounded text-xs outline-none">
+                                <option value="Gold" ${ukirType === 'Gold' ? 'selected' : ''}>Gold</option>
+                                <option value="Coklat" ${ukirType === 'Coklat' ? 'selected' : ''}>Coklat</option>
+                                <option value="Silver" ${ukirType === 'Silver' ? 'selected' : ''}>Silver</option>
+                                <option value="Putih" ${ukirType === 'Putih' ? 'selected' : ''}>Putih</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex justify-end pt-1">
+                        <button type="button" onclick="document.getElementById('row-${rowId}').remove()" class="text-red-500 hover:text-red-700 text-[10px] font-bold"><i class="fa-solid fa-trash mr-1"></i> Hapus Kolom</button>
+                    </div>
+                `;
+                wrapper.appendChild(div);
+            },
+
+            onFrameSizeRowChange(rowId) {
+                const size = document.getElementById(`size-${rowId}`).value;
+                const isSmall = ['4R', '5R', '6R'].includes(size);
+                const colorSelect = document.getElementById(`color-${rowId}`);
+                const currentColor = colorSelect.value;
+                
+                let html = `
+                    <option value="Putih" ${currentColor === 'Putih' ? 'selected' : ''}>Putih</option>
+                    <option value="Hitam" ${currentColor === 'Hitam' ? 'selected' : ''}>Hitam</option>
+                `;
+                if (!isSmall) {
+                    html += `<option value="Ukir" ${currentColor === 'Ukir' ? 'selected' : ''}>Ukir</option>`;
+                }
+                colorSelect.innerHTML = html;
+                this.onFrameColorRowChange(rowId);
+            },
+
+            onFrameColorRowChange(rowId) {
+                const size = document.getElementById(`size-${rowId}`).value;
+                const color = document.getElementById(`color-${rowId}`).value;
+                const isSmall = ['4R', '5R', '6R'].includes(size);
+                const ukirContainer = document.getElementById(`ukir-container-${rowId}`);
+
+                if (color === 'Ukir' && !isSmall) {
+                    ukirContainer.classList.remove('hidden');
+                } else {
+                    ukirContainer.classList.add('hidden');
+                }
+            },
+
+            saveProduct() {
+                const id = document.getElementById('prod-id').value;
+                const category = document.getElementById('prod-category').value;
+                const name = document.getElementById('prod-name').value.trim();
+                const price = parseInt(document.getElementById('prod-price').value.replace(/\D/g, '') || '0');
+
+                if (!category || !name || !price) {
+                    this.showToast('Semua field wajib diisi dengan benar!');
+                    return;
+                }
+
+                let frames = [];
+                if (category === 'paket') {
+                    const rows = document.querySelectorAll('#frame-rows-wrapper > div');
+                    rows.forEach(r => {
+                        const rowId = r.id.replace('row-', '');
+                        const size = document.getElementById(`size-${rowId}`).value;
+                        const qty = parseInt(document.getElementById(`qty-${rowId}`).value.replace(/\D/g, '') || '1');
+                        const color = document.getElementById(`color-${rowId}`).value;
+                        const isSmall = ['4R', '5R', '6R'].includes(size);
+                        const ukirType = (!isSmall && color === 'Ukir') ? document.getElementById(`ukir-${rowId}`).value : '-';
+                        frames.push({ size, color, ukirType, qty });
+                    });
+                }
+
+                if (id) {
+                    const prod = this.data.products.find(p => p.id === id);
+                    if (prod) {
+                        prod.category = category;
+                        prod.name = name;
+                        prod.price = price;
+                        prod.frames = frames;
+                    }
+                } else {
+                    const newProd = { id: generateId(), category, name, price, frames };
+                    this.data.products.push(newProd);
+                }
+
+                this.saveData();
+                this.closeModal('modal-product');
+                this.renderInventory();
+                this.renderProducts();
+                this.showToast('Produk berhasil disimpan');
+            },
+
+            confirmDeleteProduct(id) {
+                this.openConfirmModal('Hapus Produk', 'Apakah Anda yakin ingin menghapus produk ini?', () => {
+                    this.data.products = this.data.products.filter(p => p.id !== id);
+                    this.saveData();
+                    this.renderInventory();
+                    this.renderProducts();
+                    this.showToast('Produk berhasil dihapus');
+                });
+            },
+
+            switchStockSubTab(tab) {
+                const btnFrame = document.getElementById('stock-tab-frame');
+                const btnOther = document.getElementById('stock-tab-other');
+                const subFrame = document.getElementById('stock-subview-frame');
+                const subOther = document.getElementById('stock-subview-other');
+
+                if (tab === 'frame') {
+                    btnFrame.className = "px-3.5 py-1.5 rounded-lg font-bold text-xs bg-primary text-white shadow transition-colors";
+                    btnOther.className = "px-3.5 py-1.5 rounded-lg font-medium text-xs bg-white text-gray-600 border border-gray-300 hover:bg-gray-100 transition-colors";
+                    subFrame.classList.remove('hidden');
+                    subOther.classList.add('hidden');
+                    this.renderStockFrame();
+                } else {
+                    btnOther.className = "px-3.5 py-1.5 rounded-lg font-bold text-xs bg-primary text-white shadow transition-colors";
+                    btnFrame.className = "px-3.5 py-1.5 rounded-lg font-medium text-xs bg-white text-gray-600 border border-gray-300 hover:bg-gray-100 transition-colors";
+                    subOther.classList.remove('hidden');
+                    subFrame.classList.add('hidden');
+                    this.renderStockOther();
+                }
+            },
+
+            renderStockFrame() {
+                const list = document.getElementById('frame-stock-list');
+                if (!list) return;
+
+                if (this.data.frameStock.length === 0) {
+                    list.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-gray-400">Belum ada data stok frame.</td></tr>`;
+                    return;
+                }
+
+                list.innerHTML = this.data.frameStock.map(fs => `
+                    <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
+                        <td class="p-3 font-bold text-gray-800">${fs.size}</td>
+                        <td class="p-3 text-gray-600">${fs.color}${fs.ukirType && fs.ukirType !== '-' ? ' (' + fs.ukirType + ')' : ''}</td>
+                        <td class="p-3">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold ${fs.qty <= 3 ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-700'}">${fs.qty} Pcs</span>
+                        </td>
+                        <td class="p-3 text-right">
+                            <div class="inline-flex items-center gap-1">
+                                <button onclick="app.adjustFrameStock('${fs.id}', -1)" class="w-7 h-7 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded font-bold">-</button>
+                                <span class="w-8 text-center font-bold text-xs">${fs.qty}</span>
+                                <button onclick="app.adjustFrameStock('${fs.id}', 1)" class="w-7 h-7 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded font-bold">+</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            },
+
+            adjustFrameStock(id, delta) {
+                const fs = this.data.frameStock.find(f => f.id === id);
+                if (fs) {
+                    fs.qty = Math.max(0, fs.qty + delta);
+                    this.saveData();
+                    this.renderStockFrame();
+                }
+            },
+
+            openBulkInboundModal() {
+                const sizeSelect = document.getElementById('bulk-inbound-size-select');
+                sizeSelect.innerHTML = `<option value="">- Pilih Ukuran -</option>` + frameStockSizes.map(s => `<option value="${s}">${s}</option>`).join('');
+                document.getElementById('bulk-inbound-color-section').classList.add('hidden');
+                document.getElementById('bulk-inbound-qty').value = '';
+                document.getElementById('modal-bulk-inbound').classList.remove('hidden');
+            },
+
+            onBulkInboundSizeChange() {
+                const size = document.getElementById('bulk-inbound-size-select').value;
+                const section = document.getElementById('bulk-inbound-color-section');
+                const variantSelect = document.getElementById('bulk-inbound-variant-select');
+
+                if (!size) {
+                    section.classList.add('hidden');
+                    return;
+                }
+
+                const variants = this.data.frameStock.filter(f => f.size === size);
+                variantSelect.innerHTML = variants.map(v => `<option value="${v.id}">${v.color}${v.ukirType && v.ukirType !== '-' ? ' (' + v.ukirType + ')' : ''} (Stok: ${v.qty})</option>`).join('');
+                section.classList.remove('hidden');
+            },
+
+            saveBulkInbound() {
+                const variantId = document.getElementById('bulk-inbound-variant-select').value;
+                const qtyInput = parseInt(document.getElementById('bulk-inbound-qty').value.replace(/\D/g, '') || '0');
+
+                if (!variantId || qtyInput <= 0) {
+                    this.showToast('Pilih varian dan masukkan jumlah stok masuk dengan benar!');
+                    return;
+                }
+
+                const fs = this.data.frameStock.find(f => f.id === variantId);
+                if (fs) {
+                    fs.qty += qtyInput;
+                    this.saveData();
+                    this.closeModal('modal-bulk-inbound');
+                    this.renderStockFrame();
+                    this.showToast('Stok masuk frame berhasil ditambahkan!');
+                }
+            },
+
+            renderStockOther() {
+                const list = document.getElementById('other-stock-list');
+                if (!list) return;
+
+                if (this.data.stock.length === 0) {
+                    list.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-gray-400">Belum ada data material stok.</td></tr>`;
+                    return;
+                }
+
+                list.innerHTML = this.data.stock.map(stk => `
+                    <tr class="hover:bg-gray-50 transition-colors border-b border-gray-100">
+                        <td class="p-3 font-bold text-gray-800">${stk.name}</td>
+                        <td class="p-3"><span class="px-2 py-0.5 bg-gray-100 rounded text-[10px] font-bold text-gray-700">${stk.category}</span></td>
+                        <td class="p-3">
+                            <span class="px-2.5 py-1 rounded-full text-xs font-bold ${stk.qty <= 5 ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-700'}">${stk.qty} Pcs</span>
+                        </td>
+                        <td class="p-3 text-right">
+                            <div class="inline-flex items-center gap-1">
+                                <button onclick="app.adjustOtherStock('${stk.id}', -1)" class="w-7 h-7 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded font-bold">-</button>
+                                <span class="w-8 text-center font-bold text-xs">${stk.qty}</span>
+                                <button onclick="app.adjustOtherStock('${stk.id}', 1)" class="w-7 h-7 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded font-bold">+</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            },
+
+            adjustOtherStock(id, delta) {
+                const stk = this.data.stock.find(s => s.id === id);
+                if (stk) {
+                    stk.qty = Math.max(0, stk.qty + delta);
+                    this.saveData();
+                    this.renderStockOther();
+                }
+            },
+
+            openStockModal(id = null) {
+                document.getElementById('stock-id').value = id || '';
+                document.getElementById('stock-modal-title').innerText = id ? 'Edit Item Stok' : 'Tambah Item Stok';
+                document.getElementById('stock-name').value = '';
+                document.getElementById('stock-qty').value = '';
+                document.getElementById('modal-stock').classList.remove('hidden');
+            },
+
+            saveStock() {
+                const id = document.getElementById('stock-id').value;
+                const name = document.getElementById('stock-name').value.trim();
+                const category = document.getElementById('stock-category').value;
+                const qty = parseInt(document.getElementById('stock-qty').value.replace(/\D/g, '') || '0');
+
+                if (!name || isNaN(qty)) {
+                    this.showToast('Nama barang dan jumlah stok wajib diisi!');
+                    return;
+                }
+
+                if (id) {
+                    const stk = this.data.stock.find(s => s.id === id);
+                    if (stk) { stk.name = name; stk.category = category; stk.qty = qty; }
+                } else {
+                    this.data.stock.push({ id: generateId(), name, category, qty });
+                }
+
+                this.saveData();
+                this.closeModal('modal-stock');
+                this.renderStockOther();
+                this.showToast('Stok material berhasil disimpan');
+            },
+
             closeModal(modalId) {
                 document.getElementById(modalId).classList.add('hidden');
+            },
+
+            openConfirmModal(title, message, onYes) {
+                document.getElementById('confirm-title').innerText = title;
+                document.getElementById('confirm-message').innerText = message;
+                const yesBtn = document.getElementById('confirm-yes-btn');
+                yesBtn.onclick = () => {
+                    this.closeConfirmModal();
+                    onYes();
+                };
+                document.getElementById('modal-confirm').classList.remove('hidden');
+            },
+
+            closeConfirmModal() {
+                document.getElementById('modal-confirm').classList.add('hidden');
             }
         };
 
-        window.addEventListener('DOMContentLoaded', () => { app.init(); });
+        window.onload = function() {
+            app.init();
+        };
     </script>
 </body>
 </html>
