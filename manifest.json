@@ -1,9 +1,10 @@
 {
   "name": "KHJAM Photo Studio POS",
   "short_name": "KHJAM POS",
-  "start_url": ".",
+  "start_url": "./index.html",
+  "scope": "./",
   "display": "standalone",
-  "background_color": "#f8fafc",
+  "background_color": "#ffffff",
   "theme_color": "#76cdca",
   "icons": [
     {
