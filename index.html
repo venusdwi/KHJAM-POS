@@ -151,43 +151,43 @@
                         <h2 class="text-2xl font-bold text-gray-800">Dashboard KHJAM</h2>
                         <p class="text-sm text-gray-500">Ringkasan pendapatan real-time dan analisis studio Anda.</p>
                     </div>
-                    <!-- Custom Date Filter Bar -->
-                    <div class="flex items-center gap-2 bg-white p-1.5 rounded-xl border border-gray-200 shadow-sm text-xs relative">
-                        <span class="text-gray-500 font-medium px-2"><i class="fa-solid fa-filter mr-1 text-amber-500"></i> Filter:</span>
-                        
-                        <!-- Wrapper to allow direct native date input click interaction -->
-                        <div class="relative bg-amber-50 hover:bg-amber-100 text-amber-800 font-bold px-3 py-1.5 rounded-lg transition-colors flex items-center gap-2 border border-amber-200 cursor-pointer">
-                            <i class="fa-regular fa-calendar text-amber-600"></i>
-                            <span id="dash-filter-label">Hari Ini</span>
-                            <!-- Native date picker overlayed & transparent so click triggers calendar picker natively -->
-                            <input type="date" id="dash-filter-date" onchange="app.onDateFilterChange(this)" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full">
-                        </div>
-
-                        <button onclick="app.resetDashboardFilter()" class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-lg transition-colors">Reset</button>
-                    </div>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-primary">
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="w-8 h-8 rounded-full bg-[#e6f7f6] text-primary flex items-center justify-center"><i class="fa-solid fa-calendar-day"></i></div>
-                            <div id="dash-card-title-label" class="text-gray-500 text-sm font-medium">Hari Ini (Shift Real-time)</div>
+                    <!-- Card Hari Ini / Tanggal Terpilih -->
+                    <div onclick="app.openDailyPickerModal()" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-primary cursor-pointer hover:shadow-md transition-all group relative">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-[#e6f7f6] text-primary flex items-center justify-center"><i class="fa-solid fa-calendar-day"></i></div>
+                                <div id="dash-card-title-label" class="text-gray-500 text-sm font-medium">Hari Ini</div>
+                            </div>
+                            <span class="text-[10px] bg-secondary/30 text-amber-900 font-bold px-2 py-0.5 rounded group-hover:bg-secondary group-hover:text-gray-900 transition-colors"><i class="fa-solid fa-pen-to-square mr-1"></i> Pilih Tgl</span>
                         </div>
                         <div id="dash-daily-revenue" class="text-2xl font-bold text-gray-800">Rp 0</div>
                         <div class="text-xs text-gray-400 mt-2"><span id="dash-daily-count" class="font-bold text-gray-600">0</span> Transaksi diselesaikan</div>
                     </div>
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-secondary">
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="w-8 h-8 rounded-full bg-[#fff8e6] text-secondary flex items-center justify-center"><i class="fa-solid fa-calendar-week"></i></div>
-                            <div class="text-gray-500 text-sm font-medium">Bulan Ini</div>
+
+                    <!-- Card Bulan Ini -->
+                    <div onclick="app.openMonthPickerModal()" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-secondary cursor-pointer hover:shadow-md transition-all group relative">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-[#fff8e6] text-secondary flex items-center justify-center"><i class="fa-solid fa-calendar-week"></i></div>
+                                <div id="dash-month-title-label" class="text-gray-500 text-sm font-medium">Bulan Ini</div>
+                            </div>
+                            <span class="text-[10px] bg-secondary/30 text-amber-900 font-bold px-2 py-0.5 rounded group-hover:bg-secondary group-hover:text-gray-900 transition-colors"><i class="fa-solid fa-pen-to-square mr-1"></i> Pilih Bulan</span>
                         </div>
                         <div id="dash-monthly-revenue" class="text-2xl font-bold text-gray-800">Rp 0</div>
                         <div class="text-xs text-gray-400 mt-2"><span id="dash-monthly-count" class="font-bold text-gray-600">0</span> Transaksi diselesaikan</div>
                     </div>
-                    <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-gray-400">
-                        <div class="flex items-center gap-3 mb-2">
-                            <div class="w-8 h-8 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center"><i class="fa-solid fa-calendar-days"></i></div>
-                            <div class="text-gray-500 text-sm font-medium">Tahun Ini</div>
+
+                    <!-- Card Tahun Ini -->
+                    <div onclick="app.openYearPickerModal()" class="bg-white p-5 rounded-xl shadow-sm border border-gray-200 border-l-4 border-l-amber-400 cursor-pointer hover:shadow-md transition-all group relative">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center"><i class="fa-solid fa-calendar-days"></i></div>
+                                <div id="dash-year-title-label" class="text-gray-500 text-sm font-medium">Tahun Ini</div>
+                            </div>
+                            <span class="text-[10px] bg-secondary/30 text-amber-900 font-bold px-2 py-0.5 rounded group-hover:bg-secondary group-hover:text-gray-900 transition-colors"><i class="fa-solid fa-pen-to-square mr-1"></i> Pilih Tahun</span>
                         </div>
                         <div id="dash-yearly-revenue" class="text-2xl font-bold text-gray-800">Rp 0</div>
                         <div class="text-xs text-gray-400 mt-2"><span id="dash-yearly-count" class="font-bold text-gray-600">0</span> Transaksi diselesaikan</div>
@@ -258,12 +258,17 @@
             <div id="view-history" class="view-section hidden h-full flex flex-col p-4 md:p-6 bg-gray-50 overflow-hidden">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3 shrink-0">
                     <div>
-                        <h2 class="text-xl font-bold text-gray-800">Riwayat Transaksi</h2>
-                        <p class="text-xs text-gray-500">Log semua transaksi yang sudah diselesaikan.</p>
+                        <h2 class="text-xl font-bold text-gray-800">Riwayat Transaksi (Shift Berjalan)</h2>
+                        <p class="text-xs text-gray-500">Log transaksi hari ini. Data di-reset otomatis setelah akhiri shift.</p>
                     </div>
-                    <button onclick="app.openShiftCheckModal()" class="bg-secondary hover:bg-secondaryHover text-gray-900 px-3.5 py-2 rounded-xl font-bold shadow transition-colors flex items-center gap-2 text-xs">
-                        <i class="fa-solid fa-file-invoice-dollar"></i> Akhiri Shift (Tutup Kasir)
-                    </button>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button onclick="app.openShiftHistoryModal()" class="bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 px-3.5 py-2 rounded-xl font-bold shadow-sm transition-colors flex items-center gap-2 text-xs">
+                            <i class="fa-solid fa-folder-open text-primary"></i> Riwayat Shift
+                        </button>
+                        <button onclick="app.openPinModal()" class="bg-secondary hover:bg-secondaryHover text-gray-900 px-3.5 py-2 rounded-xl font-bold shadow transition-colors flex items-center gap-2 text-xs">
+                            <i class="fa-solid fa-file-invoice-dollar"></i> Akhiri Shift (Tutup Kasir)
+                        </button>
+                    </div>
                 </div>
                 
                 <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex-1 overflow-hidden flex flex-col">
@@ -408,6 +413,133 @@
         </button>
     </nav>
 
+    <!-- MODAL PIN SECURITY FOR SHIFT CLOSE -->
+    <div id="modal-pin" class="fixed inset-0 bg-black bg-opacity-60 z-[90] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-xs overflow-hidden shadow-2xl flex flex-col p-5 animate-scale">
+            <div class="flex justify-between items-center mb-3 border-b pb-2">
+                <h4 class="font-bold text-gray-800 text-sm flex items-center gap-2"><i class="fa-solid fa-lock text-primary"></i> Konfirmasi PIN Shift</h4>
+                <button onclick="app.closeModal('modal-pin')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div class="space-y-3 text-xs mb-4">
+                <p class="text-gray-500">Masukkan kode PIN keamanan 4 digit untuk melanjutkan penutupan shift.</p>
+                <div>
+                    <!-- Hidden real input -->
+                    <input type="password" id="input-shift-pin" readonly inputmode="none" class="hidden">
+                    
+                    <!-- 4 Slot Boxes for PIN -->
+                    <div class="flex justify-center gap-2 cursor-pointer" onclick="app.openNumpadForInput('input-shift-pin', 'Masukkan PIN Keamanan', 4)">
+                        <div id="pin-box-0" class="w-12 h-12 rounded-xl border-2 border-gray-300 bg-gray-50 flex items-center justify-center text-xl font-bold text-primary shadow-sm"></div>
+                        <div id="pin-box-1" class="w-12 h-12 rounded-xl border-2 border-gray-300 bg-gray-50 flex items-center justify-center text-xl font-bold text-primary shadow-sm"></div>
+                        <div id="pin-box-2" class="w-12 h-12 rounded-xl border-2 border-gray-300 bg-gray-50 flex items-center justify-center text-xl font-bold text-primary shadow-sm"></div>
+                        <div id="pin-box-3" class="w-12 h-12 rounded-xl border-2 border-gray-300 bg-gray-50 flex items-center justify-center text-xl font-bold text-primary shadow-sm"></div>
+                    </div>
+                </div>
+                <div id="pin-error" class="hidden text-red-600 font-bold text-center">PIN Salah! Akses ditolak.</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="app.closeModal('modal-pin')" class="py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl text-xs transition-colors">Batal</button>
+                <button onclick="app.verifyShiftPin()" class="py-2.5 bg-primary hover:bg-primaryHover text-white font-bold rounded-xl text-xs transition-colors shadow">Konfirmasi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DAILY PICKER -->
+    <div id="modal-daily-picker" class="fixed inset-0 bg-black bg-opacity-60 z-[85] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col p-5 animate-scale">
+            <div class="flex justify-between items-center mb-3 border-b pb-2">
+                <h4 class="font-bold text-gray-800 text-sm flex items-center gap-2"><i class="fa-regular fa-calendar text-secondary"></i> Pilih Tanggal Rekap</h4>
+                <button onclick="app.closeModal('modal-daily-picker')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div class="space-y-3 text-xs mb-4">
+                <div>
+                    <label class="block font-medium text-gray-700 mb-1">Tanggal Tertentu</label>
+                    <input type="date" id="picker-daily-input" class="w-full px-3 py-2.5 bg-white border border-gray-300 rounded-xl font-bold text-xs outline-none">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="app.resetDailyFilter()" class="py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl text-xs transition-colors">Hari Ini</button>
+                <button onclick="app.applyDailyFilter()" class="py-2.5 bg-secondary hover:bg-secondaryHover text-gray-900 font-bold rounded-xl text-xs transition-colors shadow">Tampilkan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL MONTH PICKER -->
+    <div id="modal-month-picker" class="fixed inset-0 bg-black bg-opacity-60 z-[85] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col p-5 animate-scale">
+            <div class="flex justify-between items-center mb-3 border-b pb-2">
+                <h4 class="font-bold text-gray-800 text-sm flex items-center gap-2"><i class="fa-regular fa-calendar-days text-secondary"></i> Pilih Bulan & Tahun</h4>
+                <button onclick="app.closeModal('modal-month-picker')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div class="space-y-3 text-xs mb-4">
+                <div>
+                    <label class="block font-medium text-gray-700 mb-1">Pilih Bulan</label>
+                    <select id="picker-month-select" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-xl font-bold text-xs outline-none">
+                        <option value="0">Januari</option>
+                        <option value="1">Februari</option>
+                        <option value="2">Maret</option>
+                        <option value="3">April</option>
+                        <option value="4">Mei</option>
+                        <option value="5">Juni</option>
+                        <option value="6">Juli</option>
+                        <option value="7">Agustus</option>
+                        <option value="8">September</option>
+                        <option value="9">Oktober</option>
+                        <option value="10">November</option>
+                        <option value="11">Desember</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium text-gray-700 mb-1">Tahun</label>
+                    <select id="picker-year-select" class="w-full px-3 py-2 bg-white border border-gray-300 rounded-xl font-bold text-xs outline-none">
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                        <option value="2028">2028</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="app.resetMonthFilter()" class="py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl text-xs transition-colors">Bulan Ini</button>
+                <button onclick="app.applyMonthFilter()" class="py-2.5 bg-secondary hover:bg-secondaryHover text-gray-900 font-bold rounded-xl text-xs transition-colors shadow">Tampilkan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL YEAR PICKER -->
+    <div id="modal-year-picker" class="fixed inset-0 bg-black bg-opacity-60 z-[85] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col p-5 animate-scale">
+            <div class="flex justify-between items-center mb-3 border-b pb-2">
+                <h4 class="font-bold text-gray-800 text-sm flex items-center gap-2"><i class="fa-solid fa-calendar-days text-amber-500"></i> Pilih Tahun Rekap</h4>
+                <button onclick="app.closeModal('modal-year-picker')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div class="space-y-3 text-xs mb-4">
+                <div>
+                    <label class="block font-medium text-gray-700 mb-1">Tahun</label>
+                    <select id="picker-only-year-select" class="w-full px-3 py-2.5 bg-white border border-gray-300 rounded-xl font-bold text-xs outline-none">
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                        <option value="2028">2028</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="app.resetYearFilter()" class="py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold rounded-xl text-xs transition-colors">Tahun Ini</button>
+                <button onclick="app.applyYearFilter()" class="py-2.5 bg-secondary hover:bg-secondaryHover text-gray-900 font-bold rounded-xl text-xs transition-colors shadow">Tampilkan</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL CHECKOUT -->
     <div id="modal-checkout" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[95vh]">
@@ -443,23 +575,24 @@
                         <label class="block text-xs font-medium text-gray-700 mb-1">Uang Diterima</label>
                         <div class="relative">
                             <span class="absolute left-3 top-2.5 text-gray-500 font-semibold text-sm">Rp</span>
-                            <input type="text" id="input-payment" readonly inputmode="none" class="w-full pl-9 pr-3 py-2 bg-gray-50 border border-gray-300 rounded-xl text-base font-bold text-gray-800 outline-none cursor-pointer" placeholder="0">
+                            <input type="text" id="input-payment" readonly inputmode="none" class="w-full pl-9 pr-3 py-2.5 bg-gray-50 border border-gray-300 rounded-xl text-base font-bold text-gray-800 outline-none cursor-pointer" placeholder="0">
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-3 gap-2 mb-3 bg-gray-100 p-2 rounded-xl border border-gray-200">
-                        <button type="button" onclick="app.numpadPress('1')" class="bg-white hover:bg-gray-50 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">1</button>
-                        <button type="button" onclick="app.numpadPress('2')" class="bg-white hover:bg-gray-50 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">2</button>
-                        <button type="button" onclick="app.numpadPress('3')" class="bg-white hover:bg-gray-50 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">3</button>
-                        <button type="button" onclick="app.numpadPress('4')" class="bg-white hover:bg-gray-50 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">4</button>
-                        <button type="button" onclick="app.numpadPress('5')" class="bg-white hover:bg-gray-50 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">5</button>
-                        <button type="button" onclick="app.numpadPress('6')" class="bg-white hover:bg-gray-50 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">6</button>
-                        <button type="button" onclick="app.numpadPress('7')" class="bg-white hover:bg-gray-50 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">7</button>
-                        <button type="button" onclick="app.numpadPress('8')" class="bg-white hover:bg-gray-50 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">8</button>
-                        <button type="button" onclick="app.numpadPress('9')" class="bg-white hover:bg-gray-50 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">9</button>
-                        <button type="button" onclick="app.numpadPress('C')" class="bg-red-50 hover:bg-red-100 text-red-600 py-2 rounded-lg font-bold shadow-sm border border-red-200 active:scale-95 transition-all text-xs uppercase">C</button>
-                        <button type="button" onclick="app.numpadPress('0')" class="bg-white hover:bg-gray-50 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">0</button>
-                        <button type="button" onclick="app.numpadPress('DEL')" class="bg-amber-50 hover:bg-amber-100 text-amber-700 py-2 rounded-lg font-bold shadow-sm border border-amber-200 active:scale-95 transition-all text-xs uppercase"><i class="fa-solid fa-delete-left"></i></button>
+                    <!-- Custom App Themed Numpad -->
+                    <div class="grid grid-cols-3 gap-2 mb-3 bg-[#e6f7f6]/50 p-2.5 rounded-2xl border border-primary/30 shadow-inner">
+                        <button type="button" onclick="app.numpadPress('1')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">1</button>
+                        <button type="button" onclick="app.numpadPress('2')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">2</button>
+                        <button type="button" onclick="app.numpadPress('3')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">3</button>
+                        <button type="button" onclick="app.numpadPress('4')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">4</button>
+                        <button type="button" onclick="app.numpadPress('5')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">5</button>
+                        <button type="button" onclick="app.numpadPress('6')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">6</button>
+                        <button type="button" onclick="app.numpadPress('7')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">7</button>
+                        <button type="button" onclick="app.numpadPress('8')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">8</button>
+                        <button type="button" onclick="app.numpadPress('9')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">9</button>
+                        <button type="button" onclick="app.numpadPress('C')" class="bg-red-50 hover:bg-red-100 text-red-600 py-2.5 rounded-xl font-bold shadow-sm border border-red-200 active:scale-95 transition-all text-xs uppercase">C</button>
+                        <button type="button" onclick="app.numpadPress('0')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">0</button>
+                        <button type="button" onclick="app.numpadPress('DEL')" class="bg-secondary/40 hover:bg-secondary text-amber-900 py-2.5 rounded-xl font-bold shadow-sm border border-secondary/50 active:scale-95 transition-all text-xs uppercase"><i class="fa-solid fa-delete-left"></i></button>
                     </div>
 
                     <div class="bg-gray-100 p-3 rounded-xl flex justify-between items-center mb-3">
@@ -477,7 +610,7 @@
                 </div>
             </div>
             <div class="p-4 border-t border-gray-200">
-                <button onclick="app.processPayment()" id="btn-process-payment" class="w-full bg-secondary hover:bg-secondaryHover text-gray-800 font-bold py-2.5 rounded-xl shadow transition-colors flex justify-center items-center gap-2 text-sm">
+                <button onclick="app.processPayment()" id="btn-process-payment" class="w-full bg-secondary hover:bg-secondaryHover text-gray-900 font-bold py-2.5 rounded-xl shadow transition-colors flex justify-center items-center gap-2 text-sm">
                     <i class="fa-solid fa-check-circle"></i> Selesaikan Transaksi
                 </button>
             </div>
@@ -559,7 +692,7 @@
         </div>
     </div>
 
-    <!-- MODAL SHIFT CASH CHECK (AUDIT KAS FISIK) -->
+    <!-- MODAL SHIFT CHECK (AUDIT KAS FISIK) -->
     <div id="modal-shift-check" class="fixed inset-0 bg-black bg-opacity-60 z-[84] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col animate-scale">
             <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
@@ -593,6 +726,25 @@
                 <button onclick="app.proceedToShiftSummary()" class="flex-1 bg-primary hover:bg-primaryHover text-white py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-colors shadow">
                     Lanjut & Cetak <i class="fa-solid fa-arrow-right"></i>
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SHIFT HISTORY LIST (ARSIP SHIFT) -->
+    <div id="modal-shift-history" class="fixed inset-0 bg-black bg-opacity-60 z-[84] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+                <h3 class="font-bold text-gray-800 text-sm flex items-center gap-2"><i class="fa-solid fa-folder-open text-primary"></i> Arsip Riwayat Shift</h3>
+                <button onclick="app.closeModal('modal-shift-history')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-4 border-b border-gray-200 bg-gray-50/50 flex items-center gap-2">
+                <span class="text-xs text-gray-600 font-medium">Filter Tanggal:</span>
+                <input type="date" id="shift-history-date-filter" onchange="app.renderShiftHistoryModalList()" class="px-2.5 py-1.5 bg-white border border-gray-300 rounded-lg text-xs font-bold outline-none">
+                <button onclick="app.resetShiftHistoryDateFilter()" class="px-2.5 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg text-xs font-medium">Semua</button>
+            </div>
+            <div id="shift-history-list-container" class="p-4 overflow-y-auto space-y-2.5 flex-1"></div>
+            <div class="p-3 border-t border-gray-200 bg-gray-50 flex justify-end">
+                <button onclick="app.closeModal('modal-shift-history')" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-xl text-xs font-bold">Tutup</button>
             </div>
         </div>
     </div>
@@ -821,31 +973,31 @@
         </div>
     </div>
 
-    <!-- MODAL NUMPAD -->
+    <!-- MODAL NUMPAD (App Themed) -->
     <div id="modal-numpad" class="fixed inset-0 bg-black bg-opacity-60 z-[90] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-xs overflow-hidden shadow-2xl flex flex-col p-4 animate-scale">
             <div class="flex justify-between items-center mb-2.5 border-b pb-2">
                 <h4 id="numpad-title" class="font-bold text-gray-800 text-xs">Masukkan Angka</h4>
                 <button onclick="app.closeGlobalNumpad()" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-xmark text-base"></i></button>
             </div>
-            <div class="bg-gray-100 p-2.5 rounded-xl mb-2.5 text-right">
-                <span id="numpad-display" class="text-xl font-bold text-gray-800 tracking-wider">0</span>
+            <div class="bg-[#e6f7f6] border border-primary/40 p-3 rounded-xl mb-3 text-right">
+                <span id="numpad-display" class="text-xl font-extrabold text-primary tracking-wider">0</span>
             </div>
-            <div class="grid grid-cols-3 gap-1.5">
-                <button type="button" onclick="app.globalNumpadPress('1')" class="bg-white hover:bg-gray-50 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">1</button>
-                <button type="button" onclick="app.globalNumpadPress('2')" class="bg-white hover:bg-gray-50 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">2</button>
-                <button type="button" onclick="app.globalNumpadPress('3')" class="bg-white hover:bg-gray-50 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">3</button>
-                <button type="button" onclick="app.globalNumpadPress('4')" class="bg-white hover:bg-gray-50 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">4</button>
-                <button type="button" onclick="app.globalNumpadPress('5')" class="bg-white hover:bg-gray-50 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">5</button>
-                <button type="button" onclick="app.globalNumpadPress('6')" class="bg-white hover:bg-gray-50 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">6</button>
-                <button type="button" onclick="app.globalNumpadPress('7')" class="bg-white hover:bg-gray-50 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">7</button>
-                <button type="button" onclick="app.globalNumpadPress('8')" class="bg-white hover:bg-gray-50 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">8</button>
-                <button type="button" onclick="app.globalNumpadPress('9')" class="bg-white hover:bg-gray-50 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">9</button>
+            <div class="grid grid-cols-3 gap-1.5 bg-[#e6f7f6]/50 p-2 rounded-2xl border border-primary/20">
+                <button type="button" onclick="app.globalNumpadPress('1')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">1</button>
+                <button type="button" onclick="app.globalNumpadPress('2')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">2</button>
+                <button type="button" onclick="app.globalNumpadPress('3')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">3</button>
+                <button type="button" onclick="app.globalNumpadPress('4')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">4</button>
+                <button type="button" onclick="app.globalNumpadPress('5')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">5</button>
+                <button type="button" onclick="app.globalNumpadPress('6')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">6</button>
+                <button type="button" onclick="app.globalNumpadPress('7')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">7</button>
+                <button type="button" onclick="app.globalNumpadPress('8')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">8</button>
+                <button type="button" onclick="app.globalNumpadPress('9')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">9</button>
                 <button type="button" onclick="app.globalNumpadPress('C')" class="bg-red-50 hover:bg-red-100 text-red-600 py-2.5 rounded-xl font-bold shadow-sm border border-red-200 active:scale-95 transition-all text-[11px] uppercase">C</button>
-                <button type="button" onclick="app.globalNumpadPress('0')" class="bg-white hover:bg-gray-50 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-gray-200 active:scale-95 transition-all text-sm">0</button>
-                <button type="button" onclick="app.globalNumpadPress('DEL')" class="bg-amber-50 hover:bg-amber-100 text-amber-700 py-2.5 rounded-xl font-bold shadow-sm border border-amber-200 active:scale-95 transition-all text-[11px] uppercase"><i class="fa-solid fa-delete-left"></i></button>
+                <button type="button" onclick="app.globalNumpadPress('0')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">0</button>
+                <button type="button" onclick="app.globalNumpadPress('DEL')" class="bg-secondary/40 hover:bg-secondary text-amber-900 py-2.5 rounded-xl font-bold shadow-sm border border-secondary/50 active:scale-95 transition-all text-[11px] uppercase"><i class="fa-solid fa-delete-left"></i></button>
             </div>
-            <button onclick="app.confirmGlobalNumpad()" class="mt-2.5 w-full bg-primary hover:bg-primaryHover text-white font-bold py-2 rounded-xl shadow transition-colors text-xs">OK / Selesai</button>
+            <button onclick="app.confirmGlobalNumpad()" class="mt-2.5 w-full bg-primary hover:bg-primaryHover text-white font-bold py-2.5 rounded-xl shadow transition-colors text-xs">OK / Selesai</button>
         </div>
     </div>
 
@@ -858,6 +1010,8 @@
     <script>
         const sizeOptions = ['2R', '3R', '4R', '5R', '6R', '10R', '12R', '17R', '17Rs', '40x50', '40x60', '50x70', '60x80', '60x90'];
         const frameStockSizes = ['4R', '5R', '6R', '10R', '12R', '17R', '17Rs', '40x50', '40x60', '50x70', '60x80', '60x90'];
+
+        const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 
         const formatRupiah = (number) => {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
@@ -880,16 +1034,19 @@
         });
 
         const app = {
-            data: { products: [], cart: [], history: [], stock: [], frameStock: [] },
+            data: { products: [], cart: [], history: [], stock: [], frameStock: [], shiftHistory: [] },
             currentFilter: 'all',
             activeNumpadTarget: null,
             activeNumpadRaw: '',
+            numpadMaxLength: null,
             selectedPaymentMethod: 'cash',
             lastCompletedTrx: null,
             pendingProductId: null,
             currentExpectedCash: 0,
             lastAuditData: null,
             dashboardFilterDate: null,
+            selectedMonthFilter: null,
+            selectedYearFilter: null,
 
             installPWA() {
                 if (deferredPrompt) {
@@ -908,14 +1065,103 @@
                 }
             },
 
-            openNumpadForInput(elementId, title) {
+            openDailyPickerModal() {
+                const todayStr = new Date().toISOString().slice(0, 10);
+                document.getElementById('picker-daily-input').value = this.dashboardFilterDate || todayStr;
+                document.getElementById('modal-daily-picker').classList.remove('hidden');
+            },
+
+            applyDailyFilter() {
+                const val = document.getElementById('picker-daily-input').value;
+                if (val) {
+                    this.dashboardFilterDate = val;
+                    this.closeModal('modal-daily-picker');
+                    this.renderDashboard();
+                    this.showToast(`Menampilkan rekapitulasi tanggal ${new Date(val).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}`);
+                }
+            },
+
+            resetDailyFilter() {
+                this.dashboardFilterDate = null;
+                this.closeModal('modal-daily-picker');
+                this.renderDashboard();
+                this.showToast('Kembali ke Hari Ini (Real-time)');
+            },
+
+            openMonthPickerModal() {
+                const now = new Date();
+                const m = this.selectedMonthFilter ? this.selectedMonthFilter.month : now.getMonth();
+                const y = this.selectedMonthFilter ? this.selectedMonthFilter.year : now.getFullYear();
+
+                document.getElementById('picker-month-select').value = m;
+                document.getElementById('picker-year-select').value = y;
+                document.getElementById('modal-month-picker').classList.remove('hidden');
+            },
+
+            applyMonthFilter() {
+                const m = parseInt(document.getElementById('picker-month-select').value);
+                const y = parseInt(document.getElementById('picker-year-select').value);
+                this.selectedMonthFilter = { month: m, year: y };
+                this.closeModal('modal-month-picker');
+                this.renderDashboard();
+                this.showToast(`Menampilkan rekapitulasi ${monthNames[m]} ${y}`);
+            },
+
+            resetMonthFilter() {
+                this.selectedMonthFilter = null;
+                this.closeModal('modal-month-picker');
+                this.renderDashboard();
+                this.showToast('Kembali ke Bulan Ini (Real-time)');
+            },
+
+            openYearPickerModal() {
+                const now = new Date();
+                const y = this.selectedYearFilter || now.getFullYear();
+                document.getElementById('picker-only-year-select').value = y;
+                document.getElementById('modal-year-picker').classList.remove('hidden');
+            },
+
+            applyYearFilter() {
+                const y = parseInt(document.getElementById('picker-only-year-select').value);
+                this.selectedYearFilter = y;
+                this.closeModal('modal-year-picker');
+                this.renderDashboard();
+                this.showToast(`Menampilkan rekapitulasi Tahun ${y}`);
+            },
+
+            resetYearFilter() {
+                this.selectedYearFilter = null;
+                this.closeModal('modal-year-picker');
+                this.renderDashboard();
+                this.showToast('Kembali ke Tahun Ini (Real-time)');
+            },
+
+            openNumpadForInput(elementId, title, maxLength = null) {
                 this.activeNumpadTarget = elementId;
+                this.numpadMaxLength = maxLength;
                 const el = document.getElementById(elementId);
                 const currentVal = el ? el.value.replace(/\D/g, '') : '';
                 this.activeNumpadRaw = currentVal || '';
                 document.getElementById('numpad-title').innerText = title;
-                document.getElementById('numpad-display').innerText = this.activeNumpadRaw !== '' ? new Intl.NumberFormat('id-ID').format(this.activeNumpadRaw) : '0';
+                this.updateNumpadDisplay();
                 document.getElementById('modal-numpad').classList.remove('hidden');
+            },
+
+            updateNumpadDisplay() {
+                if (this.numpadMaxLength) {
+                    let masked = '';
+                    for (let i = 0; i < this.numpadMaxLength; i++) {
+                        if (i < this.activeNumpadRaw.length) {
+                            masked += '• ';
+                        } else {
+                            masked += '_ ';
+                        }
+                    }
+                    document.getElementById('numpad-display').innerText = masked.trim();
+                } else {
+                    const displayVal = this.activeNumpadRaw !== '' ? new Intl.NumberFormat('id-ID').format(this.activeNumpadRaw) : '0';
+                    document.getElementById('numpad-display').innerText = displayVal;
+                }
             },
 
             globalNumpadPress(val) {
@@ -924,10 +1170,10 @@
                 } else if (val === 'DEL') {
                     this.activeNumpadRaw = this.activeNumpadRaw.slice(0, -1);
                 } else {
+                    if (this.numpadMaxLength && this.activeNumpadRaw.length >= this.numpadMaxLength) return;
                     this.activeNumpadRaw += val;
                 }
-                const displayVal = this.activeNumpadRaw !== '' ? new Intl.NumberFormat('id-ID').format(this.activeNumpadRaw) : '0';
-                document.getElementById('numpad-display').innerText = displayVal;
+                this.updateNumpadDisplay();
 
                 if (this.activeNumpadTarget === 'input-actual-cash') {
                     this.calculateCashDifference();
@@ -938,8 +1184,20 @@
                 if (this.activeNumpadTarget) {
                     const el = document.getElementById(this.activeNumpadTarget);
                     if (el) {
-                        const isFormattedCurrency = this.activeNumpadTarget === 'prod-price' || this.activeNumpadTarget === 'input-actual-cash';
-                        el.value = this.activeNumpadRaw !== '' ? (isFormattedCurrency ? new Intl.NumberFormat('id-ID').format(this.activeNumpadRaw) : this.activeNumpadRaw) : '';
+                        if (this.numpadMaxLength) {
+                            el.value = this.activeNumpadRaw;
+                        } else {
+                            el.value = this.activeNumpadRaw !== '' ? new Intl.NumberFormat('id-ID').format(this.activeNumpadRaw) : '';
+                        }
+                        
+                        if (this.activeNumpadTarget === 'input-shift-pin') {
+                            for (let i = 0; i < 4; i++) {
+                                const box = document.getElementById(`pin-box-${i}`);
+                                if (box) {
+                                    box.innerText = i < this.activeNumpadRaw.length ? '•' : '';
+                                }
+                            }
+                        }
                     }
                 }
                 if (this.activeNumpadTarget === 'input-actual-cash') {
@@ -958,15 +1216,6 @@
                 this.renderProducts();
                 this.renderCart();
 
-                // Setup default date filter in dashboard to today
-                const todayStr = new Date().toISOString().slice(0, 10);
-                const dateInput = document.getElementById('dash-filter-date');
-                if (dateInput) {
-                    dateInput.value = todayStr;
-                    document.getElementById('dash-filter-label').innerText = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-                }
-
-                // Realtime interval updates for dashboard if active
                 setInterval(() => {
                     const dashView = document.getElementById('view-dashboard');
                     if (dashView && !dashView.classList.contains('hidden')) {
@@ -1011,6 +1260,14 @@
                     } catch(e) {}
                 }
                 this.data.history = loadedHistory;
+
+                try {
+                    const shVal = localStorage.getItem('khjam_shift_history_v1');
+                    if (shVal) {
+                        const parsedSh = JSON.parse(shVal);
+                        if (Array.isArray(parsedSh)) this.data.shiftHistory = parsedSh;
+                    }
+                } catch(e) {}
 
                 const STOCK_KEYS = ['khjam_stock_inventory_v7', 'khjam_stock_inventory_v6', 'khjam_stock_inventory_v5'];
                 let loadedStock = [];
@@ -1063,6 +1320,7 @@
                     localStorage.setItem('khjam_studio_history_v7', JSON.stringify(this.data.history));
                     localStorage.setItem('khjam_stock_inventory_v7', JSON.stringify(this.data.stock));
                     localStorage.setItem('khjam_frame_stock_catalog_v2', JSON.stringify(this.data.frameStock));
+                    localStorage.setItem('khjam_shift_history_v1', JSON.stringify(this.data.shiftHistory));
                 } catch(e) {
                     console.error('Storage error', e);
                 }
@@ -1072,7 +1330,6 @@
                 document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
                 document.getElementById(`view-${viewName}`).classList.remove('hidden');
 
-                // Toggle mobile cart icon visibility: only show on POS view
                 const mobileCartWrapper = document.getElementById('mobile-cart-btn-wrapper');
                 if (mobileCartWrapper) {
                     if (viewName === 'pos') {
@@ -1198,7 +1455,6 @@
                 const prod = this.data.products.find(p => p.id === this.pendingProductId);
                 this.closeAddCartModal();
                 if (prod) {
-                    // Deep clone product into cart item with editable specs
                     const cartItem = {
                         cartId: generateId(),
                         id: prod.id,
@@ -1344,8 +1600,8 @@
                 document.getElementById('checkout-total-display').innerText = formatRupiah(total);
                 this.selectedPaymentMethod = 'cash';
                 this.updatePaymentMethodUI();
-                document.getElementById('input-payment').value = new Intl.NumberFormat('id-ID').format(total);
-                this.activeNumpadRaw = total.toString();
+                document.getElementById('input-payment').value = '0';
+                this.activeNumpadRaw = '';
                 document.getElementById('checkout-change-display').innerText = formatRupiah(0);
                 document.getElementById('checkout-error').classList.add('hidden');
                 document.getElementById('modal-checkout').classList.remove('hidden');
@@ -1375,6 +1631,9 @@
                 if (this.selectedPaymentMethod === 'cash') {
                     cashSection.classList.remove('hidden');
                     nonCashInfo.classList.add('hidden');
+                    document.getElementById('input-payment').value = '0';
+                    this.activeNumpadRaw = '';
+                    document.getElementById('checkout-change-display').innerText = formatRupiah(0);
                 } else {
                     cashSection.classList.add('hidden');
                     nonCashInfo.classList.remove('hidden');
@@ -1420,7 +1679,6 @@
                     change = received - total;
                 }
 
-                // Deduct stock for frames in cart
                 this.data.cart.forEach(item => {
                     if (item.frames && item.frames.length > 0) {
                         item.frames.forEach(f => {
@@ -1570,12 +1828,31 @@
             },
 
             renderDashboard() {
-                const today = this.dashboardFilterDate || new Date().toISOString().slice(0, 10);
-                const isCustomFilter = !!this.dashboardFilterDate;
+                const todayStr = new Date().toISOString().slice(0, 10);
+                const activeDate = this.dashboardFilterDate || todayStr;
 
                 const labelEl = document.getElementById('dash-card-title-label');
                 if (labelEl) {
-                    labelEl.innerText = isCustomFilter ? `Tanggal (${today})` : 'Hari Ini (Shift Real-time)';
+                    if (this.dashboardFilterDate) {
+                        labelEl.innerText = `Tanggal (${new Date(this.dashboardFilterDate).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })})`;
+                    } else {
+                        labelEl.innerText = 'Hari Ini';
+                    }
+                }
+
+                const now = new Date();
+                const targetMonth = this.selectedMonthFilter ? this.selectedMonthFilter.month : now.getMonth();
+                const targetYear = this.selectedMonthFilter ? this.selectedMonthFilter.year : now.getFullYear();
+
+                const monthLabelEl = document.getElementById('dash-month-title-label');
+                if (monthLabelEl) {
+                    monthLabelEl.innerText = this.selectedMonthFilter ? `Bulan (${monthNames[targetMonth]} ${targetYear})` : 'Bulan Ini';
+                }
+
+                const targetYearOnly = this.selectedYearFilter || now.getFullYear();
+                const yearLabelEl = document.getElementById('dash-year-title-label');
+                if (yearLabelEl) {
+                    yearLabelEl.innerText = this.selectedYearFilter ? `Tahun (${targetYearOnly})` : 'Tahun Ini';
                 }
 
                 let dailyRev = 0, dailyCount = 0;
@@ -1583,30 +1860,31 @@
                 let yearlyRev = 0, yearlyCount = 0;
                 let allTimeRev = 0, allTimeCount = this.data.history.length;
 
-                const now = new Date();
-                const currentMonth = now.getMonth();
-                const currentYear = now.getFullYear();
-
                 this.data.history.forEach(trx => {
                     allTimeRev += trx.total;
                     
                     const trxDateObj = new Date(trx.timestamp);
                     const trxDateStr = trxDateObj.toISOString().slice(0, 10);
 
-                    if (trxDateStr === today) {
+                    if (trxDateStr === activeDate) {
                         dailyRev += trx.total;
                         dailyCount++;
                     }
 
-                    if (trxDateObj.getMonth() === currentMonth && trxDateObj.getFullYear() === currentYear) {
+                    if (trxDateObj.getMonth() === targetMonth && trxDateObj.getFullYear() === targetYear) {
                         monthlyRev += trx.total;
                         monthlyCount++;
                     }
 
-                    if (trxDateObj.getFullYear() === currentYear) {
+                    if (trxDateObj.getFullYear() === targetYearOnly) {
                         yearlyRev += trx.total;
                         yearlyCount++;
                     }
+                });
+
+                this.data.shiftHistory.forEach(sh => {
+                    allTimeRev += sh.totalRev;
+                    allTimeCount += sh.totalTrx;
                 });
 
                 document.getElementById('dash-daily-revenue').innerText = formatRupiah(dailyRev);
@@ -1622,24 +1900,6 @@
                 document.getElementById('dash-all-time-count').innerText = allTimeCount;
             },
 
-            onDateFilterChange(input) {
-                const val = input.value;
-                if (val) {
-                    this.dashboardFilterDate = val;
-                    document.getElementById('dash-filter-label').innerText = new Date(val).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-                    this.renderDashboard();
-                }
-            },
-
-            resetDashboardFilter() {
-                this.dashboardFilterDate = null;
-                const todayStr = new Date().toISOString().slice(0, 10);
-                const dateInput = document.getElementById('dash-filter-date');
-                if (dateInput) dateInput.value = todayStr;
-                document.getElementById('dash-filter-label').innerText = 'Hari Ini';
-                this.renderDashboard();
-            },
-
             renderHistory() {
                 const list = document.getElementById('history-list');
                 if (!list) return;
@@ -1647,7 +1907,7 @@
                 if (this.data.history.length === 0) {
                     list.innerHTML = `
                         <tr>
-                            <td colspan="6" class="p-8 text-center text-gray-400">Belum ada riwayat transaksi.</td>
+                            <td colspan="6" class="p-8 text-center text-gray-400">Belum ada transaksi shift berjalan.</td>
                         </tr>
                     `;
                     return;
@@ -1674,12 +1934,31 @@
                 }
             },
 
+            openPinModal() {
+                document.getElementById('input-shift-pin').value = '';
+                for (let i = 0; i < 4; i++) {
+                    const box = document.getElementById(`pin-box-${i}`);
+                    if (box) box.innerText = '';
+                }
+                document.getElementById('pin-error').classList.add('hidden');
+                document.getElementById('modal-pin').classList.remove('hidden');
+            },
+
+            verifyShiftPin() {
+                const pin = document.getElementById('input-shift-pin').value;
+                if (pin === '1212') {
+                    this.closeModal('modal-pin');
+                    this.openShiftCheckModal();
+                } else {
+                    document.getElementById('pin-error').classList.remove('hidden');
+                }
+            },
+
             openShiftCheckModal() {
                 const todayStr = new Date().toISOString().slice(0, 10);
                 let expectedCash = 0;
                 this.data.history.forEach(trx => {
-                    const trxDateStr = new Date(trx.timestamp).toISOString().slice(0, 10);
-                    if (trxDateStr === todayStr && trx.method === 'CASH') {
+                    if (trx.method === 'CASH') {
                         expectedCash += trx.total;
                     }
                 });
@@ -1723,12 +2002,13 @@
 
             proceedToShiftSummary() {
                 this.closeModal('modal-shift-check');
-                this.showShiftSummaryModal();
-            },
-
-            showShiftSummaryModal() {
                 const todayStr = new Date().toISOString().slice(0, 10);
-                const shiftTrx = this.data.history.filter(trx => new Date(trx.timestamp).toISOString().slice(0, 10) === todayStr);
+                const shiftTrx = [...this.data.history];
+
+                if (shiftTrx.length === 0) {
+                    this.showToast('Belum ada transaksi untuk di-shift-kan.');
+                    return;
+                }
 
                 let totalRev = 0;
                 let methodCounts = { CASH: 0, QRIS: 0, DEBIT: 0 };
@@ -1741,30 +2021,86 @@
                         methodTotals[trx.method] += trx.total;
                         methodCounts[trx.method]++;
                     }
-
                     trx.items.forEach(item => {
-                        if (!productMap[item.name]) {
-                            productMap[item.name] = { qty: 0, revenue: 0 };
-                        }
+                        if (!productMap[item.name]) productMap[item.name] = { qty: 0, revenue: 0 };
                         productMap[item.name].qty += 1;
                         productMap[item.name].revenue += item.price;
                     });
                 });
 
-                document.getElementById('shift-date-range').innerText = `Tanggal: ${todayStr} | Total Sesi Shift`;
-                document.getElementById('shift-total-trx').innerText = `${shiftTrx.length} Transaksi`;
-                document.getElementById('shift-total-revenue').innerText = formatRupiah(totalRev);
+                const shiftRecord = {
+                    id: 'SHIFT-' + Math.floor(1000 + Math.random() * 9000),
+                    dateStr: todayStr,
+                    timestamp: Date.now(),
+                    totalTrx: shiftTrx.length,
+                    totalRev,
+                    methodCounts,
+                    methodTotals,
+                    audit: this.lastAuditData ? { ...this.lastAuditData } : null,
+                    products: productMap,
+                    transactions: shiftTrx
+                };
+
+                this.data.shiftHistory.unshift(shiftRecord);
+                this.data.history = [];
+                this.saveData();
+
+                this.showShiftSummaryModal(shiftRecord);
+                this.renderHistory();
+            },
+
+            openShiftHistoryModal() {
+                document.getElementById('shift-history-date-filter').value = '';
+                this.renderShiftHistoryModalList();
+                document.getElementById('modal-shift-history').classList.remove('hidden');
+            },
+
+            resetShiftHistoryDateFilter() {
+                document.getElementById('shift-history-date-filter').value = '';
+                this.renderShiftHistoryModalList();
+            },
+
+            renderShiftHistoryModalList() {
+                const container = document.getElementById('shift-history-list-container');
+                if (!container) return;
+                const filterDate = document.getElementById('shift-history-date-filter').value;
+
+                let filtered = this.data.shiftHistory;
+                if (filterDate) {
+                    filtered = filtered.filter(sh => sh.dateStr === filterDate);
+                }
+
+                if (filtered.length === 0) {
+                    container.innerHTML = `<div class="py-8 text-center text-gray-400 text-xs">Belum ada riwayat shift tersimpan.</div>`;
+                    return;
+                }
+
+                container.innerHTML = filtered.map(sh => `
+                    <div class="bg-gray-50 border border-gray-200 p-3 rounded-xl flex justify-between items-center text-xs">
+                        <div>
+                            <div class="font-bold text-gray-800">${sh.dateStr} <span class="text-[10px] text-gray-400">(${sh.id})</span></div>
+                            <div class="text-[11px] text-gray-500">${sh.totalTrx} Transaksi | <span class="font-bold text-primary">${formatRupiah(sh.totalRev)}</span></div>
+                        </div>
+                        <button onclick="app.showShiftSummaryModal(${JSON.stringify(sh).replace(/"/g, '&quot;')})" class="px-3 py-1.5 bg-primary/10 hover:bg-primary hover:text-white text-primary rounded-lg font-bold text-xs transition-colors">Lihat Detail</button>
+                    </div>
+                `).join('');
+            },
+
+            showShiftSummaryModal(shRecord) {
+                document.getElementById('shift-date-range').innerText = `Tanggal: ${shRecord.dateStr} | Rekap Shift`;
+                document.getElementById('shift-total-trx').innerText = `${shRecord.totalTrx} Transaksi`;
+                document.getElementById('shift-total-revenue').innerText = formatRupiah(shRecord.totalRev);
 
                 const pmList = document.getElementById('shift-payment-methods-list');
                 pmList.innerHTML = `
-                    <div class="flex justify-between text-gray-600"><span>Cash (${methodCounts.CASH} trx):</span><span class="font-bold">${formatRupiah(methodTotals.CASH)}</span></div>
-                    <div class="flex justify-between text-gray-600"><span>QRIS (${methodCounts.QRIS} trx):</span><span class="font-bold">${formatRupiah(methodTotals.QRIS)}</span></div>
-                    <div class="flex justify-between text-gray-600"><span>Debit (${methodCounts.DEBIT} trx):</span><span class="font-bold">${formatRupiah(methodTotals.DEBIT)}</span></div>
+                    <div class="flex justify-between text-gray-600"><span>Cash (${shRecord.methodCounts.CASH} trx):</span><span class="font-bold">${formatRupiah(shRecord.methodTotals.CASH)}</span></div>
+                    <div class="flex justify-between text-gray-600"><span>QRIS (${shRecord.methodCounts.QRIS} trx):</span><span class="font-bold">${formatRupiah(shRecord.methodTotals.QRIS)}</span></div>
+                    <div class="flex justify-between text-gray-600"><span>Debit (${shRecord.methodCounts.DEBIT} trx):</span><span class="font-bold">${formatRupiah(shRecord.methodTotals.DEBIT)}</span></div>
                 `;
 
                 const auditSum = document.getElementById('shift-audit-result-summary');
-                if (this.lastAuditData) {
-                    const { expected, actual, diff } = this.lastAuditData;
+                if (shRecord.audit) {
+                    const { expected, actual, diff } = shRecord.audit;
                     auditSum.innerHTML = `
                         <div class="text-[11px] space-y-0.5 text-gray-700">
                             <div class="flex justify-between"><span>Kas Sistem (Cash):</span><span class="font-bold">${formatRupiah(expected)}</span></div>
@@ -1777,14 +2113,14 @@
                 }
 
                 const prodList = document.getElementById('shift-products-list');
-                const prodKeys = Object.keys(productMap);
+                const prodKeys = Object.keys(shRecord.products);
                 if (prodKeys.length === 0) {
-                    prodList.innerHTML = `<p class="text-gray-400">Belum ada produk terjual hari ini.</p>`;
+                    prodList.innerHTML = `<p class="text-gray-400">Belum ada produk terjual.</p>`;
                 } else {
                     prodList.innerHTML = prodKeys.map(name => `
                         <div class="flex justify-between text-gray-700">
-                            <span>• ${name} (${productMap[name].qty}x)</span>
-                            <span class="font-bold">${formatRupiah(productMap[name].revenue)}</span>
+                            <span>• ${name} (${shRecord.products[name].qty}x)</span>
+                            <span class="font-bold">${formatRupiah(shRecord.products[name].revenue)}</span>
                         </div>
                     `).join('');
                 }
@@ -1817,54 +2153,7 @@
                 doc.setFont("helvetica", "normal");
                 doc.setFontSize(10);
                 const todayStr = new Date().toISOString().slice(0, 10);
-                const shiftTrx = this.data.history.filter(trx => new Date(trx.timestamp).toISOString().slice(0, 10) === todayStr);
-                let totalRev = shiftTrx.reduce((sum, t) => sum + t.total, 0);
-
-                doc.text(`Total Transaksi: ${shiftTrx.length}`, 20, y); y += 6;
-                doc.text(`Total Pendapatan Shift: ${formatRupiah(totalRev)}`, 20, y); y += 10;
-
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(12);
-                doc.text("2. Rincian Metode Pembayaran & Audit Kas", 15, y);
-                y += 6;
-
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(10);
-                let methodTotals = { CASH: 0, QRIS: 0, DEBIT: 0 };
-                shiftTrx.forEach(t => { if(methodTotals[t.method] !== undefined) methodTotals[t.method] += t.total; });
-                doc.text(`- Cash: ${formatRupiah(methodTotals.CASH)}`, 20, y); y += 5;
-                doc.text(`- QRIS: ${formatRupiah(methodTotals.QRIS)}`, 20, y); y += 5;
-                doc.text(`- Debit: ${formatRupiah(methodTotals.DEBIT)}`, 20, y); y += 6;
-
-                if (this.lastAuditData) {
-                    doc.text(`Kas Sistem (Cash): ${formatRupiah(this.lastAuditData.expected)}`, 20, y); y += 5;
-                    doc.text(`Kas Fisik Aktual: ${formatRupiah(this.lastAuditData.actual)}`, 20, y); y += 5;
-                    doc.text(`Selisih Kas: ${this.lastAuditData.diff === 0 ? 'Pas' : formatRupiah(this.lastAuditData.diff)}`, 20, y); y += 10;
-                } else {
-                    y += 4;
-                }
-
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(12);
-                doc.text("3. Rincian Produk Terjual", 15, y);
-                y += 6;
-
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(10);
-                let productMap = {};
-                shiftTrx.forEach(trx => {
-                    trx.items.forEach(item => {
-                        if (!productMap[item.name]) productMap[item.name] = { qty: 0, rev: 0 };
-                        productMap[item.name].qty += 1;
-                        productMap[item.name].rev += item.price;
-                    });
-                });
-
-                Object.keys(productMap).forEach(name => {
-                    doc.text(`- ${name} (${productMap[name].qty}x) : ${formatRupiah(productMap[name].rev)}`, 20, y);
-                    y += 6;
-                });
-
+                
                 doc.save(`Rekap_Shift_${todayStr}.pdf`);
                 this.showToast('Laporan Shift PDF berhasil diunduh!');
             },
