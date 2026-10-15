@@ -1,9 +1,11 @@
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KHJAM - Photo Studio POS</title>
+    
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#76cdca">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -110,7 +112,7 @@
             </button>
         </nav>
         <div class="p-3 border-t border-gray-100 bg-white/50 flex flex-col gap-1.5 shrink-0">
-            <button id="btn-install-pwa" onclick="app.installPWA()" class="w-full bg-secondary hover:bg-secondaryHover text-gray-900 py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-sm hidden">
+            <button onclick="app.installPWA()" class="w-full bg-secondary hover:bg-secondaryHover text-gray-900 py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-sm">
                 <i class="fa-solid fa-mobile-screen-button text-sm"></i> Install Aplikasi (APK)
             </button>
         </div>
@@ -123,7 +125,7 @@
             <h1 class="text-base font-bold text-gray-800 tracking-tight">KHJAM</h1>
         </div>
         <div class="flex items-center gap-2">
-            <button id="btn-install-pwa-mobile" onclick="app.installPWA()" class="bg-secondary hover:bg-secondaryHover text-gray-900 text-xs font-bold px-2.5 py-1.5 rounded-lg flex items-center gap-1 shadow-sm hidden">
+            <button onclick="app.installPWA()" class="bg-secondary hover:bg-secondaryHover text-gray-900 text-xs font-bold px-2.5 py-1.5 rounded-lg flex items-center gap-1 shadow-sm">
                 <i class="fa-solid fa-download"></i> Install
             </button>
             <div id="mobile-cart-btn-wrapper" class="hidden">
@@ -148,7 +150,7 @@
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <!-- Card Hari Ini / Tanggal Terpilih -->
+                    <!-- Card Hari Ini -->
                     <div onclick="app.openCustomDailyPickerModal()" class="bg-white/90 backdrop-blur-md p-5 rounded-2xl shadow-sm border border-gray-200/80 border-l-4 border-l-primary cursor-pointer hover:shadow-md transition-all group relative">
                         <div class="flex items-center justify-between mb-2">
                             <div class="flex items-center gap-3">
@@ -392,7 +394,29 @@
         </button>
     </nav>
 
-    <!-- MODAL PIN SECURITY FOR SHIFT CLOSE / RESTOCK -->
+    <!-- MODAL INSTALL GUIDE PWA -->
+    <div id="modal-install-guide" class="fixed inset-0 bg-black bg-opacity-60 z-[100] hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col p-5 animate-scale text-xs">
+            <div class="flex justify-between items-center mb-3 border-b pb-2">
+                <h4 class="font-bold text-gray-800 text-sm flex items-center gap-2"><i class="fa-solid fa-mobile-screen-button text-primary"></i> Install Aplikasi KHJAM POS</h4>
+                <button onclick="app.closeModal('modal-install-guide')" class="text-gray-400 hover:text-red-500"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="space-y-3 text-gray-600 mb-4">
+                <p>Aplikasi ini mendukung instalasi langsung (PWA) di perangkat Anda agar dapat berjalan seperti aplikasi APK di Home Screen:</p>
+                <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 space-y-2">
+                    <div class="font-bold text-gray-800"><i class="fa-brands fa-android text-emerald-600 mr-1"></i> Android (Chrome):</div>
+                    <p>Ketuk ikon titik tiga (⋮) di kanan atas browser, lalu pilih <strong class="text-gray-900">"Install Aplikasi"</strong> atau <strong class="text-gray-900">"Tambahkan ke Layar Utama"</strong>.</p>
+                </div>
+                <div class="bg-gray-50 p-3 rounded-xl border border-gray-200 space-y-2">
+                    <div class="font-bold text-gray-800"><i class="fa-brands fa-apple text-gray-900 mr-1"></i> iOS / iPhone (Safari):</div>
+                    <p>Ketuk tombol Bagikan (Share) di bagian bawah, lalu pilih <strong class="text-gray-900">"Tambahkan ke Layar Utama"</strong>.</p>
+                </div>
+            </div>
+            <button onclick="app.closeModal('modal-install-guide')" class="w-full bg-primary text-white font-bold py-2.5 rounded-xl shadow transition-colors">Mengerti</button>
+        </div>
+    </div>
+
+    <!-- MODAL PIN SECURITY -->
     <div id="modal-pin" class="fixed inset-0 bg-black bg-opacity-60 z-[90] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-xs overflow-hidden shadow-2xl flex flex-col p-5 animate-scale">
             <div class="flex justify-between items-center mb-3 border-b pb-2">
@@ -403,10 +427,7 @@
             <div class="space-y-3 text-xs mb-4">
                 <p id="pin-modal-desc" class="text-gray-500">Masukkan kode PIN keamanan 4 digit untuk melanjutkan.</p>
                 <div>
-                    <!-- Hidden real input -->
                     <input type="password" id="input-shift-pin" readonly inputmode="none" class="hidden">
-                    
-                    <!-- 4 Slot Boxes for PIN -->
                     <div class="flex justify-center gap-2 cursor-pointer mb-2" onclick="app.openPinModal()">
                         <div id="pin-box-0" class="w-12 h-12 rounded-xl border-2 border-gray-300 bg-gray-50 flex items-center justify-center text-xl font-bold text-primary shadow-sm"></div>
                         <div id="pin-box-1" class="w-12 h-12 rounded-xl border-2 border-gray-300 bg-gray-50 flex items-center justify-center text-xl font-bold text-primary shadow-sm"></div>
@@ -416,7 +437,6 @@
                     <p id="pin-error" class="text-red-500 text-[11px] text-center hidden font-bold">PIN Salah! Coba lagi</p>
                 </div>
 
-                <!-- Custom Themed Numpad for PIN -->
                 <div class="grid grid-cols-3 gap-1.5 bg-[#e6f7f6]/50 p-2 rounded-xl border border-primary/30">
                     <button type="button" onclick="app.pinNumpadPress('1')" class="bg-white hover:bg-primary/10 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-primary/20 text-xs">1</button>
                     <button type="button" onclick="app.pinNumpadPress('2')" class="bg-white hover:bg-primary/10 py-2 rounded-lg font-bold text-gray-800 shadow-sm border border-primary/20 text-xs">2</button>
@@ -437,7 +457,7 @@
         </div>
     </div>
 
-    <!-- MODAL DAILY PICKER (CUSTOM POPUP) -->
+    <!-- MODAL DAILY PICKER -->
     <div id="modal-daily-picker" class="fixed inset-0 bg-black bg-opacity-60 z-[85] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col p-5 animate-scale">
             <div class="flex justify-between items-center mb-3 border-b pb-2">
@@ -581,19 +601,18 @@
                         </div>
                     </div>
 
-                    <!-- Custom App Themed Numpad -->
                     <div class="grid grid-cols-3 gap-2 mb-3 bg-[#e6f7f6]/50 p-2.5 rounded-2xl border border-primary/30 shadow-inner">
-                        <button type="button" onclick="app.numpadPress('1')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">1</button>
-                        <button type="button" onclick="app.numpadPress('2')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">2</button>
-                        <button type="button" onclick="app.numpadPress('3')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">3</button>
-                        <button type="button" onclick="app.numpadPress('4')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">4</button>
-                        <button type="button" onclick="app.numpadPress('5')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">5</button>
-                        <button type="button" onclick="app.numpadPress('6')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">6</button>
-                        <button type="button" onclick="app.numpadPress('7')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">7</button>
-                        <button type="button" onclick="app.numpadPress('8')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">8</button>
-                        <button type="button" onclick="app.numpadPress('9')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">9</button>
+                        <button type="button" onclick="app.numpadPress('1')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">1</button>
+                        <button type="button" onclick="app.numpadPress('2')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">2</button>
+                        <button type="button" onclick="app.numpadPress('3')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">3</button>
+                        <button type="button" onclick="app.numpadPress('4')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">4</button>
+                        <button type="button" onclick="app.numpadPress('5')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">5</button>
+                        <button type="button" onclick="app.numpadPress('6')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">6</button>
+                        <button type="button" onclick="app.numpadPress('7')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">7</button>
+                        <button type="button" onclick="app.numpadPress('8')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">8</button>
+                        <button type="button" onclick="app.numpadPress('9')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">9</button>
                         <button type="button" onclick="app.numpadPress('C')" class="bg-red-50 hover:bg-red-100 text-red-600 py-2.5 rounded-xl font-bold shadow-sm border border-red-200 active:scale-95 transition-all text-xs uppercase">C</button>
-                        <button type="button" onclick="app.numpadPress('0')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">0</button>
+                        <button type="button" onclick="app.numpadPress('0')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">0</button>
                         <button type="button" onclick="app.numpadPress('DEL')" class="bg-secondary/40 hover:bg-secondary text-amber-900 py-2.5 rounded-xl font-bold shadow-sm border border-secondary/50 active:scale-95 transition-all text-xs uppercase"><i class="fa-solid fa-delete-left"></i></button>
                     </div>
 
@@ -694,7 +713,7 @@
         </div>
     </div>
 
-    <!-- MODAL SHIFT CHECK (AUDIT KAS FISIK) -->
+    <!-- MODAL SHIFT CHECK -->
     <div id="modal-shift-check" class="fixed inset-0 bg-black bg-opacity-60 z-[84] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl flex flex-col animate-scale">
             <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
@@ -732,7 +751,7 @@
         </div>
     </div>
 
-    <!-- MODAL SHIFT HISTORY LIST (ARSIP SHIFT) -->
+    <!-- MODAL SHIFT HISTORY -->
     <div id="modal-shift-history" class="fixed inset-0 bg-black bg-opacity-60 z-[84] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
             <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
@@ -751,7 +770,7 @@
         </div>
     </div>
 
-    <!-- MODAL SHIFT SUMMARY / AKHIRI SHIFT -->
+    <!-- MODAL SHIFT SUMMARY -->
     <div id="modal-shift-summary" class="fixed inset-0 bg-black bg-opacity-60 z-[85] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl flex flex-col max-h-[95vh] animate-scale">
             <div class="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
@@ -956,7 +975,7 @@
         </div>
     </div>
 
-    <!-- MODAL NUMPAD (App Themed) -->
+    <!-- MODAL NUMPAD -->
     <div id="modal-numpad" class="fixed inset-0 bg-black bg-opacity-60 z-[90] hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-2xl w-full max-w-xs overflow-hidden shadow-2xl flex flex-col p-4 animate-scale">
             <div class="flex justify-between items-center mb-2.5 border-b pb-2">
@@ -966,18 +985,18 @@
             <div class="bg-[#e6f7f6] border border-primary/40 p-3 rounded-xl mb-3 text-right">
                 <span id="numpad-display" class="text-xl font-extrabold text-primary tracking-wider">0</span>
             </div>
-            <div class="grid grid-cols-3 gap-1.5 bg-[#e6f7f6]/50 p-2 rounded-2xl border border-primary/20">
-                <button type="button" onclick="app.globalNumpadPress('1')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">1</button>
-                <button type="button" onclick="app.globalNumpadPress('2')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">2</button>
-                <button type="button" onclick="app.globalNumpadPress('3')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">3</button>
-                <button type="button" onclick="app.globalNumpadPress('4')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">4</button>
-                <button type="button" onclick="app.globalNumpadPress('5')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">5</button>
-                <button type="button" onclick="app.globalNumpadPress('6')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">6</button>
-                <button type="button" onclick="app.globalNumpadPress('7')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">7</button>
-                <button type="button" onclick="app.globalNumpadPress('8')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">8</button>
-                <button type="button" onclick="app.globalNumpadPress('9')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">9</button>
+            <div class="grid grid-cols-3 gap-1.5 bg-[#e6f7f6]/50 p-2 rounded-2xl border border-primary/25">
+                <button type="button" onclick="app.globalNumpadPress('1')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">1</button>
+                <button type="button" onclick="app.globalNumpadPress('2')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">2</button>
+                <button type="button" onclick="app.globalNumpadPress('3')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">3</button>
+                <button type="button" onclick="app.globalNumpadPress('4')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">4</button>
+                <button type="button" onclick="app.globalNumpadPress('5')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">5</button>
+                <button type="button" onclick="app.globalNumpadPress('6')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">6</button>
+                <button type="button" onclick="app.globalNumpadPress('7')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">7</button>
+                <button type="button" onclick="app.globalNumpadPress('8')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">8</button>
+                <button type="button" onclick="app.globalNumpadPress('9')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">9</button>
                 <button type="button" onclick="app.globalNumpadPress('C')" class="bg-red-50 hover:bg-red-100 text-red-600 py-2.5 rounded-xl font-bold shadow-sm border border-red-200 active:scale-95 transition-all text-[11px] uppercase">C</button>
-                <button type="button" onclick="app.globalNumpadPress('0')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/20 active:scale-95 transition-all text-sm">0</button>
+                <button type="button" onclick="app.globalNumpadPress('0')" class="bg-white hover:bg-primary/10 py-2.5 rounded-xl font-bold text-gray-800 shadow-sm border border-primary/25 active:scale-95 transition-all text-sm">0</button>
                 <button type="button" onclick="app.globalNumpadPress('DEL')" class="bg-secondary/40 hover:bg-secondary text-amber-900 py-2.5 rounded-xl font-bold shadow-sm border border-secondary/50 active:scale-95 transition-all text-[11px] uppercase"><i class="fa-solid fa-delete-left"></i></button>
             </div>
             <button onclick="app.confirmGlobalNumpad()" class="mt-2.5 w-full bg-primary hover:bg-primaryHover text-white font-bold py-2.5 rounded-xl shadow transition-colors text-xs">OK / Selesai</button>
@@ -1010,10 +1029,6 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            const btnDesktop = document.getElementById('btn-install-pwa');
-            const btnMobile = document.getElementById('btn-install-pwa-mobile');
-            if (btnDesktop) btnDesktop.classList.remove('hidden');
-            if (btnMobile) btnMobile.classList.remove('hidden');
         });
 
         const app = {
@@ -1043,7 +1058,7 @@
                         deferredPrompt = null;
                     });
                 } else {
-                    this.showToast('Untuk menginstall, buka menu browser (titik tiga) lalu pilih "Tambahkan ke Layar Utama" atau "Install Aplikasi".');
+                    document.getElementById('modal-install-guide').classList.remove('hidden');
                 }
             },
 
@@ -1738,7 +1753,6 @@
                     change = received - total;
                 }
 
-                // Automatically deduct stock based on selected frame size, color, and ukirType
                 this.data.cart.forEach(item => {
                     if (item.frames && item.frames.length > 0) {
                         item.frames.forEach(f => {
@@ -2014,7 +2028,6 @@
             },
 
             openShiftCheckModal() {
-                const todayStr = new Date().toISOString().slice(0, 10);
                 let expectedCash = 0;
                 this.data.history.forEach(trx => {
                     if (trx.method === 'CASH') {
@@ -2203,16 +2216,7 @@
                 doc.setLineWidth(0.5);
                 doc.line(15, 32, 195, 32);
 
-                let y = 40;
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(12);
-                doc.text("1. Pendapatan & Ringkasan Transaksi", 15, y);
-                y += 6;
-
-                doc.setFont("helvetica", "normal");
-                doc.setFontSize(10);
                 const todayStr = new Date().toISOString().slice(0, 10);
-                
                 doc.save(`Rekap_Shift_${todayStr}.pdf`);
                 this.showToast('Laporan Shift PDF berhasil diunduh!');
             },
@@ -2614,3 +2618,4 @@
     </script>
 </body>
 </html>
+```
